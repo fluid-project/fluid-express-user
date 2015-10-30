@@ -1,0 +1,30 @@
+<!-- User controls -->
+<div class="row">
+    <div class="column small-offset-9 small-3">
+        <a class="user-controls-toggle" tabindex="0">
+            <div class="button secondary expand small">
+                <span class="user-icon-user"></span>
+                {{#if user}}
+                    {{user.username}}
+                {{else}}
+                    Not Logged In
+                {{/if}}
+            </div>
+        </a>
+
+        <div class="user-menu" tabindex="0" style="display: none;">
+            <div class="controls-message"></div>
+                <ul>
+                    {{#if user}}
+                        <li><a href="#" class="user-menu-logout"  tabindex="0">Log Out</a></li>
+                        <li><a href="/api/user/profile" class="user-menu-profile" tabindex="0">Profile</a></li>
+                    {{else}}
+                        <li>
+                            <p>You must log in before you can make changes.</p>
+                            <p><a href="/api/user/login{{#if path}}?source={{path}}{{/if}}" tabindex="0">Log in</a> or <a href="/api/user/signup{{#if path}}?source={{path}}{{/if}}" tabindex="0">Create an account</a>.</p>
+                        </li>
+                    {{/if}}
+                </ul>
+        </div>
+    </div>
+</div>

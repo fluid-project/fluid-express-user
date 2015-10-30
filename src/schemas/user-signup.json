@@ -1,0 +1,24 @@
+{
+    "type":        "object",
+    "id":          "user-signup.json",
+    "title":       "gpii-express-user user signup schema",
+    "description": "This schema defines the format accepted when creating a new user.",
+    "properties": {
+        "email": {
+            "$ref": "user-core.json#/definitions/email"
+        },
+        "username": {
+            "$ref": "user-core.json#/definitions/username"
+        },
+        "password": {
+            "$ref": "user-core.json#/definitions/password"
+        },
+        "confirm": {
+            "type": "string"
+        },
+        "profile": {
+            "$ref": "user-core.json#/definitions/profile"
+        }
+    },
+    "required": ["email", "username", "password", "confirm"]
+}

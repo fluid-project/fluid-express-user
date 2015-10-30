@@ -1,0 +1,31 @@
+{
+  "name":    "gpii-express-user",
+  "version": "0.0.1",
+  "homepage": "https://github.com/the-t-in-rtf/gpii-express-user",
+  "authors": [
+    "Tony <tony@raisingthefloor.org>"
+  ],
+  "description": "A series of Fluid components that provide user management API and front-end components to interact with the API.",
+  "license": "See LICENSE file for details.",
+  "private": true,
+  "main": [
+    "./src/js/forgot.js",
+    "./src/js/login.js",
+    "./src/js/reset.js",
+    "./src/js/signup.js",
+    "./src/js/user-controls.js",
+    "./src/js/verify.js"
+  ],
+  "ignore": [
+    "**/.*",
+    "Gruntfile.js",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "gpii-handlebars": "git://github.com/the-t-in-rtf/gpii-handlebars.git#4912292d3ebd4e0dc50b9ebb69e10fd85bb45e6c",
+    "foundation":      "~5.5.2"
+  }
+}
