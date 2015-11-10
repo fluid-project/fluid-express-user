@@ -7,10 +7,11 @@ fluid.registerNamespace("gpii.express.user.api.login.post.handler");
 var path      = require("path");
 var schemaDir = path.resolve(__dirname, "../../schemas");
 
+require("gpii-handlebars");
 require("gpii-json-schema");
+
 require("./lib/datasource");
 require("./lib/password");
-require("./lib/singleTemplateRouter");
 
 fluid.registerNamespace("gpii.express.user.api.login");
 
@@ -125,7 +126,7 @@ fluid.defaults("gpii.express.user.api.login", {
     ],
     components: {
         getRouter: {
-            type: "gpii.express.user.api.singleTemplateRouter",
+            type: "gpii.express.singleTemplateRouter",
             options: {
                 templateKey: "pages/login"
             }

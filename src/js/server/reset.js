@@ -14,8 +14,9 @@
 var fluid  = fluid || require("infusion");
 var gpii   = fluid.registerNamespace("gpii");
 
+require("gpii-handlebars");
+
 require("./lib/password");
-require("./lib/singleTemplateRouter");
 require("./lib/datasource");
 
 // TODO:  Replace this with a writable `dataSource`
@@ -114,7 +115,7 @@ fluid.defaults("gpii.express.user.api.reset.handler", {
 
 // GET /api/user/reset/:code, a `singleTemplateRouter` that just serves up the client-side form.
 fluid.defaults("gpii.express.user.api.reset.formRouter", {
-    gradeNames:  ["gpii.express.user.api.singleTemplateRouter"],
+    gradeNames:  ["gpii.express.singleTemplateRouter"],
     path:        "/:code",
     method:      "get",
     templateKey: "pages/reset"

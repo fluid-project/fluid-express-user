@@ -7,10 +7,11 @@ var request = require("request"); // TODO:  Replace this with a writable data so
 var path      = require("path");
 var schemaDir = path.resolve(__dirname, "../../schemas");
 
+require("gpii-handlebars");
+
 require("./lib/datasource");
 require("./lib/mailer");
 require("./lib/password");
-require("./lib/singleTemplateRouter");
 
 fluid.registerNamespace("gpii.express.user.api.signup.post.handler");
 
@@ -217,7 +218,7 @@ fluid.defaults("gpii.express.user.api.signup", {
     ],
     components: {
         getRouter: {
-            type: "gpii.express.user.api.singleTemplateRouter",
+            type: "gpii.express.singleTemplateRouter",
             options: {
                 templateKey: "pages/signup"
             }

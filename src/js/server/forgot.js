@@ -20,7 +20,7 @@ var gpii   = fluid.registerNamespace("gpii");
 var request = require("request");
 
 require("./lib/password");
-require("./lib/singleTemplateRouter");
+require("gpii-handlebars");
 
 fluid.registerNamespace("gpii.express.user.api.forgot.post.handler");
 gpii.express.user.api.forgot.post.handler.checkUser = function (that, user) {
@@ -205,7 +205,7 @@ fluid.defaults("gpii.express.user.api.forgot", {
     ],
     components: {
         getRouter: {
-            type: "gpii.express.user.api.singleTemplateRouter",
+            type: "gpii.express.singleTemplateRouter",
             options: {
                 templateKey: "{gpii.express.user.api.forgot}.options.templates.form",
                 defaultContext: "{gpii.express.user.api.forgot}.options.defaultContext"

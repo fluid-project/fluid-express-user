@@ -14,7 +14,7 @@
 var fluid = fluid || require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
-require("./lib/singleTemplateRouter");
+require("gpii-handlebars");
 
 fluid.registerNamespace("gpii.express.user.api.verify.resend.handler");
 
@@ -160,7 +160,7 @@ fluid.defaults("gpii.express.user.api.verify.resend", {
             }
         },
         formRouter: {
-            type: "gpii.express.user.api.singleTemplateRouter",
+            type: "gpii.express.singleTemplateRouter",
             options: {
                 templateKey: "pages/verify-resend",
                 method:      "get"
