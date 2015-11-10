@@ -20,7 +20,6 @@ var gpii   = fluid.registerNamespace("gpii");
 var request = require("request");
 
 require("./lib/password");
-require("./lib/passthroughRouter");
 require("./lib/singleTemplateRouter");
 
 fluid.registerNamespace("gpii.express.user.api.forgot.post.handler");

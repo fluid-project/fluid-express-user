@@ -10,7 +10,6 @@ var schemaDir = path.resolve(__dirname, "../../schemas");
 require("gpii-json-schema");
 require("./lib/datasource");
 require("./lib/password");
-require("./lib/passthroughRouter");
 require("./lib/singleTemplateRouter");
 
 fluid.registerNamespace("gpii.express.user.api.login");
