@@ -21,7 +21,6 @@ var path        = require("path");
 var templateDir = path.resolve(__dirname, "../../src/templates");
 
 require("gpii-handlebars");
-require("./standaloneRenderer");
 
 fluid.registerNamespace("gpii.express.user.mailer");
 
