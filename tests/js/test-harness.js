@@ -139,7 +139,6 @@ fluid.defaults("gpii.express.user.tests.harness", {
                         type: "gpii.express.user.api",
                         options: {
                             path:        "/api/user",
-                            templateDir: templateDir,
                             couch:  {
                                 port: "{harness}.options.pouchPort",
                                 userDbName: "users",
