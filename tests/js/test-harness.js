@@ -5,7 +5,7 @@ var fluid = fluid || require("infusion");
 var path        = require("path");
 var templateDir = path.resolve(__dirname, "../../src/templates");
 
-require("../../src/js/server/api");
+require("../../");
 
 require("gpii-express");
 require("gpii-handlebars");
@@ -16,6 +16,17 @@ require("./test-harness-pouch");
 var bowerDir        = path.resolve(__dirname, "../../bower_components");
 var srcDir          = path.resolve(__dirname, "../../src");
 var modulesDir      = path.resolve(__dirname, "../../node_modules");
+
+fluid.defaults("gpii.express.user.tests.harness.gated.handler", {
+    gradeNames: ["gpii.express.handler"],
+    invokers: {
+        handleRequest: {
+            // TODO:  Why can't we use `{that}.sendResponse` here?
+            funcName: "gpii.express.handler.sendResponse",
+            args:     ["{that}", 200, { ok: true, message: "You are in the club!"}]
+        }
+    }
+});
 
 // TODO:  Update this to use the new version of gpii-mail-test once we have a Zombie version that works in 0.12 or higher.
 fluid.defaults("gpii.express.user.tests.harness", {
@@ -77,6 +88,18 @@ fluid.defaults("gpii.express.user.tests.harness", {
                     onStarted: "{harness}.events.onApiStarted.fire"
                 },
                 components: {
+                    session: {
+                        type: "gpii.express.middleware.session",
+                        options: {
+                            config: {
+                                express: {
+                                    session: {
+                                        secret: "Printer, printer take a hint-ter."
+                                    }
+                                }
+                            }
+                        }
+                    },
                     handlebars: {
                         type: "gpii.express.hb",
                         options: {
@@ -112,7 +135,6 @@ fluid.defaults("gpii.express.user.tests.harness", {
                             path: "/hbs"
                         }
                     },
-
                     api: {
                         type: "gpii.express.user.api",
                         options: {
@@ -131,13 +153,31 @@ fluid.defaults("gpii.express.user.tests.harness", {
                             app: "{gpii.express}.options.config.app"
                         }
                     },
-
                     // Serve up the rest of our static content (JS source, etc.)
                     src: {
                         type:  "gpii.express.router.static",
                         options: {
                             path:    "/",
                             content: srcDir
+                        }
+                    },
+                    // A "gated" endpoint that can only be accessed if the user is logged in
+                    gated: {
+                        type: "gpii.express.router.passthrough",
+                        options: {
+                            path: "/gated",
+                            components: {
+                                gatekeeper: {
+                                    type: "gpii.express.user.middleware.loginRequired"
+                                },
+                                root: {
+                                    type: "gpii.express.requestAware.router",
+                                    options: {
+                                        path:          "/",
+                                        handlerGrades: ["gpii.express.user.tests.harness.gated.handler"]
+                                    }
+                                }
+                            }
                         }
                     }
                 }

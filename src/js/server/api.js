@@ -23,6 +23,8 @@ gpii.express.user.api.handleRoute = function (that, request, response, next) {
     that.options.router(request, response, next);
 };
 
+
+
 fluid.defaults("gpii.express.user.api", {
     gradeNames: ["gpii.express.router"],
     path:       "/user",
@@ -61,6 +63,9 @@ fluid.defaults("gpii.express.user.api", {
         cookieparser: {
             type: "gpii.express.middleware.cookieparser"
         },
+        docs: {
+            type: "gpii.express.api.docs.router"
+        },
         session: {
             type: "gpii.express.middleware.session",
             options: {
@@ -72,10 +77,6 @@ fluid.defaults("gpii.express.user.api", {
                     }
                 }
             }
-        },
-
-        docs: {
-            type: "gpii.express.api.docs.router"
         },
 
         // API Endpoints (routers)
@@ -106,6 +107,27 @@ fluid.defaults("gpii.express.user.api", {
         route: {
             funcName: "gpii.express.user.api.handleRoute",
             args:     ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
+        }
+    }
+});
+
+// An instance of `gpii.express.user.api` that already has the required session middleware wired in
+//
+// Generally you will want to start with the base grade and provide your own.
+fluid.defaults("gpii.express.user.api.hasMiddleware", {
+    gradeNames: ["gpii.express.user.api"],
+    components: {
+        session: {
+            type: "gpii.express.middleware.session",
+            options: {
+                config: {
+                    express: {
+                        session: {
+                            secret: "Printer, printer take a hint-ter."
+                        }
+                    }
+                }
+            }
         }
     }
 });

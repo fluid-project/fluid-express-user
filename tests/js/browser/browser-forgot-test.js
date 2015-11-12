@@ -10,7 +10,6 @@ var fs         = require("fs");
 
 require("./lib/browser-sanity.js");
 require("../test-environment.js");
-require("../../../node_modules/gpii-express/tests/js/lib/test-helpers");
 
 fluid.registerNamespace("gpii.express.user.tests.forgot.client");
 

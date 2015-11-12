@@ -12,13 +12,13 @@ var MailParser = require("mailparser").MailParser;
 var templateDir = path.resolve(__dirname, "../../templates");
 
 require("gpii-mail-test");
-require("./../kettle-includes");
+var kettle = require("kettle");
+kettle.loadTestingSupport();
 
 require("../../../src/js/server/lib/mailer");
 
-// Although we are not working with express, we need to wire in a similar delay to ensure that QUnit has time to comb
-// its hair or whatever it is it needs to do before we start imposing on it by asking it to do its job.
-require("../../../node_modules/gpii-express/tests/js/lib/test-helpers");
+var express = require("gpii-express");
+express.loadTestingSupport();
 
 fluid.registerNamespace("gpii.mailer.tests");
 

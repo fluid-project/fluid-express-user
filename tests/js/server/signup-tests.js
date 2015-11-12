@@ -8,11 +8,6 @@
 var fluid        = fluid || require("infusion");
 var gpii         = fluid.registerNamespace("gpii");
 
-// We use just the request-handling bits of the kettle stack in our tests, but we include the whole thing to pick up the base grades
-require("../../../node_modules/kettle");
-require("../../../node_modules/kettle/lib/test/KettleTestUtils");
-
-require("../../../node_modules/gpii-express/tests/js/lib/test-helpers");
 require("../test-environment");
 
 require("../lib/generate-user");

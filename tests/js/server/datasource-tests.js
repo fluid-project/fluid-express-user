@@ -11,13 +11,14 @@ fluid.logObjectRenderChars = 4096;
 var gpii   = fluid.registerNamespace("gpii");
 var jqUnit = require("jqUnit");
 
-require("gpii-express");
-require("./../test-harness-pouch");
-require("./../kettle-includes");
+var express = require("gpii-express");
+express.loadTestingSupport();
 
+var kettle = require("kettle");
+kettle.loadTestingSupport();
+
+require("../test-harness-pouch");
 require("../../../src/js/server/lib/datasource");
-
-require("../../../node_modules/gpii-express/tests/js/lib/test-helpers");
 
 fluid.registerNamespace("gpii.express.user.datasource.tests");
 gpii.express.user.datasource.tests.checkResult = function (that, response, expected) {

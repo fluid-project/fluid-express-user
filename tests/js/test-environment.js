@@ -4,6 +4,12 @@ var fluid = fluid || require("infusion");
 
 require("./test-harness");
 
+var kettle = require("kettle");
+kettle.loadTestingSupport();
+
+var express = require("gpii-express");
+express.loadTestingSupport();
+
 fluid.defaults("gpii.express.user.tests.environment", {
     gradeNames: ["fluid.test.testEnvironment"],
     apiPort:    "3959",

@@ -9,13 +9,8 @@
 var fluid        = fluid || require("infusion");
 var gpii         = fluid.registerNamespace("gpii");
 
-// We use just the request-handling bits of the kettle stack in our tests, but we include the whole thing to pick up the base grades
-require("../../../node_modules/kettle");
-require("../../../node_modules/kettle/lib/test/KettleTestUtils");
-
-require("../../../node_modules/gpii-express/tests/js/lib/test-helpers");
-
 require("../test-environment");
+require("../lib/verify-response");
 
 var jqUnit       = require("jqUnit");
 
@@ -39,22 +34,9 @@ gpii.express.user.api.login.test.caseHolder.generatePassword = function () {
 };
 
 gpii.express.user.api.login.test.caseHolder.verifyResponse = function (response, body, statusCode, truthy, falsy, hasCurrentUser) {
-    if (!statusCode) { statusCode = 200; }
-    gpii.express.tests.helpers.isSaneResponse(jqUnit, response, body, statusCode);
+    gpii.express.user.api.test.verifyResponse(response, body, statusCode, truthy, falsy);
 
     var data = typeof body === "string" ? JSON.parse(body): body;
-
-    if (truthy) {
-        truthy.forEach(function (key) {
-            jqUnit.assertTrue("The data for '" + key + "' should be truthy...", data[key]);
-        });
-    }
-
-    if (falsy) {
-        falsy.forEach(function (key) {
-            jqUnit.assertFalse("The data for '" + key + "' should be falsy...", data[key]);
-        });
-    }
 
     if (hasCurrentUser) {
         jqUnit.assertEquals("The current user should be returned.", "existing", data.user.username);
