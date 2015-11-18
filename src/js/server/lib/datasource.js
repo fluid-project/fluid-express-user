@@ -4,7 +4,7 @@
 // are copied from that grade.
 // 
 // To work with the value returned from CouchDB, you most likely will simply want to add another `onRead` listener with 
-// a lower priority than `kettle.dataSource.priorities.CouchDB`, as in:
+// a lower priority, as in:
 //
 // listeners: {
 //   "onRead.logResponse": {
@@ -58,7 +58,7 @@ fluid.defaults("gpii.express.user.couchdb.read", {
             funcName:  "gpii.express.user.couchdb.read.transformCouchResults",
             args:      ["{that}", "{arguments}.0"],
             namespace: "gpii.express.user.couchdb",
-            priority:  kettle.dataSource.priorities.CouchDB
+            priority:  "after:encoding"
         }
     }
 });
@@ -129,7 +129,7 @@ fluid.defaults("gpii.express.user.couchdb.writable", {
             funcName:  "gpii.express.user.couchdb.writable.transformModelToCouch",
             args:      ["{that}", "{arguments}.0", "{arguments}.1"], // model, options
             namespace: "gpii.express.user.couchdb",
-            priority:  kettle.dataSource.priorities.CouchDB
+            priority:  "after:encoding"
         },
         "onError.log": {
             priority:  100,
@@ -142,9 +142,9 @@ fluid.defaults("gpii.express.user.couchdb.writable", {
         onRead: null
     },
     components: {
-        urlResolver: {
-            type: "kettle.dataSource.urlResolver"
-        },
+        //urlResolver: {
+        //    type: "kettle.dataSource.urlResolver"
+        //},
         reader: {
             type: "gpii.express.user.couchdb.read",
             options: {

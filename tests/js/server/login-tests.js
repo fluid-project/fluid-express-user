@@ -12,7 +12,7 @@ var gpii         = fluid.registerNamespace("gpii");
 require("../test-environment");
 require("../lib/verify-response");
 
-var jqUnit       = require("jqUnit");
+var jqUnit       = require("node-jqunit");
 
 fluid.registerNamespace("gpii.express.user.api.login.test.caseHolder");
 

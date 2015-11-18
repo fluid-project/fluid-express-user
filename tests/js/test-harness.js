@@ -162,18 +162,16 @@ fluid.defaults("gpii.express.user.tests.harness", {
                     },
                     // A "gated" endpoint that can only be accessed if the user is logged in
                     gated: {
-                        type: "gpii.express.router.passthrough",
+                        type: "gpii.express.requestAware.router",
                         options: {
-                            path: "/gated",
+                            path:          "/gated",
+                            method:        "use",
+                            handlerGrades: ["gpii.express.user.tests.harness.gated.handler"],
                             components: {
                                 gatekeeper: {
-                                    type: "gpii.express.user.middleware.loginRequired"
-                                },
-                                root: {
-                                    type: "gpii.express.requestAware.router",
+                                    type: "gpii.express.user.middleware.loginRequired",
                                     options: {
-                                        path:          "/",
-                                        handlerGrades: ["gpii.express.user.tests.harness.gated.handler"]
+                                        method: "get"
                                     }
                                 }
                             }

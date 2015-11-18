@@ -7,7 +7,7 @@
 var fluid         = fluid || require("infusion");
 var gpii          = fluid.registerNamespace("gpii");
 
-var jqUnit        = fluid.require("jqUnit");
+var jqUnit        = fluid.require("node-jqunit");
 var Browser       = require("zombie");
 
 var fs            = require("fs");

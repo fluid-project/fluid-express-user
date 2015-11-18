@@ -9,7 +9,7 @@ fluid.setLogging(true);
 fluid.logObjectRenderChars = 4096;
 
 var gpii   = fluid.registerNamespace("gpii");
-var jqUnit = require("jqUnit");
+var jqUnit = require("node-jqunit");
 
 var express = require("gpii-express");
 express.loadTestingSupport();

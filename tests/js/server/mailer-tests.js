@@ -6,7 +6,7 @@ var gpii  = fluid.registerNamespace("gpii");
 
 var fs         = require("fs");
 var path       = require("path");
-var jqUnit     = require("jqUnit");
+var jqUnit     = require("node-jqunit");
 var MailParser = require("mailparser").MailParser;
 
 var templateDir = path.resolve(__dirname, "../../templates");

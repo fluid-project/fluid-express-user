@@ -8,7 +8,7 @@ fluid.setLogging(true);
 
 var gpii       = fluid.registerNamespace("gpii");
 
-var jqUnit     = fluid.require("jqUnit");
+var jqUnit     = fluid.require("node-jqunit");
 var Browser    = require("zombie");
 
 require("./lib/browser-sanity.js");

@@ -13,13 +13,13 @@ require("../test-environment");
 require("../lib/generate-user");
 require("../lib/extract-code");
 
-var jqUnit       = require("jqUnit");
+var jqUnit = require("node-jqunit");
 
 fluid.registerNamespace("gpii.express.user.api.signup.test.caseHolder");
 
 gpii.express.user.api.signup.test.caseHolder.verifyResponse = function (response, body, statusCode, truthy, falsy, hasCurrentUser) {
     if (!statusCode) { statusCode = 200; }
-    gpii.express.tests.helpers.isSaneResponse(jqUnit, response, body, statusCode);
+    gpii.express.tests.helpers.isSaneResponse(response, body, statusCode);
 
     var data = typeof body === "string" ? JSON.parse(body): body;
 

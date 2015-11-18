@@ -7,12 +7,12 @@
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
-var jqUnit = require("jqUnit");
+var jqUnit = require("node-jqunit");
 
 fluid.registerNamespace("gpii.express.user.api.test");
 gpii.express.user.api.test.verifyResponse = function (response, body, statusCode, truthy, falsy) {
     if (!statusCode) { statusCode = 200; }
-    gpii.express.tests.helpers.isSaneResponse(jqUnit, response, body, statusCode);
+    gpii.express.tests.helpers.isSaneResponse(response, body, statusCode);
 
     var data = typeof body === "string" ? JSON.parse(body): body;
 

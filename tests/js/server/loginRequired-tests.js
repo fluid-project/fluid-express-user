@@ -44,6 +44,12 @@ fluid.defaults("gpii.express.user.api.loginRequired.test.caseHolder", {
         },
         loggedInGatedRequest: {
             type: "gpii.express.user.api.loginRequired.request"
+        },
+        alternateMethodGatedRequest: {
+            type: "gpii.express.user.api.loginRequired.request",
+            options: {
+                method: "DELETE"
+            }
         }
     },
     rawModules: [
@@ -83,6 +89,20 @@ fluid.defaults("gpii.express.user.api.loginRequired.test.caseHolder", {
                             listener: "gpii.express.user.api.test.verifyResponse",
                             event:    "{loggedInGatedRequest}.events.onComplete",
                             args:     ["{loggedInGatedRequest}.nativeResponse", "{arguments}.0", 200, ["ok", "message"]] // response, body, statusCode, truthy, falsy
+                        }
+                    ]
+                },
+                {
+                    name: "Testing accessing a non-gated method...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{alternateMethodGatedRequest}.send"
+                        },
+                        {
+                            listener: "gpii.express.user.api.test.verifyResponse",
+                            event:    "{alternateMethodGatedRequest}.events.onComplete",
+                            args:     ["{alternateMethodGatedRequest}.nativeResponse", "{arguments}.0", 200, ["ok", "message"]] // response, body, statusCode, truthy, falsy
                         }
                     ]
                 }
