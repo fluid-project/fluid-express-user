@@ -20,6 +20,7 @@ var gpii   = fluid.registerNamespace("gpii");
 var request = require("request");
 
 require("./lib/password");
+require("./lib/hasMailerHandler");
 require("gpii-handlebars");
 
 fluid.registerNamespace("gpii.express.user.api.forgot.post.handler");
@@ -52,18 +53,28 @@ gpii.express.user.api.forgot.post.handler.handleRequestResponse = function (that
         that.sendResponse(response.statusCode, { ok: false, message: body });
     }
     else {
-        var mailOptions = fluid.copy(that.options.mailDefaults);
-        mailOptions.to  = that.request.body.email;
-
-        var templateContext  = that.options.templateDefaultContext ? fluid.copy(that.options.templateDefaultContext): {};
-        templateContext.user = that.user;
-
-        that.mailer.sendMessage(mailOptions, templateContext);
+        that.sendMessage();
     }
 };
 
 fluid.defaults("gpii.express.user.api.forgot.post.handler", {
-    gradeNames: ["gpii.express.handler"],
+    gradeNames: ["gpii.express.user.api.hasMailHandler"],
+    messages: {
+        success: "A password reset code and instructions have been sent to your email address.",
+        error:   "A password reset code could not be sent.  Contact an administrator."
+    },
+    templates: {
+        mail: {
+            text:  "email-forgot-text",
+            html:  "email-forgot-html"
+        }
+    },
+    rules: {
+        mailOptions: {
+            to:      "request.body.email",
+            subject: { literalValue: "Reset your password..."}
+        }
+    },
     members: {
         user: null
     },
@@ -97,25 +108,6 @@ fluid.defaults("gpii.express.user.api.forgot.post.handler", {
                     }
                 }
             }
-        },
-        mailer: {
-            type: "gpii.express.user.mailer.handlebars",
-            options: {
-                templateDir:     "{gpii.express.user.api.forgot}.options.templateDir",
-                htmlTemplateKey: "{gpii.express.user.api.forgot}.options.templates.mail.html",
-                textTemplateKey: "{gpii.express.user.api.forgot}.options.templates.mail.text",
-                listeners: {
-                    "onSuccess.sendResponse": {
-                        func: "{handler}.sendResponse",
-                        args: [200, { ok: true, message: "A password reset code and instructions have been sent to your email address."}]
-                    },
-                    "onError.sendResponse": {
-                        func: "{handler}.sendResponse",
-                        args: [500, { ok: false, message: "A password reset code could not be sent.  Contact an administrator."}]
-                    }
-                }
-            }
-
         }
     }
 });
@@ -166,13 +158,6 @@ fluid.defaults("gpii.express.user.api.forgot", {
     // Both of these should match what is used in `gpii.express.user.api.reset`
     resetCodeKey:   "reset_code",
     codeIssuedKey:  "reset_code_issued",
-    mailDefaults:    {
-        from:    "noreply@localhost",
-        subject: "Reset your password..."
-    },
-    templateDefaultContext: {
-        app: "{gpii.express}.options.config.app"
-    },
     distributeOptions: [
         {
             source: "{that}.options.urls",
@@ -193,14 +178,6 @@ fluid.defaults("gpii.express.user.api.forgot", {
         {
             source: "{that}.options.codeIssuedKey",
             target: "{that gpii.express.handler}.options.codeIssuedKey"
-        },
-        {
-            source: "{that}.options.mailDefaults",
-            target: "{that gpii.express.handler}.options.mailDefaults"
-        },
-        {
-            source: "{that}.options.templateDefaultContext",
-            target: "{that gpii.express.handler}.options.templateDefaultContext"
         }
     ],
     components: {

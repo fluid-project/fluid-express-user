@@ -10,6 +10,7 @@ var schemaDir = path.resolve(__dirname, "../../schemas");
 require("gpii-handlebars");
 
 require("./lib/datasource");
+require("./lib/hasMailerHandler");
 require("./lib/mailer");
 require("./lib/password");
 
@@ -42,6 +43,9 @@ gpii.express.user.api.signup.post.handler.checkForExistingUser = function (that,
     // Set the ID to match the CouchDB conventions, for backward compatibility
     combinedRecord._id = "org.couch.db.user:" + combinedRecord.username;
 
+    // Save the record for later use in rendering the outgoing email
+    that.user = combinedRecord;
+
     // Write the record to couch.  TODO: Migrate this to a writable dataSource.
     var writeOptions = {
         url:    that.options.urls.write,
@@ -56,19 +60,23 @@ gpii.express.user.api.signup.post.handler.checkForExistingUser = function (that,
         else if ([200, 201].indexOf(response.statusCode) === -1) {
             return that.sendResponse(response.statusCode, { ok: false, message: body});
         }
-
-        var mailOptions = fluid.model.transformWithRules(that.request.body, that.options.rules.mail);
-
-        var templateContext = fluid.copy(that.options.templateDefaultContext);
-        templateContext.user = combinedRecord;
-        that.mailer.sendMessage(mailOptions, templateContext); // Our listeners will monitor the mailer and continue from there.
+        else {
+            that.sendMessage();
+        }
     });
 };
 
 fluid.defaults("gpii.express.user.api.signup.post.handler", {
-    gradeNames: ["gpii.express.handler"],
-    templateDefaultContext: {
-        app: "{gpii.express}.options.config.app"
+    gradeNames: ["gpii.express.user.api.hasMailHandler"],
+    templates: {
+        mail: {
+            text:  "email-verify-text",
+            html:  "email-verify-html"
+        }
+    },
+    messages: {
+        success: "A verification code and instructions have been sent to your email address.",
+        error:   "A verification code could not be sent.  Contact an administrator."
     },
     rules: {
         // Only let the user supply a very particular set of fields.
@@ -82,9 +90,7 @@ fluid.defaults("gpii.express.user.api.signup.post.handler", {
             iterations:      { literalValue: 10},
             verified:        { literalValue: false}
         },
-        mail: {
-            from:    { literalValue: "test@localhost"},
-            to:      "email",
+        mailOptions: {
             subject: { literalValue: "Please verify your account..."}
         }
     },
@@ -115,25 +121,6 @@ fluid.defaults("gpii.express.user.api.signup.post.handler", {
                 url:     "{gpii.express.user.api.signup.post}.options.urls.read",
                 termMap: "{gpii.express.user.api.signup.post}.options.termMaps.read"
             }
-        },
-        mailer: {
-            type: "gpii.express.user.mailer.handlebars",
-            options: {
-                templateDir:     "{gpii.express.user.api.signup.post}.options.templateDir",
-                htmlTemplateKey: "{gpii.express.user.api.signup.post}.options.htmlTemplateKey",
-                textTemplateKey: "{gpii.express.user.api.signup.post}.options.textTemplateKey",
-                listeners: {
-                    "onSuccess.sendResponse": {
-                        func: "{handler}.sendResponse",
-                        args: [200, { ok: true, message: "Your account has been created, but must be verified.  Please check your email for details."}]
-                    },
-                    "onError.sendResponse": {
-                        func: "{handler}.sendResponse",
-                        args: [500, { ok: false, message: "Your account has been created, but a confirmation email could not be sent.  Contact an administrator."}]
-                    }
-                }
-            }
-
         }
     }
 });
@@ -145,9 +132,6 @@ fluid.defaults("gpii.express.user.api.signup.post", {
     verifyCodeLength: 16,
     codeKey:          "verification_code",  // Must match the value in gpii.express.user.api.verify
     couchPath:        "/_design/lookup/_view/byUsernameOrEmail",
-    textTemplateKey:  "email-verify-text",
-    htmlTemplateKey:  "email-verify-html",
-    templateDefaultContext: {},
     urls: {
         read:  {
             expander: {

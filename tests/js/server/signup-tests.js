@@ -42,7 +42,7 @@ gpii.express.user.api.signup.test.caseHolder.verifyResponse = function (response
 
 // Listen for the email with the verification code and launch the verification request
 gpii.express.user.api.signup.test.caseHolder.fullSignupVerifyEmail = function (signupRequest, verificationRequest, testEnvironment) {
-    gpii.express.user.api.signup.test.caseHolder.extractVerificationCode(testEnvironment).then(gpii.express.user.api.signup.test.caseHolder.checkResetCode).then(function (code) {
+    gpii.express.user.api.signup.test.caseHolder.extractVerificationCode(testEnvironment).then(gpii.express.user.api.signup.test.caseHolder.checkVerificationCode).then(function (code) {
         signupRequest.code = code;
         var path = "/api/user/verify/" + signupRequest.code;
 
@@ -59,7 +59,7 @@ gpii.express.user.api.signup.test.caseHolder.checkVerificationCode = function (c
 };
 
 gpii.express.user.api.signup.test.caseHolder.checkEnvironmentForVerificationCode = function (testEnvironment) {
-    gpii.express.user.api.signup.test.caseHolder.extractVerificationCode(testEnvironment).then(gpii.express.user.api.signup.test.caseHolder.checkResetCode);
+    gpii.express.user.api.signup.test.caseHolder.extractVerificationCode(testEnvironment).then(gpii.express.user.api.signup.test.caseHolder.checkVerificationCode);
 };
 
 gpii.express.user.api.signup.test.caseHolder.extractVerificationCode = function (testEnvironment) {

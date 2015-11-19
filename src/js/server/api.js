@@ -48,10 +48,6 @@ fluid.defaults("gpii.express.user.api", {
             "target": "{that gpii.express.router}.options.couch"
         },
         {
-            source: "{that}.options.templateDir",
-            target: "{that gpii.express.router}.options.templateDir"
-        },
-        {
             source: "{that}.options.app",
             target: "{that gpii.express.router}.options.app"
         }

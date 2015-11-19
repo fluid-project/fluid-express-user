@@ -15,17 +15,9 @@ var fluid = fluid || require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
 require("gpii-handlebars");
+require("./lib/hasMailerHandler");
 
 fluid.registerNamespace("gpii.express.user.api.verify.resend.handler");
-
-gpii.express.user.api.verify.resend.handler.sendVerificationMessage = function (that, user) {
-    var mailOptions = fluid.copy(that.options.mailDefaults);
-    mailOptions.to  = that.request.body.email;
-
-    var templateContext = fluid.copy(that.options.templateDefaultContext);
-    templateContext.user = user;
-    that.mailer.sendMessage(mailOptions, templateContext); // The mailer listeners will take care of the response from here.
-};
 
 gpii.express.user.api.verify.resend.handler.getVerificationCode = function (that, user) {
     if (!user || !user.username) {
@@ -38,18 +30,26 @@ gpii.express.user.api.verify.resend.handler.getVerificationCode = function (that
         that.sendFinalResponse(500, { ok: false, message: "Cannot retrieve verification code.  Contact an administrator."});
     }
     else {
-        gpii.express.user.api.verify.resend.handler.sendVerificationMessage(that, user);
+        that.user = user;
+        that.sendMessage();
     }
 };
 
 fluid.defaults("gpii.express.user.api.verify.resend.handler", {
-    gradeNames: ["gpii.express.handler"],
-    mailDefaults: {
-        from:    "test@localhost",
-        subject: "Please verify your account..."
+    gradeNames: ["gpii.express.user.api.hasMailHandler"],
+    templates: {
+        mail: {
+            text:  "email-verify-text",
+            html:  "email-verify-html"
+        }
     },
-    templateDefaultContext: {
-        app: "{gpii.express}.options.config.app"
+    members: {
+        user: null
+    },
+    rules: {
+        mailOptions: {
+            subject: { literalValue: "Please verify your account..." }
+        }
     },
     invokers: {
         handleRequest: {
@@ -76,25 +76,6 @@ fluid.defaults("gpii.express.user.api.verify.resend.handler", {
                     }
                 }
             }
-        },
-        mailer: {
-            type: "gpii.express.user.mailer.handlebars",
-            options: {
-                templateDir:     "{gpii.express.user.api.verify.resend}.options.templateDir",
-                htmlTemplateKey: "email-verify-html",
-                textTemplateKey: "email-verify-text",
-                listeners: {
-                    "onSuccess.sendResponse": {
-                        func: "{gpii.express.user.api.verify.resend.handler}.sendFinalResponse",
-                        args: [200, { ok: true, message: "Your verification code has been resent.  Please check your email for details."}]
-                    },
-                    "onError.sendResponse": {
-                        func: "{gpii.express.user.api.verify.resend.handler}.sendFinalResponse",
-                        args: [500, { ok: false, message: "A verification code could not be sent to you via email.  Contact an administrator."}]
-                    }
-                }
-            }
-
         }
     }
 });
