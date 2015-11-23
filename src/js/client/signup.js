@@ -25,6 +25,9 @@
             successResponseToModel: {
                 successMessage: {
                     literalValue: "You have successfully created an account.  Check your email for further instructions."
+                },
+                errorMessage: {
+                    literalValue: null
                 }
             },
             // TODO: replace this with a more general approach once https://issues.gpii.net/browse/GPII-1324 is resolved
