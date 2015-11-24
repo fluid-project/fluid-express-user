@@ -17,7 +17,7 @@ gpii.express.user.tests.forgot.client.testMismatchingPasswords = function (harne
     var browser = new Browser();
 
     jqUnit.stop();
-    browser.visit(harness.options.apiUrl + "forgot").then(function () {
+    browser.visit(harness.options.baseUrl + "api/user/forgot").then(function () {
         jqUnit.start();
         gpii.express.user.api.tests.isBrowserSane(jqUnit, browser);
         jqUnit.stop();
@@ -101,7 +101,7 @@ gpii.express.user.tests.forgot.client.resetMissingUser = function (harness) {
     var timestamp = (new Date()).getTime();
 
     jqUnit.stop();
-    browser.visit(harness.options.apiUrl + "forgot").then(function () {
+    browser.visit(harness.options.baseUrl + "api/user/forgot").then(function () {
         jqUnit.start();
         gpii.express.user.api.tests.isBrowserSane(jqUnit, browser);
         jqUnit.stop();
@@ -138,7 +138,7 @@ gpii.express.user.tests.forgot.client.invalidResetCode = function (harness) {
     var timestamp = (new Date()).getTime();
 
     jqUnit.stop();
-    browser.visit(harness.options.apiUrl + "reset/" + timestamp).then(function () {
+    browser.visit(harness.options.baseUrl + "api/user/reset/" + timestamp).then(function () {
         jqUnit.start();
         gpii.express.user.api.tests.isBrowserSane(jqUnit, browser);
         jqUnit.stop();
@@ -170,7 +170,7 @@ gpii.express.user.tests.forgot.client.resetEndToEnd  = function (harness) {
     var browser = new Browser();
 
     jqUnit.stop();
-    browser.visit(harness.options.apiUrl + "forgot").then(function () {
+    browser.visit(harness.options.baseUrl + "api/user/forgot").then(function () {
         jqUnit.start();
         gpii.express.user.api.tests.isBrowserSane(jqUnit, browser);
         jqUnit.stop();
@@ -250,7 +250,7 @@ gpii.express.user.tests.forgot.client.continueResetFromEmail = function (harness
 
                         // Log in using the new details
                         jqUnit.stop();
-                        resetBrowser.visit(harness.options.apiUrl + "login").then(function () {
+                        resetBrowser.visit(harness.options.baseUrl + "api/user/login").then(function () {
                             jqUnit.start();
                             gpii.express.user.api.tests.isBrowserSane(jqUnit, resetBrowser);
                             jqUnit.stop();

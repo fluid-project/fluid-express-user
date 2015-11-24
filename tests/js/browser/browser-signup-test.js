@@ -26,7 +26,7 @@ gpii.express.user.tests.signup.client.submitDuplicateUser = function (harness) {
     var browser = new Browser();
 
     jqUnit.stop();
-    browser.visit(harness.options.apiUrl + "signup").then(function () {
+    browser.visit(harness.options.baseUrl + "api/user/signup").then(function () {
         jqUnit.start();
         gpii.express.user.api.tests.isBrowserSane(jqUnit, browser);
 
@@ -66,7 +66,7 @@ gpii.express.user.tests.signup.client.mismatchedPasswords = function (harness) {
     var email     = "email-" + timestamp + "@localhost";
 
     jqUnit.stop();
-    browser.visit(harness.options.apiUrl + "signup").then(function () {
+    browser.visit(harness.options.baseUrl + "api/user/signup").then(function () {
         jqUnit.start();
         gpii.express.user.api.tests.isBrowserSane(jqUnit, browser);
         jqUnit.stop();
@@ -107,7 +107,7 @@ gpii.express.user.tests.signup.client.invalidVerificationCode = function (harnes
     var timestamp = (new Date()).getTime();
 
     jqUnit.stop();
-    browser.visit(harness.options.apiUrl + "verify/" + timestamp).then(function () {
+    browser.visit(harness.options.baseUrl + "api/user/verify/" + timestamp).then(function () {
         jqUnit.start();
 
         // There should be at least one alert
@@ -137,7 +137,7 @@ gpii.express.user.tests.signup.client.startSignupFromBrowser = function (harness
     };
 
     jqUnit.stop();
-    browser.visit(harness.options.apiUrl + "signup").then(function () {
+    browser.visit(harness.options.baseUrl + "api/user/signup").then(function () {
         jqUnit.start();
         gpii.express.user.api.tests.isBrowserSane(jqUnit, browser);
 
@@ -201,7 +201,7 @@ gpii.express.user.tests.signup.client.continueSignupFromEmail = function (harnes
 
                 // Log in using the new account
                 jqUnit.stop();
-                verifyBrowser.visit(harness.options.apiUrl + "login").then(function () {
+                verifyBrowser.visit(harness.options.baseUrl + "api/user/login").then(function () {
                     jqUnit.start();
                     gpii.express.user.api.tests.isBrowserSane(jqUnit, verifyBrowser);
                     jqUnit.stop();

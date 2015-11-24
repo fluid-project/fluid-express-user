@@ -34,10 +34,10 @@ fluid.defaults("gpii.express.user.tests.harness", {
     pouchPort:  "9735",
     apiPort:    "5379",
     mailPort:   "5225",
-    apiUrl: {
+    baseUrl: {
         expander: {
             funcName: "fluid.stringTemplate",
-            args:     ["http://localhost:%port/api/user/", { port: "{that}.options.apiPort"}]
+            args:     ["http://localhost:%port/", { port: "{that}.options.apiPort"}]
         }
     },
     // As we may commonly be working with a debugger, we need a much longer timeout for all `requestAwareRouter` and `contentAware` grades.
@@ -81,7 +81,7 @@ fluid.defaults("gpii.express.user.tests.harness", {
                     },
                     app: {
                         name: "Express User Test Harness",
-                        url:  "{harness}.options.apiUrl"
+                        url:  "{harness}.options.baseUrl"
                     }
                 },
                 listeners: {

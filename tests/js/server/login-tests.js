@@ -56,7 +56,7 @@ fluid.defaults("gpii.express.user.api.login.test.caseHolder", {
                 path: {
                     expander: {
                         funcName: "fluid.stringTemplate",
-                        args:     ["%apiUrl%endpoint", { apiUrl: "{testEnvironment}.options.apiUrl", endpoint: "login"}]
+                        args:     ["%baseUrl%endpoint", { baseUrl: "{testEnvironment}.options.baseUrl", endpoint: "login"}]
                     }
                 },
                 port: "{testEnvironment}.options.apiPort",
@@ -69,7 +69,7 @@ fluid.defaults("gpii.express.user.api.login.test.caseHolder", {
                 path: {
                     expander: {
                         funcName: "fluid.stringTemplate",
-                        args:     ["%apiUrl%endpoint", { apiUrl: "{testEnvironment}.options.apiUrl", endpoint: "current"}]
+                        args:     ["%baseUrl%endpoint", { baseUrl: "{testEnvironment}.options.baseUrl", endpoint: "current"}]
                     }
                 },
                 port: "{testEnvironment}.options.apiPort",
@@ -82,7 +82,7 @@ fluid.defaults("gpii.express.user.api.login.test.caseHolder", {
                 path: {
                     expander: {
                         funcName: "fluid.stringTemplate",
-                        args:     ["%apiUrl%endpoint", { apiUrl: "{testEnvironment}.options.apiUrl", endpoint: "logout"}]
+                        args:     ["%baseUrl%endpoint", { baseUrl: "{testEnvironment}.options.baseUrl", endpoint: "logout"}]
                     }
                 },
                 port: "{testEnvironment}.options.apiPort",
@@ -95,7 +95,7 @@ fluid.defaults("gpii.express.user.api.login.test.caseHolder", {
                 path: {
                     expander: {
                         funcName: "fluid.stringTemplate",
-                        args:     ["%apiUrl%endpoint", { apiUrl: "{testEnvironment}.options.apiUrl", endpoint: "current"}]
+                        args:     ["%baseUrl%endpoint", { baseUrl: "{testEnvironment}.options.baseUrl", endpoint: "current"}]
                     }
                 },
                 port: "{testEnvironment}.options.apiPort",
@@ -108,7 +108,7 @@ fluid.defaults("gpii.express.user.api.login.test.caseHolder", {
                 path: {
                     expander: {
                         funcName: "fluid.stringTemplate",
-                        args:     ["%apiUrl%endpoint", { apiUrl: "{testEnvironment}.options.apiUrl", endpoint: "login"}]
+                        args:     ["%baseUrl%endpoint", { baseUrl: "{testEnvironment}.options.baseUrl", endpoint: "login"}]
                     }
 
                 },
@@ -122,7 +122,7 @@ fluid.defaults("gpii.express.user.api.login.test.caseHolder", {
                 path: {
                     expander: {
                         funcName: "fluid.stringTemplate",
-                        args:     ["%apiUrl%endpoint", { apiUrl: "{testEnvironment}.options.apiUrl", endpoint: "login"}]
+                        args:     ["%baseUrl%endpoint", { baseUrl: "{testEnvironment}.options.baseUrl", endpoint: "login"}]
                     }
                 },
                 port:   "{testEnvironment}.options.apiPort",

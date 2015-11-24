@@ -71,7 +71,7 @@ fluid.defaults("gpii.express.user.api.signup.test.request", {
     path: {
         expander: {
             funcName: "fluid.stringTemplate",
-            args:     ["%apiUrl%endpoint", { apiUrl: "{testEnvironment}.options.apiUrl", endpoint: "{that}.options.endpoint"}]
+            args:     ["%baseUrl%endpoint", { baseUrl: "{testEnvironment}.options.baseUrl", endpoint: "{that}.options.endpoint"}]
         }
     },
     port: "{testEnvironment}.options.apiPort"

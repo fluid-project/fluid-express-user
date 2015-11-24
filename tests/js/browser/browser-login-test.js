@@ -20,7 +20,7 @@ gpii.express.user.tests.login.client.loginWithValidUser = function (harness) {
     var browser = new Browser();
 
     jqUnit.stop();
-    browser.visit(harness.options.apiUrl + "login").then(function () {
+    browser.visit(harness.options.baseUrl + "api/user/login").then(function () {
         jqUnit.start();
         gpii.express.user.api.tests.isBrowserSane(jqUnit, browser);
 
@@ -90,7 +90,7 @@ gpii.express.user.tests.login.client.loginWithInvalidUser = function (harness) {
     var browser = new Browser();
 
     jqUnit.stop();
-    browser.visit(harness.options.apiUrl + "login").then(function () {
+    browser.visit(harness.options.baseUrl + "api/user/login").then(function () {
         jqUnit.start();
         gpii.express.user.api.tests.isBrowserSane(jqUnit, browser);
 

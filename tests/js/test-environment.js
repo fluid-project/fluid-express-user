@@ -13,7 +13,7 @@ express.loadTestingSupport();
 fluid.defaults("gpii.express.user.tests.environment", {
     gradeNames: ["fluid.test.testEnvironment"],
     apiPort:    "3959",
-    apiUrl: {
+    baseUrl: {
         expander: {
             funcName: "fluid.stringTemplate",
             args:     ["http://localhost:%port/api/user/", { port: "{that}.options.apiPort"}]
