@@ -128,7 +128,14 @@ fluid.defaults("gpii.express.user.api.login", {
         getRouter: {
             type: "gpii.express.singleTemplateRouter",
             options: {
-                templateKey: "pages/login"
+                templateKey: "pages/login",
+                rules: {
+                    contextToExpose: {
+                        model: {
+                            user: "req.session._gpii_user"
+                        }
+                    }
+                }
             }
         },
         postRouter: {
