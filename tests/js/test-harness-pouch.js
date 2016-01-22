@@ -1,5 +1,5 @@
 // Just the PouchDB bits of the test harness (which we use independently in testing our datasource grades)
-var fluid = fluid || require("infusion");
+var fluid = require("infusion");
 
 require("gpii-pouch");
 

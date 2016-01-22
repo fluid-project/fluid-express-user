@@ -11,7 +11,7 @@
   // TODO:  Update this to send the verification form for a GET and migrate the other bits to just the POST side.
  */
 "use strict";
-var fluid = fluid || require("infusion");
+var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
 require("gpii-handlebars");

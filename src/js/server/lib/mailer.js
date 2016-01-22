@@ -11,7 +11,7 @@
   // TODO:  Evaluate moving this to its own package, perhaps combining with gpii-mail-test.
  */
 "use strict";
-var fluid = fluid || require("infusion");
+var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
 var nodemailer    = require("nodemailer");

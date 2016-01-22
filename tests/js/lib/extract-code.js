@@ -2,7 +2,7 @@
 // account creation tests.
 //
 "use strict";
-var fluid = fluid || require("infusion");
+var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
 var fs = require("fs");

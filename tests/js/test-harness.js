@@ -1,6 +1,6 @@
 // The common test harness we will use for all tests as well as manual verification.
 "use strict";
-var fluid = fluid || require("infusion");
+var fluid = require("infusion");
 
 var path        = require("path");
 var templateDir = path.resolve(__dirname, "../../src/templates");

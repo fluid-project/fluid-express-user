@@ -4,7 +4,7 @@
 
 // TODO: Test signup form with various errors.  Password length errors and messages regarding duplicate users are not displayed correctly.
 "use strict";
-var fluid         = fluid || require("infusion");
+var fluid         = require("infusion");
 var gpii          = fluid.registerNamespace("gpii");
 
 var jqUnit        = fluid.require("node-jqunit");

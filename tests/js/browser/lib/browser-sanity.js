@@ -1,5 +1,5 @@
 "use strict";
-var fluid = fluid || require("infusion");
+var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
 fluid.registerNamespace("gpii.express.user.api.tests");

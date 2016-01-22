@@ -1,6 +1,6 @@
 // Function to generate a user when testing the signup functionality on both the server and client side.
 "use strict";
-var fluid = fluid || require("infusion");
+var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
 fluid.registerNamespace("gpii.express.user.api.signup.test");

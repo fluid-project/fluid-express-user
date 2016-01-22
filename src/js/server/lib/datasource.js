@@ -17,7 +17,7 @@
 // For more information on priorities, see: http://docs.fluidproject.org/infusion/development/Priorities.html
 //
 "use strict";
-var fluid  = fluid || require("infusion");
+var fluid  = require("infusion");
 var gpii   = fluid.registerNamespace("gpii");
 var kettle = require("kettle");
 

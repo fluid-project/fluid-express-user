@@ -4,7 +4,7 @@
 
  */
 "use strict";
-var fluid  = fluid || require("infusion");
+var fluid  = require("infusion");
 fluid.setLogging(true);
 fluid.logObjectRenderChars = 4096;
 

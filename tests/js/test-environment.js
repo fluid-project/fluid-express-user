@@ -1,6 +1,6 @@
 // The common test harness wired up as a `fluid.test.testEnvironment` instance.  You are expected to extend this and
 // supply a specific test case holder component.
-var fluid = fluid || require("infusion");
+var fluid = require("infusion");
 
 require("./test-harness");
 

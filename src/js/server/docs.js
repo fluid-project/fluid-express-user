@@ -1,6 +1,6 @@
 // Display API docs written in Markdown
 "use strict";
-var fluid  = fluid || require("infusion");
+var fluid  = require("infusion");
 var gpii   = fluid.registerNamespace("gpii");
 
 var marked = require("marked");
