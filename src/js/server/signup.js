@@ -150,7 +150,7 @@ fluid.defaults("gpii.express.user.api.signup.post", {
     },
     components: {
         schemaMiddleware: {
-            type: "gpii.schema.middleware.hasParser",
+            type: "gpii.schema.middleware",
             options: {
                 messages: {
                     error: "Please check the information you have provided."
