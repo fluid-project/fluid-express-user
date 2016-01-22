@@ -4,7 +4,7 @@
 
  */
 "use strict";
-var fluid  = fluid || require("infusion");
+var fluid  = require("infusion");
 var gpii   = fluid.registerNamespace("gpii");
 var jqUnit = require("node-jqunit");
 
@@ -68,7 +68,7 @@ fluid.defaults("gpii.express.user.password.tests", {
             "iterations":  23,
             "keyLength":   32,
             "digest":      "sha256",
-            "derived_key": "f34467e93e3f8b73ffaa9781e815be966074c8f34911efc7b7406cb7c8e01c1e",
+            "derived_key": "8263cc1c1ccad9780c8ad66df3cd6cbae517bbd6f99d27c0512e3383ed045229",
             "salt":        "secret"
         }
 
