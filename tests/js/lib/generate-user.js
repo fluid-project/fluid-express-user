@@ -6,7 +6,7 @@ var gpii  = fluid.registerNamespace("gpii");
 fluid.registerNamespace("gpii.express.user.api.signup.test");
 
 gpii.express.user.api.signup.test.generateUser = function () {
-    var timestamp = (new Date()).getTime();
+    var timestamp = Date.now();
     return {
         username: "user-" + timestamp,
         password: gpii.express.user.api.signup.test.generatePassword(timestamp),
@@ -18,7 +18,7 @@ gpii.express.user.api.signup.test.generateUser = function () {
 // Generate a simple password that meets our rules.  Used in testing both the signup and reset functions.
 gpii.express.user.api.signup.test.generatePassword = function (timestamp) {
     if (!timestamp) {
-        timestamp = (new Date()).getTime();
+        timestamp = Date.now();
     }
 
     return "Password-" + timestamp;

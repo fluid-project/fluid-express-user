@@ -18,7 +18,7 @@ require("../test-environment.js");
 fluid.registerNamespace("gpii.express.user.tests.signup.client");
 
 gpii.express.user.tests.signup.client.submitDuplicateUser = function (harness) {
-    var timestamp = (new Date()).getTime();
+    var timestamp = Date.now();
     var username  = "user-" + timestamp;
     var password  = "Pass-" + timestamp;
     var email     = "existing@localhost";
@@ -60,7 +60,7 @@ gpii.express.user.tests.signup.client.submitDuplicateUser = function (harness) {
 
 gpii.express.user.tests.signup.client.mismatchedPasswords = function (harness) {
     var browser = new Browser();
-    var timestamp = (new Date()).getTime();
+    var timestamp = Date.now();
     var username  = "user-" + timestamp;
     var password  = "Pass-" + timestamp;
     var email     = "email-" + timestamp + "@localhost";
@@ -104,7 +104,7 @@ gpii.express.user.tests.signup.client.mismatchedPasswords = function (harness) {
 
 gpii.express.user.tests.signup.client.invalidVerificationCode = function (harness) {
     var browser = new Browser();
-    var timestamp = (new Date()).getTime();
+    var timestamp = Date.now();
 
     jqUnit.stop();
     browser.visit(harness.options.baseUrl + "api/user/verify/" + timestamp).then(function () {
@@ -125,7 +125,7 @@ gpii.express.user.tests.signup.client.invalidVerificationCode = function (harnes
 gpii.express.user.tests.signup.client.startSignupFromBrowser = function (harness) {
     var browser = new Browser();
 
-    var timestamp = (new Date()).getTime();
+    var timestamp = Date.now();
     var username  = "user-" + timestamp;
     var password  = "Pass-" + timestamp;
     var email     = "email-" + timestamp + "@localhost";

@@ -27,7 +27,7 @@ fluid.registerNamespace("gpii.express.user.api.reset.handler");
 // TODO: Check this against a schema using a schemaHandler
 gpii.express.user.api.reset.handler.checkResetCode = function (that, dataSourceResponse) {
     // Prepare dates that will be used in later sanity checks.
-    var earliestAcceptable = new Date((new Date()).getTime() - that.options.codeExpiration);
+    var earliestAcceptable = new Date(Date.now() - that.options.codeExpiration);
     var issueDate          = new Date(dataSourceResponse[that.options.codeIssuedKey]);
 
     if (!dataSourceResponse || !dataSourceResponse[that.options.codeKey] || (that.request.params.code !== dataSourceResponse[that.options.codeKey])) {

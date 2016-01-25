@@ -18,7 +18,7 @@ fluid.registerNamespace("gpii.express.user.api.login.test.caseHolder");
 
 // An expander to generate a new username every time
 gpii.express.user.api.login.test.caseHolder.generateUser = function () {
-    var timestamp = (new Date()).getTime();
+    var timestamp = Date.now();
     return {
         username: "user-" + timestamp,
         password: "user-" + timestamp,
@@ -29,7 +29,7 @@ gpii.express.user.api.login.test.caseHolder.generateUser = function () {
 
 // An expander to generate a new password so that we can confirm that the password reset function actually works more than once.
 gpii.express.user.api.login.test.caseHolder.generatePassword = function () {
-    var timestamp = (new Date()).getTime();
+    var timestamp = Date.now();
     return "password-" + timestamp;
 };
 

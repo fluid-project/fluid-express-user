@@ -46,7 +46,7 @@ gpii.express.user.tests.forgot.client.testMismatchingPasswords = function (harne
 };
 
 gpii.express.user.tests.forgot.client.continueMismatchedPasswordTestFromEmail = function (harness) {
-    var timestamp = (new Date()).getTime();
+    var timestamp = Date.now();
     var content = fs.readFileSync(harness.smtp.mailServer.currentMessageFile, "utf8");
 
     // Get the reset code and continue the reset process
@@ -98,7 +98,7 @@ gpii.express.user.tests.forgot.client.continueMismatchedPasswordTestFromEmail = 
 
 gpii.express.user.tests.forgot.client.resetMissingUser = function (harness) {
     var browser = new Browser();
-    var timestamp = (new Date()).getTime();
+    var timestamp = Date.now();
 
     jqUnit.stop();
     browser.visit(harness.options.baseUrl + "api/user/forgot").then(function () {
@@ -135,7 +135,7 @@ gpii.express.user.tests.forgot.client.resetMissingUser = function (harness) {
 
 gpii.express.user.tests.forgot.client.invalidResetCode = function (harness) {
     var browser = new Browser();
-    var timestamp = (new Date()).getTime();
+    var timestamp = Date.now();
 
     jqUnit.stop();
     browser.visit(harness.options.baseUrl + "api/user/reset/" + timestamp).then(function () {
@@ -200,7 +200,7 @@ gpii.express.user.tests.forgot.client.resetEndToEnd  = function (harness) {
 };
 
 gpii.express.user.tests.forgot.client.continueResetFromEmail = function (harness) {
-    var timestamp = (new Date()).getTime();
+    var timestamp = Date.now();
     var password  = "Password-" + timestamp;
 
     // This is a MIME message, it will mangle the lines and special characters unless we decode it.
