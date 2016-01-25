@@ -58,15 +58,25 @@ fluid.defaults("gpii.express.user.tests.harness", {
         }
     ],
     events: {
-        onPouchStarted:        null,
+        onApiDone:             null,
         onApiStarted:          null,
-        onPouchExpressStarted: null,
+        onMailDone:            null,
         onMailReady:           null,
+        onPouchDone:           null,
+        onPouchStarted:        null,
+        onPouchExpressStarted: null, // TODO:  Remove?
         onStarted: {
             events: {
                 onPouchStarted: "onPouchStarted",
                 onApiStarted:   "onApiStarted",
                 onMailReady:    "onMailReady"
+            }
+        },
+        onDone: {
+            events: {
+                onPouchDone: "onPouchDone",
+                onApiDone:   "onApiDone",
+                onMailDone:  "onMailDone"
             }
         }
     },
@@ -85,7 +95,8 @@ fluid.defaults("gpii.express.user.tests.harness", {
                     }
                 },
                 listeners: {
-                    onStarted: "{harness}.events.onApiStarted.fire"
+                    "onStarted.notifyParent": "{harness}.events.onApiStarted.fire",
+                    "afterDestroy.notifyParent": "{harness}.events.onApiDone.fire"
                 },
                 components: {
                     session: {
@@ -185,7 +196,8 @@ fluid.defaults("gpii.express.user.tests.harness", {
             options: {
                 pouchPort: "{harness}.options.pouchPort",
                 listeners: {
-                    onAllStarted: "{harness}.events.onPouchStarted.fire"
+                    onAllStarted: "{harness}.events.onPouchStarted.fire",
+                    "afterDestroy.notifyParent": "{harness}.events.onPouchDone.fire"
                 }
             }
         },
@@ -199,7 +211,8 @@ fluid.defaults("gpii.express.user.tests.harness", {
                         {
                             func: "{harness}.events.onMailReady.fire"
                         }
-                    ]
+                    ],
+                    "afterDestroy.notifyParent": "{harness}.events.onMailDone.fire"
                 }
             }
         }
