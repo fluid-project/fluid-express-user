@@ -97,29 +97,68 @@ fluid.defaults("gpii.express.user.tests.login.client.caseHolder", {
     rawModules: [
         {
             tests: [
-                //{
-                //    name: "Login with a valid username and password...",
-                //    type: "test",
-                //    sequence: [
-                //        {
-                //            func: "{testEnvironment}.browser.goto",
-                //            args: ["{testEnvironment}.options.loginUrl"]
-                //        },
-                //        {
-                //            event:    "{testEnvironment}.browser.events.onGotoComplete",
-                //            listener: "{testEnvironment}.browser.check",
-                //            args:     ["[name='checked']"]
-                //        },
-                //        {
-                //            funcName: "gpii.express.user.tests.login.client.loginWithValidUser",
-                //            args:     ["{testEnvironment}.harness"]
-                //        },
-                //        {
-                //            listener: "fluid.identity",
-                //            event: "{testEnvironment}.harness.events.onReadyToDie"
-                //        }
-                //    ]
-                //},
+                {
+                    name: "Login with a valid username and password...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "console.log",
+                            args: ["LOGIN URL: ", "{testEnvironment}.options.loginUrl"]
+                        },
+                        {
+                            func: "{testEnvironment}.browser.goto",
+                            args: ["{testEnvironment}.options.loginUrl"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onLoaded",
+                            listener: "{testEnvironment}.browser.type",
+                            args:     ["[name='username']", "existing"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onTypeComplete",
+                            listener: "{testEnvironment}.browser.type",
+                            args:     ["[name='password']", "password"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onTypeComplete",
+                            listener: "{testEnvironment}.browser.click",
+                            args:     [".login-button"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onClickComplete",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     [500] // TODO: Try reducing or eliminating this
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
+                            listener: "{testEnvironment}.browser.evaluate",
+                            args:     [gpii.tests.browser.tests.elementMatches, ".login-success", "You have successfully logged in."]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
+                            listener: "jqUnit.assertTrue",
+                            args:     ["A success message should now be displayed...", "{arguments}.0"]
+                        },
+                        {
+                            func: "{testEnvironment}.browser.evaluate",
+                            args: [gpii.tests.browser.tests.lookupFunction, ".login-error", "innerHTML"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
+                            listener: "jqUnit.assertNull",
+                            args:     ["A failure message should not be displayed...", "{arguments}.0"]
+                        },
+                        {
+                            func: "{testEnvironment}.browser.visible",
+                            args: [".login-form"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onVisibleComplete",
+                            listener: "jqUnit.assertFalse",
+                            args:     ["The login form should no longer be visible...", "{arguments}.0"]
+                        }
+                    ]
+                },
                 {
                     name: "Login with an invalid username and password...",
                     type: "test",
@@ -128,7 +167,6 @@ fluid.defaults("gpii.express.user.tests.login.client.caseHolder", {
                             func: "console.log",
                             args: ["LOGIN URL: ", "{testEnvironment}.options.loginUrl"]
                         },
-                        // TODO:  Content does not seem to be loading.
                         {
                             func: "{testEnvironment}.browser.goto",
                             args: ["{testEnvironment}.options.loginUrl"]
@@ -145,10 +183,7 @@ fluid.defaults("gpii.express.user.tests.login.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onTypeComplete",
-                            listener: "{testEnvironment}.browser.screenshot"
-                        },
-                        {
-                            func:     "{testEnvironment}.browser.click",
+                            listener: "{testEnvironment}.browser.click",
                             args:     [".login-button"]
                         },
                         {
@@ -159,32 +194,24 @@ fluid.defaults("gpii.express.user.tests.login.client.caseHolder", {
                         {
                             event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.evaluate",
-                            args:     [gpii.tests.browser.tests.elementMatches, ".login-error", "Invalid username or password."]
+                            args: [gpii.tests.browser.tests.elementMatches, ".login-error .alert", "Invalid username or password."]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",
                             listener: "jqUnit.assertTrue",
                             args:     ["A failure message should now be displayed...", "{arguments}.0"]
+                        },
+                        {
+                            func: "{testEnvironment}.browser.evaluate",
+                            args: [gpii.tests.browser.tests.lookupFunction, ".login-success", "innerHTML"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
+                            listener: "jqUnit.assertNull",
+                            args:     ["A success message should not be displayed...", "{arguments}.0"]
                         }
                     ]
                 }
-
-
-//                // The login form should be visible
-//                var loginForm = browser.window.$(".login-form");
-//                jqUnit.assertNotUndefined("There should be a login form...", loginForm.html());
-//                jqUnit.assertEquals("The login form should not be hidden...", "", loginForm.css("display"));
-//
-//                // A "success" message should be visible
-//                var feedback = browser.window.$(".success");
-//                jqUnit.assertUndefined("There should not be a positive feedback message...", feedback.html());
-//
-//                // There should be no alerts
-//                var alert = browser.window.$(".alert");
-//                jqUnit.assertNotUndefined("There should be an alert...", alert.html());
-//                if (alert.html()) {
-//                    jqUnit.assertTrue("The alert should have content.", alert.html().trim().length > 0);
-//                }
             ]
         }
     ]
