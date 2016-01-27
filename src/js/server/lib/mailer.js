@@ -109,7 +109,7 @@ fluid.registerNamespace("gpii.express.user.mailer.handlebars");
 // output.
 //
 gpii.express.user.mailer.handlebars.sendTemplateMessage = function (that, mailOptions, context) {
-    var fullMailOptions = mailOptions ? mailOptions : {};
+    var fullMailOptions = mailOptions || {};
 
     if (!that.options.textTemplateKey && !that.options.htmlTemplateKey) {
         fluid.fail("Cannot generate email without a text and/or html mail template.  Check your configuration.");
