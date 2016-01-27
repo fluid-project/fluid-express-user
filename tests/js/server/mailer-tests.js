@@ -40,8 +40,6 @@ gpii.mailer.tests.checkResponse = function (mailServerComponent, expected) {
         mailparser.write(mailContent);
         mailparser.end();
     }
-
-
 };
 
 fluid.defaults("gpii.mailer.tests.caseHolder", {

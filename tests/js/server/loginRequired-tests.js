@@ -7,8 +7,7 @@
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
-require("../test-environment");
-require("../lib/verify-response");
+require("../lib/");
 
 fluid.defaults("gpii.express.user.api.loginRequired.request", {
     gradeNames: ["kettle.test.request.httpCookie"],
@@ -27,7 +26,7 @@ fluid.registerNamespace("gpii.express.user.api.loginRequired.test.caseHolder");
 
 
 fluid.defaults("gpii.express.user.api.loginRequired.test.caseHolder", {
-    gradeNames: ["gpii.express.tests.caseHolder"],
+    gradeNames: ["gpii.express.user.tests.caseHolder"],
     components: {
         cookieJar: {
             type: "kettle.test.cookieJar"

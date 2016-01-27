@@ -17,7 +17,8 @@ express.loadTestingSupport();
 var kettle = require("kettle");
 kettle.loadTestingSupport();
 
-require("../test-harness-pouch");
+require("../lib/");
+
 require("../../../src/js/server/lib/datasource");
 
 fluid.registerNamespace("gpii.express.user.datasource.tests");

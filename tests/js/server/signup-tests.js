@@ -8,10 +8,7 @@
 var fluid        = require("infusion");
 var gpii         = fluid.registerNamespace("gpii");
 
-require("../test-environment");
-
-require("../lib/generate-user");
-require("../lib/extract-code");
+require("../lib/");
 
 var jqUnit = require("node-jqunit");
 
@@ -79,7 +76,7 @@ fluid.defaults("gpii.express.user.api.signup.test.request", {
 
 // Each test has a request instance of `kettle.test.request.http` or `kettle.test.request.httpCookie`, and a test module that wires the request to the listener that handles its results.
 fluid.defaults("gpii.express.user.api.signup.test.caseHolder", {
-    gradeNames: ["gpii.express.tests.caseHolder"],
+    gradeNames: ["gpii.express.user.tests.caseHolder"],
     components: {
         cookieJar: {
             type: "kettle.test.cookieJar"
