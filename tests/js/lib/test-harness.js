@@ -2,10 +2,8 @@
 "use strict";
 var fluid = require("infusion");
 
-var path        = require("path");
-var templateDir = path.resolve(__dirname, "../../src/templates");
+require("../../../index");
 
-require("../../");
 
 require("gpii-express");
 require("gpii-handlebars");
@@ -13,9 +11,6 @@ require("gpii-mail-test");
 
 require("./test-harness-pouch");
 
-var bowerDir        = path.resolve(__dirname, "../../bower_components");
-var srcDir          = path.resolve(__dirname, "../../src");
-var modulesDir      = path.resolve(__dirname, "../../node_modules");
 
 fluid.defaults("gpii.express.user.tests.harness.gated.handler", {
     gradeNames: ["gpii.express.handler"],
@@ -87,7 +82,7 @@ fluid.defaults("gpii.express.user.tests.harness", {
                 config: {
                     express: {
                         port:  "{harness}.options.apiPort",
-                        views: templateDir
+                        views: "%gpii-express-user/src/templates"
                     },
                     app: {
                         name: "Express User Test Harness",
@@ -130,14 +125,14 @@ fluid.defaults("gpii.express.user.tests.harness", {
                         type:  "gpii.express.router.static",
                         options: {
                             path:    "/modules",
-                            content: modulesDir
+                            content: "%gpii-express-user/node_modules"
                         }
                     },
                     bc: {
                         type:  "gpii.express.router.static",
                         options: {
                             path:    "/bc",
-                            content: bowerDir
+                            content: "%gpii-express-user/bower_components"
                         }
                     },
                     inline: {
@@ -168,7 +163,7 @@ fluid.defaults("gpii.express.user.tests.harness", {
                         type:  "gpii.express.router.static",
                         options: {
                             path:    "/",
-                            content: srcDir
+                            content: "%gpii-express-user/src"
                         }
                     },
                     // A "gated" endpoint that can only be accessed if the user is logged in

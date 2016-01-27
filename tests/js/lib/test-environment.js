@@ -11,8 +11,6 @@ kettle.loadTestingSupport();
 require("gpii-test-browser");
 gpii.tests.browser.loadTestingSupport();
 
-
-
 fluid.defaults("gpii.express.user.tests.environment", {
     gradeNames: ["gpii.tests.browser.environment"],
     apiPort:    "3959",

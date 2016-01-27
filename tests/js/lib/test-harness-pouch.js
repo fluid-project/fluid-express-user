@@ -3,9 +3,6 @@ var fluid = require("infusion");
 
 require("gpii-pouch");
 
-var path = require("path");
-var userDataFile = path.resolve(__dirname, "../data/users.json");
-
 fluid.defaults("gpii.express.user.tests.pouch", {
     gradeNames: ["gpii.express"],
     pouchPort: "3579",
@@ -30,7 +27,7 @@ fluid.defaults("gpii.express.user.tests.pouch", {
             options: {
                 path: "/",
                 databases: {
-                    "users":   { "data": userDataFile }
+                    "users":   { "data": "%gpii-express-user/tests/data/users.json" }
                 },
                 listeners: {
                     "onStarted.notifyParent": {

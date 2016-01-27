@@ -4,7 +4,7 @@ fluid.setLogging(true);
 
 var gpii = fluid.registerNamespace("gpii");
 
-require("./test-harness");
+require("./lib/test-harness");
 
 gpii.express.user.tests.harness({
     pouchPort:  "9599",

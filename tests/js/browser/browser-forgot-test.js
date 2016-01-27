@@ -1,298 +1,16 @@
-// Test the "forgot password" reset mechanism end-to-end
+// Test the "forgot password" reset mechanism end-to-end.
+//
 "use strict";
 var fluid      = require("infusion");
 var gpii       = fluid.registerNamespace("gpii");
 
-var jqUnit     = fluid.require("node-jqunit");
-var Browser    = require("zombie");
+require("../lib/");
 
-var fs         = require("fs");
-
-require("./lib/browser-sanity.js");
-require("../test-environment.js");
-
-fluid.registerNamespace("gpii.express.user.tests.forgot.client");
-
-gpii.express.user.tests.forgot.client.testMismatchingPasswords = function (harness) {
-    var browser = new Browser();
-
-    jqUnit.stop();
-    browser.visit(harness.options.baseUrl + "api/user/forgot").then(function () {
-        jqUnit.start();
-        gpii.express.user.api.tests.isBrowserSane(jqUnit, browser);
-        jqUnit.stop();
-
-        browser
-            .fill("email", "existing@localhost")
-            .pressButton("Send Email", function () {
-                jqUnit.start();
-                gpii.express.user.api.tests.isBrowserSane(jqUnit, browser);
-
-                // The "forgot password" form should not be visible
-                var forgotForm = browser.window.$(".forgot-form");
-                jqUnit.assertTrue("There should be a \"forgot password\" form...", forgotForm.html().length > 0);
-                jqUnit.assertEquals("The \"forgot password\" form should be hidden...", "none", forgotForm.css("display"));
-
-
-                // A "success" message should be visible
-                var feedback = browser.window.$(".forgot-success");
-                jqUnit.assertTrue("There should be a positive feedback message...", feedback.html().length > 0);
-
-                // There should be no alerts
-                var alert = browser.window.$(".forgot-error");
-                jqUnit.assertEquals("There should not be an alert...", 0, alert.html().length);
-            });
-    });
-};
-
-gpii.express.user.tests.forgot.client.continueMismatchedPasswordTestFromEmail = function (harness) {
-    var timestamp = Date.now();
-    var content = fs.readFileSync(harness.smtp.mailServer.currentMessageFile, "utf8");
-
-    // Get the reset code and continue the reset process
-    var resetCodeRegexp = new RegExp("(http.+reset/[a-z0-9-]+)", "i");
-    var matches = content.toString().match(resetCodeRegexp);
-
-    jqUnit.assertNotNull("There should be a reset code in the email sent to the user.", matches);
-    if (matches) {
-        var resetUrl = matches[1];
-        jqUnit.stop();
-
-        // We need a separate browser to avoid clobbering the instance used to generate this email, which still needs to check the results of its activity.
-        var resetBrowser = new Browser();
-        resetBrowser.visit(resetUrl).then(function () {
-            jqUnit.start();
-            gpii.express.user.api.tests.isBrowserSane(jqUnit, resetBrowser);
-            jqUnit.stop();
-
-            // Fill out the form
-            resetBrowser
-                .fill("password", timestamp)
-                .fill("confirm", timestamp + "x")
-                .pressButton("Reset Password", function () {
-                    jqUnit.start();
-                    gpii.express.user.api.tests.isBrowserSane(jqUnit, resetBrowser);
-
-                    // The forgot password form should be visible
-                    var resetForm = resetBrowser.window.$(".reset-form");
-                    jqUnit.assertTrue("There should be a form...", resetForm.html().length > 0);
-                    jqUnit.assertEquals("The form should not be hidden...", "", resetForm.css("display"));
-
-                    // A "success" message should not be visible
-                    var feedback = resetBrowser.window.$(".success");
-                    jqUnit.assertUndefined("There should not be a positive feedback message...", feedback.html());
-
-                    // There should be an alert
-                    var alert = resetBrowser.window.$(".alert");
-                    jqUnit.assertTrue("There should be at least one alert...", alert.html().length > 0);
-                    if (alert.html()) {
-                        jqUnit.assertTrue("The alert should have content.", alert.html().trim().length > 0);
-                    }
-
-                    // Make sure the test harness waits for us to actually be finished.
-                    harness.events.onReadyToDie.fire();
-                });
-        });
-    }
-};
-
-gpii.express.user.tests.forgot.client.resetMissingUser = function (harness) {
-    var browser = new Browser();
-    var timestamp = Date.now();
-
-    jqUnit.stop();
-    browser.visit(harness.options.baseUrl + "api/user/forgot").then(function () {
-        jqUnit.start();
-        gpii.express.user.api.tests.isBrowserSane(jqUnit, browser);
-        jqUnit.stop();
-
-        browser
-            .fill("email", timestamp + "@localhost")
-            .pressButton("Send Email", function () {
-                jqUnit.start();
-
-                // The "forgot password" form should be visible
-                var forgotForm = browser.window.$(".forgot-form");
-                jqUnit.assertTrue("There should be a \"forgot password\" form...", forgotForm.html().length > 0);
-                jqUnit.assertEquals("The \"forgot password\" form should not be hidden...", "", forgotForm.css("display"));
-
-                // A "success" message should be visible
-                var feedback = browser.window.$(".forgot-success");
-                jqUnit.assertEquals("There should not be a positive feedback message...", 0, feedback.html().length);
-
-                // There should be no alerts
-                var alert = browser.window.$(".forgot-error");
-                jqUnit.assertTrue("There should be an alert...", alert.html().length > 0);
-                if (alert.html()) {
-                    jqUnit.assertTrue("The alert should have content.", alert.html().trim().length > 0);
-                }
-
-                // Make sure the test harness waits for us to actually be finished.
-                harness.events.onReadyToDie.fire();
-            });
-    });
-};
-
-gpii.express.user.tests.forgot.client.invalidResetCode = function (harness) {
-    var browser = new Browser();
-    var timestamp = Date.now();
-
-    jqUnit.stop();
-    browser.visit(harness.options.baseUrl + "api/user/reset/" + timestamp).then(function () {
-        jqUnit.start();
-        gpii.express.user.api.tests.isBrowserSane(jqUnit, browser);
-        jqUnit.stop();
-
-        browser.fill("password", timestamp)
-            .fill("confirm", timestamp)
-            .pressButton("Reset Password", function () {
-                jqUnit.start();
-
-                // The "forgot password" form should not be visible
-                var resetForm = browser.window.$(".reset-form");
-                jqUnit.assertTrue("There should be a \"reset\" form...", resetForm.html().length > 0);
-
-                // A "success" message should not be visible
-                var feedback = browser.window.$(".reset-success");
-                jqUnit.assertEquals("There should not be a positive feedback message...", 0, feedback.html().length);
-
-                // There should be at least one alert
-                var alert = browser.window.$(".reset-error");
-                jqUnit.assertTrue("The alert should have content.", alert.html().trim().length > 0);
-
-                // Make sure the test harness waits for us to actually be finished.
-                harness.events.onReadyToDie.fire();
-            });
-    });
-};
-
-gpii.express.user.tests.forgot.client.resetEndToEnd  = function (harness) {
-    var browser = new Browser();
-
-    jqUnit.stop();
-    browser.visit(harness.options.baseUrl + "api/user/forgot").then(function () {
-        jqUnit.start();
-        gpii.express.user.api.tests.isBrowserSane(jqUnit, browser);
-        jqUnit.stop();
-
-        // Because of the event sequence, we can't wait around to listen and test the results.
-        // The proof will be in the pudding, i.e. if we get an email, things are hopefully OK.
-        browser
-            .fill("email", "existing@localhost")
-            .pressButton("Send Email", function () {
-                jqUnit.start();
-                gpii.express.user.api.tests.isBrowserSane(jqUnit, browser);
-
-                // The "forgot password" form should not be visible
-                var forgotForm = browser.window.$(".forgot-form");
-                jqUnit.assertTrue("There should be a \"forgot password\" form...", forgotForm.html().length > 0);
-                jqUnit.assertEquals("The \"forgot password\" form should be hidden...", "none", forgotForm.css("display"));
-
-                // A "success" message should be visible
-                var feedback = browser.window.$(".forgot-success");
-                jqUnit.assertTrue("There should be a positive feedback message...", feedback.html().length > 0);
-
-                // There should be no alerts
-                var alert = browser.window.$(".forgot-error");
-                jqUnit.assertEquals("There should not be an alert...", 0, alert.html().length);
-            });
-    });
-};
-
-gpii.express.user.tests.forgot.client.continueResetFromEmail = function (harness) {
-    var timestamp = Date.now();
-    var password  = "Password-" + timestamp;
-
-    // This is a MIME message, it will mangle the lines and special characters unless we decode it.
-    var MailParser = require("mailparser").MailParser,
-        mailparser = new MailParser();
-
-    // If this ends up going any deeper, we will need to refactor using a testEnvironment and testCases.
-    mailparser.on("end", function (mailObject) {
-        jqUnit.start();
-        var content = mailObject.text;
-
-        // Get the reset code and continue the reset process
-        var resetCodeRegexp = new RegExp("(http.+reset/[a-z0-9-]+)", "i");
-        var matches = content.toString().match(resetCodeRegexp);
-
-        jqUnit.assertNotNull("There should be a reset code in the email sent to the user.", matches);
-        if (matches) {
-            var resetUrl = matches[1];
-            jqUnit.stop();
-
-            // We need a separate browser to avoid clobbering the instance used to generate this email, which still needs to check the results of its activity.
-            var resetBrowser = new Browser();
-            resetBrowser.visit(resetUrl).then(function () {
-                jqUnit.start();
-                gpii.express.user.api.tests.isBrowserSane(jqUnit, resetBrowser);
-                jqUnit.stop();
-
-                // Fill out the form
-                resetBrowser.fill("password", password)
-                    .fill("confirm", password)
-                    .pressButton("Reset Password", function () {
-                        jqUnit.start();
-                        gpii.express.user.api.tests.isBrowserSane(jqUnit, resetBrowser);
-
-                        // The reset form should no longer be visible
-                        var resetForm = resetBrowser.window.$(".reset-form");
-                        jqUnit.assertTrue("There should be a reset form...", resetForm.html().length > 0);
-                        jqUnit.assertEquals("The reset form should be hidden...", "none", resetForm.css("display"));
-
-                        // A "success" message should be visible
-                        var feedback = resetBrowser.window.$(".reset-success");
-                        jqUnit.assertTrue("There should be a positive feedback message...", feedback.html().length > 0);
-
-                        // There should be no alerts
-                        var alert = resetBrowser.window.$(".alert");
-                        jqUnit.assertUndefined("There should not be any alerts...", alert.html());
-
-                        // Log in using the new details
-                        jqUnit.stop();
-                        resetBrowser.visit(harness.options.baseUrl + "api/user/login").then(function () {
-                            jqUnit.start();
-                            gpii.express.user.api.tests.isBrowserSane(jqUnit, resetBrowser);
-                            jqUnit.stop();
-
-                            resetBrowser.fill("username", "existing")
-                                .fill("password", password)
-                                .pressButton("Log In", function () {
-                                    jqUnit.start();
-                                    gpii.express.user.api.tests.isBrowserSane(jqUnit, resetBrowser);
-
-                                    // The login form should no longer be visible
-                                    var loginForm = resetBrowser.window.$(".login-form");
-                                    jqUnit.assertTrue("There should be a login form...", loginForm.html().length > 0);
-                                    jqUnit.assertEquals("The login form should be hidden...", "none", loginForm.css("display"));
-
-                                    // A "success" message should be visible
-                                    var feedback = resetBrowser.window.$(".success");
-                                    jqUnit.assertTrue("There should be a positive feedback message...", feedback.html().length > 0);
-
-                                    // There should be no alerts
-                                    var alert = resetBrowser.window.$(".alert");
-                                    jqUnit.assertUndefined("There should not be any alerts...", alert.html());
-
-                                    // Make sure the test harness waits for us to actually be finished.
-                                    harness.events.onReadyToDie.fire();
-                                });
-                        });
-                    });
-            });
-        }
-    });
-
-    // send the email source to the parser
-    jqUnit.stop();
-    var mailFileContents = fs.readFileSync(harness.smtp.mailServer.currentMessageFile, "utf8");
-    mailparser.write(mailFileContents);
-    mailparser.end();
-};
-
+require("gpii-test-browser");
+gpii.tests.browser.loadTestingSupport();
 
 fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
-    gradeNames: ["gpii.express.tests.caseHolder"],
+    gradeNames: ["gpii.express.user.tests.caseHolder"],
     rawModules: [
         {
             tests: [
@@ -301,31 +19,108 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                     type: "test",
                     sequence: [
                         {
-                            funcName: "gpii.express.user.tests.forgot.client.testMismatchingPasswords",
-                            args:     ["{testEnvironment}.harness"]
+                            func: "{testEnvironment}.browser.goto",
+                            args: ["{testEnvironment}.options.forgotUrl"]
                         },
                         {
-                            listener: "gpii.express.user.tests.forgot.client.continueMismatchedPasswordTestFromEmail",
+                            event:    "{testEnvironment}.browser.events.onLoaded",
+                            listener: "{testEnvironment}.browser.type",
+                            args:     ["[name='email']", "existing@localhost"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onTypeComplete",
+                            listener: "{testEnvironment}.browser.click",
+                            args:     [".forgot-button"]
+                        },
+                        {
+                            listener: "gpii.express.user.tests.client.continueFromEmail",
                             event:    "{testEnvironment}.harness.smtp.events.onMessageReceived",
-                            args:     ["{testEnvironment}.harness"]
+                            args:     ["{testEnvironment}", "{testEnvironment}.options.resetPattern"]
+                        },
+                        // The function above will cause the browser to `goto` our custom "reset" URL.
+                        // We wait for this to load, and fill in the form.
+                        {
+                            event:    "{testEnvironment}.browser.events.onLoaded",
+                            listener: "{testEnvironment}.browser.type",
+                            args:     ["[name='password']", "NewPass12345!"]
                         },
                         {
-                            listener: "fluid.identity",
-                            event: "{testEnvironment}.harness.events.onReadyToDie"
+                            event:    "{testEnvironment}.browser.events.onTypeComplete",
+                            listener: "{testEnvironment}.browser.type",
+                            args:     ["[name='confirm']", "NewPass54321!"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onTypeComplete",
+                            listener: "{testEnvironment}.browser.click",
+                            args:     [".reset-button"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onClickComplete",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.ajaxWait"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
+                            listener: "{testEnvironment}.browser.evaluate",
+                            args:     [gpii.tests.browser.tests.elementMatches, ".reset-error", "The passwords you have entered don't match."]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
+                            listener: "jqUnit.assertTrue",
+                            args:     ["A reset failure message should now be displayed...", "{arguments}.0"]
+                        },
+                        {
+                            func: "{testEnvironment}.browser.evaluate",
+                            args: [gpii.tests.browser.tests.lookupFunction, ".reset-success", "innerHTML"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
+                            listener: "jqUnit.assertNull",
+                            args:     ["A reset success message should not be displayed...", "{arguments}.0"]
                         }
                     ]
                 },
                 {
-                    name: "Try to reset a user who doesn't exist...",
+                    name: "Try to reset the password for a user who doesn't exist...",
                     type: "test",
                     sequence: [
                         {
-                            funcName: "gpii.express.user.tests.forgot.client.resetMissingUser",
-                            args:     ["{testEnvironment}.harness"]
+                            func: "{testEnvironment}.browser.goto",
+                            args: ["{testEnvironment}.options.forgotUrl"]
                         },
                         {
-                            listener: "fluid.identity",
-                            event: "{testEnvironment}.harness.events.onReadyToDie"
+                            event:    "{testEnvironment}.browser.events.onLoaded",
+                            listener: "{testEnvironment}.browser.type",
+                            args:     ["[name='email']", "nowhere.man@localhost"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onTypeComplete",
+                            listener: "{testEnvironment}.browser.click",
+                            args:     [".forgot-button"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onClickComplete",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.ajaxWait"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
+                            listener: "{testEnvironment}.browser.evaluate",
+                            args:     [gpii.tests.browser.tests.elementMatches, ".forgot-error .alert", "No matching user found."]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
+                            listener: "jqUnit.assertTrue",
+                            args:     ["A failure message should now be displayed...", "{arguments}.0"]
+                        },
+                        {
+                            func: "{testEnvironment}.browser.evaluate",
+                            args: [gpii.tests.browser.tests.lookupFunction, ".forgot-success", "innerHTML"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
+                            listener: "jqUnit.assertNull",
+                            args:     ["A success message should not be displayed...", "{arguments}.0"]
                         }
                     ]
                 },
@@ -334,31 +129,157 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                     type: "test",
                     sequence: [
                         {
-                            funcName: "gpii.express.user.tests.forgot.client.invalidResetCode",
-                            args:     ["{testEnvironment}.harness"]
+                            func: "{testEnvironment}.browser.goto",
+                            args: ["{testEnvironment}.options.bogusResetUrl"]
                         },
                         {
-                            listener: "fluid.identity",
-                            event: "{testEnvironment}.harness.events.onReadyToDie"
+                            event:    "{testEnvironment}.browser.events.onLoaded",
+                            listener: "{testEnvironment}.browser.type",
+                            args:     ["[name='password']", "Password1!"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onTypeComplete",
+                            listener: "{testEnvironment}.browser.type",
+                            args:     ["[name='confirm']", "Password1!"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onTypeComplete",
+                            listener: "{testEnvironment}.browser.click",
+                            args:     [".reset-button"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onClickComplete",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.ajaxWait"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
+                            listener: "{testEnvironment}.browser.evaluate",
+                            args:     [gpii.tests.browser.tests.elementMatches, ".reset-error .alert", "You must provide a valid reset code to use this interface."]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
+                            listener: "jqUnit.assertTrue",
+                            args:     ["A failure message should now be displayed...", "{arguments}.0"]
+                        },
+                        {
+                            func: "{testEnvironment}.browser.evaluate",
+                            args: [gpii.tests.browser.tests.lookupFunction, ".reset-success", "innerHTML"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
+                            listener: "jqUnit.assertNull",
+                            args:     ["A success message should not be displayed...", "{arguments}.0"]
                         }
                     ]
                 },
                 {
-                    name: "Reset a user's password using the \"forgot password\" form...",
+                    name: "Reset a user's password from end-to-end using the \"forgot password\" form...",
                     type: "test",
                     sequence: [
                         {
-                            funcName: "gpii.express.user.tests.forgot.client.resetEndToEnd",
-                            args:     ["{testEnvironment}.harness"]
+                            func: "{testEnvironment}.browser.goto",
+                            args: ["{testEnvironment}.options.forgotUrl"]
                         },
                         {
-                            listener: "gpii.express.user.tests.forgot.client.continueResetFromEmail",
+                            event:    "{testEnvironment}.browser.events.onLoaded",
+                            listener: "{testEnvironment}.browser.type",
+                            args:     ["[name='email']", "existing@localhost"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onTypeComplete",
+                            listener: "{testEnvironment}.browser.click",
+                            args:     [".forgot-button"]
+                        },
+                        {
+                            listener: "gpii.express.user.tests.client.continueFromEmail",
                             event:    "{testEnvironment}.harness.smtp.events.onMessageReceived",
-                            args:     ["{testEnvironment}.harness"]
+                            args:     ["{testEnvironment}", "{testEnvironment}.options.resetPattern"]
+                        },
+                        // The function above will cause the browser to `goto` our custom "reset" URL.
+                        // We wait for this to load, and fill in the form.
+                        {
+                            event:    "{testEnvironment}.browser.events.onLoaded",
+                            listener: "{testEnvironment}.browser.type",
+                            args:     ["[name='password']", "NewPass12345!"]
                         },
                         {
-                            listener: "fluid.identity",
-                            event: "{testEnvironment}.harness.events.onReadyToDie"
+                            event:    "{testEnvironment}.browser.events.onTypeComplete",
+                            listener: "{testEnvironment}.browser.type",
+                            args:     ["[name='confirm']", "NewPass12345!"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onTypeComplete",
+                            listener: "{testEnvironment}.browser.click",
+                            args:     [".reset-button"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onClickComplete",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.ajaxWait"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
+                            listener: "{testEnvironment}.browser.evaluate",
+                            args:     [gpii.tests.browser.tests.elementMatches, ".reset-success", "Your password has been reset."]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
+                            listener: "jqUnit.assertTrue",
+                            args:     ["A reset success message should now be displayed...", "{arguments}.0"]
+                        },
+                        {
+                            func: "{testEnvironment}.browser.evaluate",
+                            args: [gpii.tests.browser.tests.lookupFunction, ".reset-failure", "innerHTML"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
+                            listener: "jqUnit.assertNull",
+                            args:     ["A reset failure message should not be displayed...", "{arguments}.0"]
+                        },
+                        // Now, confirm that our password has actually been reset by using it to log in.
+                        {
+                            func: "{testEnvironment}.browser.goto",
+                            args: ["{testEnvironment}.options.loginUrl"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onLoaded",
+                            listener: "{testEnvironment}.browser.type",
+                            args:     ["[name='username']", "existing@localhost"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onTypeComplete",
+                            listener: "{testEnvironment}.browser.type",
+                            args:     ["[name='password']", "NewPass12345!"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onTypeComplete",
+                            listener: "{testEnvironment}.browser.click",
+                            args:     [".login-button"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onClickComplete",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.ajaxWait"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
+                            listener: "{testEnvironment}.browser.evaluate",
+                            args:     [gpii.tests.browser.tests.elementMatches, ".login-success", "You have successfully logged in."]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
+                            listener: "jqUnit.assertTrue",
+                            args:     ["A login success message should now be displayed...", "{arguments}.0"]
+                        },
+                        {
+                            func: "{testEnvironment}.browser.evaluate",
+                            args: [gpii.tests.browser.tests.lookupFunction, ".login-failure", "innerHTML"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
+                            listener: "jqUnit.assertNull",
+                            args:     ["A login failure message should not be displayed...", "{arguments}.0"]
                         }
                     ]
                 }
@@ -371,6 +292,26 @@ gpii.express.user.tests.environment({
     apiPort:   7533,
     pouchPort: 7534,
     mailPort:  4082,
+    ajaxWait:  500, // The standard time we give our AJAX calls to complete
+    resetPattern: "(http.+reset/[a-z0-9-]+)",
+    forgotUrl: {
+        expander: {
+            funcName: "fluid.stringTemplate",
+            args: ["%baseUrl%path", { baseUrl: "{testEnvironment}.options.baseUrl", path: "forgot"}]
+        }
+    },
+    loginUrl: {
+        expander: {
+            funcName: "fluid.stringTemplate",
+            args: ["%baseUrl%path", { baseUrl: "{testEnvironment}.options.baseUrl", path: "login"}]
+        }
+    },
+    bogusResetUrl: {
+        expander: {
+            funcName: "fluid.stringTemplate",
+            args: ["%baseUrl%path", { baseUrl: "{testEnvironment}.options.baseUrl", path: "reset/foobar"}]
+        }
+    },
     components: {
         testCaseHolder: {
             type: "gpii.express.user.tests.forgot.client.caseHolder"
