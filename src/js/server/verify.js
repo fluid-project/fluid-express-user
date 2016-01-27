@@ -68,7 +68,6 @@ fluid.defaults("gpii.express.user.api.verify.handler", {
                 listeners: {
                     "onRead.checkVerificationCode": {
                         nameSpace: "gpii.express.user.api.verify",
-                        priority:  "last",
                         funcName:  "gpii.express.user.api.verify.handler.checkVerificationCode",
                         args:      ["{gpii.express.handler}", "{arguments}.0"] // dataSource response
                     },

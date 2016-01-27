@@ -71,8 +71,7 @@ fluid.defaults("gpii.express.user.api.verify.resend.handler", {
                 listeners: {
                     "onRead.getVerificationCode": {
                         funcName: "gpii.express.user.api.verify.resend.handler.getVerificationCode",
-                        args:     ["{gpii.express.user.api.verify.resend.handler}", "{arguments}.0"],
-                        priority: "last"
+                        args:     ["{gpii.express.user.api.verify.resend.handler}", "{arguments}.0"]
                     }
                 }
             }

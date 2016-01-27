@@ -102,7 +102,6 @@ fluid.defaults("gpii.express.user.api.forgot.post.handler", {
                 },
                 listeners: {
                     "onRead.checkUser": {
-                        priority: "last",
                         func:     "gpii.express.user.api.forgot.post.handler.checkUser",
                         args:     ["{gpii.express.user.api.forgot.post.handler}", "{arguments}.0"] // The response from our dataSource
                     }

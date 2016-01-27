@@ -88,7 +88,6 @@ fluid.defaults("gpii.express.user.api.reset.handler", {
                 listeners: {
                     "onRead.checkResetCode": {
                         nameSpace: "gpii.express.user.api.reset",
-                        priority:  "last",
                         funcName:  "gpii.express.user.api.reset.handler.checkResetCode",
                         args:      ["{gpii.express.handler}", "{arguments}.0"] // dataSource response
                     },

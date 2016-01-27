@@ -105,8 +105,7 @@ fluid.defaults("gpii.express.user.api.signup.post.handler", {
         },
         "checkForExistingUser": {
             funcName: "gpii.express.user.api.signup.post.handler.checkForExistingUser",
-            args:     ["{that}", "{arguments}.0"],
-            priority: "last"
+            args:     ["{that}", "{arguments}.0"]
         }
     },
     components: {

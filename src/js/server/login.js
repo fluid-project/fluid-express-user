@@ -63,7 +63,6 @@ fluid.defaults("gpii.express.user.api.login.post.handler", {
                 listeners: {
                     "onRead.verifyPassword": {
                         nameSpace: "gpii.express.user.api.login",
-                        priority:  "last",
                         funcName:  "gpii.express.user.api.login.post.handler.verifyPassword",
                         args:      ["{gpii.express.user.api.login.post.handler}", "{arguments}.0"]
                     },
