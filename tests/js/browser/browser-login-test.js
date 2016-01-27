@@ -18,7 +18,7 @@ fluid.defaults("gpii.express.user.tests.login.client.caseHolder", {
         {
             tests: [
                 {
-                    name: "Login with a valid username and password...",
+                    name: "Login with a valid username and password and then log out...",
                     type: "test",
                     sequence: [
                         {
@@ -43,7 +43,7 @@ fluid.defaults("gpii.express.user.tests.login.client.caseHolder", {
                         {
                             event:    "{testEnvironment}.browser.events.onClickComplete",
                             listener: "{testEnvironment}.browser.wait",
-                            args:     [500] // TODO: Try reducing or eliminating this
+                            args:     ["{testEnvironment}.options.waitTimeout"]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onWaitComplete",
@@ -72,6 +72,39 @@ fluid.defaults("gpii.express.user.tests.login.client.caseHolder", {
                             event:    "{testEnvironment}.browser.events.onVisibleComplete",
                             listener: "jqUnit.assertFalse",
                             args:     ["The login form should no longer be visible...", "{arguments}.0"]
+                        },
+                        {
+                            func: "{testEnvironment}.browser.click",
+                            args: [".user-controls-toggle"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onClickComplete",
+                            listener: "{testEnvironment}.browser.click",
+                            args:     [".user-menu-logout"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onClickComplete",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.waitTimeout"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
+                            listener: "{testEnvironment}.browser.evaluate",
+                            args:     [gpii.tests.browser.tests.elementMatches, ".user-controls-toggle", "Not Logged In"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
+                            listener: "jqUnit.assertTrue",
+                            args:     ["A username should not be displayed in the user controls...", "{arguments}.0"]
+                        },
+                        {
+                            func: "{testEnvironment}.browser.visible",
+                            args: [".login-form"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onVisibleComplete",
+                            listener: "jqUnit.assertTrue",
+                            args:     ["The login form should be visible again...", "{arguments}.0"]
                         }
                     ]
                 },
@@ -101,7 +134,7 @@ fluid.defaults("gpii.express.user.tests.login.client.caseHolder", {
                         {
                             event:    "{testEnvironment}.browser.events.onClickComplete",
                             listener: "{testEnvironment}.browser.wait",
-                            args:     [500] // TODO: Try reducing or eliminating this
+                            args:     ["{testEnvironment}.options.waitTimeout"]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onWaitComplete",
@@ -130,9 +163,10 @@ fluid.defaults("gpii.express.user.tests.login.client.caseHolder", {
 });
 
 gpii.express.user.tests.environment({
-    apiPort:   7542,
-    pouchPort: 7524,
-    mailPort:  4099,
+    apiPort:     7542,
+    pouchPort:   7524,
+    mailPort:    4099,
+    waitTimeout: 750,
     loginUrl: {
         expander: {
             funcName: "fluid.stringTemplate",

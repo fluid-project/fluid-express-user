@@ -102,33 +102,31 @@
             }
         },
         listeners: {
-            onMarkupRendered: [
-                {
-                    "this":   "{that}.dom.logout",
-                    "method": "click",
-                    "args":   "{that}.submitForm"
-                },
-                {
-                    "this":   "{that}.dom.logout",
-                    "method": "keydown",
-                    "args":   "{that}.handleLogoutKeys"
-                },
-                {
-                    "this":   "{that}.dom.toggle",
-                    "method": "click",
-                    "args":   "{that}.toggleMenu"
-                },
-                {
-                    "this":   "{that}.dom.toggle",
-                    "method": "keydown",
-                    "args":   "{that}.handleToggleKeys"
-                },
-                {
-                    "this":   "{that}.dom.menu",
-                    "method": "keydown",
-                    "args":   "{that}.handleMenuKeys"
-                }
-            ]
+            "onMarkupRendered.bindLogoutClick": {
+                "this":   "{that}.dom.logout",
+                "method": "click",
+                "args":   "{that}.submitForm"
+            },
+            "onMarkupRendered.bindLogoutKeys": {
+                "this":   "{that}.dom.logout",
+                "method": "keydown",
+                "args":   "{that}.handleLogoutKeys"
+            },
+            "onMarkupRendered.bindToggleClick": {
+                "this":   "{that}.dom.toggle",
+                "method": "click",
+                "args":   "{that}.toggleMenu"
+            },
+            "onMarkupRendered.bindToggleKeys": {
+                "this":   "{that}.dom.toggle",
+                "method": "keydown",
+                "args":   "{that}.handleToggleKeys"
+            },
+            "onMarkupRendered.bindMenuKeys": {
+                "this":   "{that}.dom.menu",
+                "method": "keydown",
+                "args":   "{that}.handleMenuKeys"
+            }
         }
     });
 
