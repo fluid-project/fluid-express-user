@@ -364,6 +364,11 @@ fluid.defaults("gpii.express.user.tests.signup.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onTypeComplete",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.waitTimeout"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.type",
                             args:     ["[name='password']", "Password1!"]
                         },
@@ -402,6 +407,11 @@ fluid.defaults("gpii.express.user.tests.signup.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onTypeComplete",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.waitTimeout"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.click",
                             args:     [".login-button"]
                         },

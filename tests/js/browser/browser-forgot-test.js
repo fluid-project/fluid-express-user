@@ -51,6 +51,11 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onTypeComplete",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.waitTimeout"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.click",
                             args:     [".reset-button"]
                         },
@@ -95,6 +100,11 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onTypeComplete",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.waitTimeout"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.click",
                             args:     [".forgot-button"]
                         },
@@ -144,6 +154,11 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onTypeComplete",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.waitTimeout"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.click",
                             args:     [".reset-button"]
                         },
@@ -210,6 +225,11 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onTypeComplete",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.waitTimeout"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.click",
                             args:     [".reset-button"]
                         },
@@ -254,6 +274,11 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onTypeComplete",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.waitTimeout"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.click",
                             args:     [".login-button"]
                         },

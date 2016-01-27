@@ -32,12 +32,21 @@ fluid.defaults("gpii.express.user.tests.login.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onTypeComplete",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.waitTimeout"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.type",
                             args:     ["[name='password']", "password"]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onTypeComplete",
-                            listener: "{testEnvironment}.browser.click",
+                            listener: "{testEnvironment}.browser.screenshot",
+                            args:     []
+                        },
+                        {
+                            func: "{testEnvironment}.browser.click",
                             args:     [".login-button"]
                         },
                         {
@@ -128,6 +137,11 @@ fluid.defaults("gpii.express.user.tests.login.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onTypeComplete",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.waitTimeout"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.click",
                             args:     [".login-button"]
                         },
