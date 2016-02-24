@@ -4,9 +4,6 @@ var gpii   = fluid.registerNamespace("gpii");
 
 var request = require("request"); // TODO:  Replace this with a writable data source.
 
-var path      = require("path");
-var schemaDir = path.resolve(__dirname, "../../schemas");
-
 require("gpii-handlebars");
 
 require("./lib/datasource");
@@ -154,12 +151,17 @@ fluid.defaults("gpii.express.user.api.signup.post", {
                 messages: {
                     error: "Please check the information you have provided."
                 },
-                schemaDir: schemaDir,
-                schemaKey: "user-signup.json",
+                schemaPath: "%gpii-express-user/src/schemas",
+                schemaKey:  "user-signup.json",
                 schemaUrl: {
                     expander: {
                         funcName: "fluid.stringTemplate",
                         args:     ["%baseUrl/schemas/%schemaKey.json", { baseUrl: "", schemaKey: "{that}.options.schemaKey"}]
+                    }
+                },
+                rules: {
+                    requestContentToValidate: {
+                        "": "body"
                     }
                 }
             }

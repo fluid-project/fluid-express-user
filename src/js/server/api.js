@@ -7,9 +7,6 @@
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
-var path  = require("path");
-var templateDir = path.resolve(__dirname, "../../templates");
-
 require("gpii-express");
 require("./current.js");
 require("./docs.js");
@@ -26,13 +23,11 @@ gpii.express.user.api.handleRoute = function (that, request, response, next) {
     that.options.router(request, response, next);
 };
 
-
-
 fluid.defaults("gpii.express.user.api", {
     gradeNames: ["gpii.express.router"],
     path:       "/user",
     method:     "use",
-    templateDir: templateDir,
+    templateDirs: "%gpii-express-user/src/templates",
     couch: {
         userDbName: "_users",
         userDbUrl: {

@@ -17,9 +17,6 @@ var gpii  = fluid.registerNamespace("gpii");
 var nodemailer    = require("nodemailer");
 var smtpTransport = require("nodemailer-smtp-transport");
 
-var path        = require("path");
-var templateDir = path.resolve(__dirname, "../../src/templates");
-
 require("gpii-handlebars");
 
 fluid.registerNamespace("gpii.express.user.mailer");
@@ -128,7 +125,7 @@ gpii.express.user.mailer.handlebars.sendTemplateMessage = function (that, mailOp
     gpii.express.user.mailer.sendMessage(that, fullMailOptions);
 };
 
-// Mailer with support for template rendering.  Requires you to set `options.templateDir`.  To use this meaningfully, you
+// Mailer with support for template rendering.  Requires you to set `options.templateDirs`.  To use this meaningfully, you
 // need to specify one or both of:
 //
 // 1. `options.textTemplateKey`: The template key for the text content of the email.
@@ -136,7 +133,7 @@ gpii.express.user.mailer.handlebars.sendTemplateMessage = function (that, mailOp
 //
 fluid.defaults("gpii.express.user.mailer.handlebars", {
     gradeNames:      ["gpii.express.user.mailer"],
-    templateDir:     templateDir,
+    templateDirs:     "%gpii-express-user/src/templates",
     textTemplateKey: "email-text",
     htmlTemplateKey: "email-html",
     invokers: {
@@ -149,7 +146,7 @@ fluid.defaults("gpii.express.user.mailer.handlebars", {
         handlebars: {
             type: "gpii.handlebars.standaloneRenderer",
             options: {
-                templateDir: "{gpii.express.user.mailer.handlebars}.options.templateDir"
+                templateDirs: "{gpii.express.user.mailer.handlebars}.options.templateDirs"
             }
         }
     }

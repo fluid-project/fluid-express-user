@@ -109,6 +109,7 @@ fluid.defaults("gpii.express.user.tests.harness", {
                     handlebars: {
                         type: "gpii.express.hb",
                         options: {
+                            templateDirs: "%gpii-express-user/src/templates",
                             components: {
                                 initBlock: {
                                     options: {
@@ -138,7 +139,8 @@ fluid.defaults("gpii.express.user.tests.harness", {
                     inline: {
                         type: "gpii.express.hb.inline",
                         options: {
-                            path: "/hbs"
+                            path: "/hbs",
+                            templateDirs: "%gpii-express-user/src/templates"
                         }
                     },
                     api: {

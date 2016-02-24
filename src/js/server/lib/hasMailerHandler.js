@@ -20,7 +20,7 @@ The user won't receive a response until the message has been sent.  If sending o
 `options.messages.success` will be sent to the end user.  If an error occurs, the contents of `options.messages.error`
 will be sent instead.
 
-Note that the mail output is sent using the mailer, and that you must have a `templateDir` and template keys set as
+Note that the mail output is sent using the mailer, and that you must have a `templateDirs` option and template keys set as
 per that documentation.
 
  */
@@ -43,7 +43,7 @@ fluid.defaults("gpii.express.user.api.hasMailHandler", {
     gradeNames:   ["gpii.express.handler"],
     replyAddress: "noreply@ul.gpii.net",
     config:       "{gpii.express}.options.config",
-    templateDir:  "{gpii.express.user.api}.options.templateDir",
+    templateDirs: "{gpii.express.user.api}.options.templateDirs",
     messages: {
         success: "Email sent.",
         error:   "Email could not be sent.  Contact an administrator."
@@ -66,7 +66,7 @@ fluid.defaults("gpii.express.user.api.hasMailHandler", {
             type: "gpii.express.user.mailer.handlebars",
             options: {
                 messages:        "{gpii.express.user.api.hasMailHandler}.options.messages",
-                templateDir:     "{gpii.express.user.api.hasMailHandler}.options.templateDir",
+                templateDirs:    "{gpii.express.user.api.hasMailHandler}.options.templateDirs",
                 htmlTemplateKey: "{gpii.express.user.api.hasMailHandler}.options.templates.mail.html",
                 textTemplateKey: "{gpii.express.user.api.hasMailHandler}.options.templates.mail.text",
                 listeners: {

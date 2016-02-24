@@ -9,8 +9,6 @@ var path       = require("path");
 var jqUnit     = require("node-jqunit");
 var MailParser = require("mailparser").MailParser;
 
-var templateDir = path.resolve(__dirname, "../../templates");
-
 require("gpii-mail-test");
 var kettle = require("kettle");
 kettle.loadTestingSupport();
@@ -136,7 +134,7 @@ fluid.defaults("gpii.mailer.tests.caseHolder", {
                 transportOptions: {
                     port: "{testEnvironment}.options.mailPort"
                 },
-                templateDir: templateDir,
+                templateDirs: ["%gpii-express-user/tests/templates", "%gpii-express-user/src/templates"],
                 textTemplateKey: "mail-text",
                 htmlTemplateKey: "mail-html"
             }

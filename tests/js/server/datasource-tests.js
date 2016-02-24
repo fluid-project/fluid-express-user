@@ -5,7 +5,6 @@
  */
 "use strict";
 var fluid  = require("infusion");
-fluid.setLogging(true);
 fluid.logObjectRenderChars = 4096;
 
 var gpii   = fluid.registerNamespace("gpii");
@@ -127,7 +126,8 @@ fluid.defaults("gpii.express.users.datasource.tests.caseHolder", {
                             args:     ["{caseHolder}", "{arguments}.0", "{caseHolder}.options.expected.sample"]
                         }
                     ]
-                },
+                }
+                //,
                 // TODO:  Review with Antranig.  This appears to be blocked by the 404 error in the initial read lookup.
                 //{
                 //    name: "Create a new record...",

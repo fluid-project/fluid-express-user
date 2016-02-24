@@ -4,9 +4,6 @@ var gpii   = fluid.registerNamespace("gpii");
 
 fluid.registerNamespace("gpii.express.user.api.login.post.handler");
 
-var path      = require("path");
-var schemaDir = path.resolve(__dirname, "../../schemas");
-
 require("gpii-handlebars");
 require("gpii-json-schema");
 
@@ -84,8 +81,13 @@ fluid.defaults("gpii.express.user.api.login.post", {
         schemaMiddleware: {
             type: "gpii.schema.middleware",
             options: {
-                schemaDir: schemaDir,
-                schemaKey: "user-login.json"
+                schemaPath: "%gpii-express-user/src/schemas",
+                schemaKey:  "user-login.json",
+                rules: {
+                    requestContentToValidate: {
+                        "": "body"
+                    }
+                }
             }
         },
         requestAwareRouter: {

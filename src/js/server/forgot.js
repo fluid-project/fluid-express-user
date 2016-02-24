@@ -163,8 +163,8 @@ fluid.defaults("gpii.express.user.api.forgot", {
             target: "{that > gpii.express.router}.options.urls"
         },
         {
-            source: "{that}.options.templateDir",
-            target: "{that > gpii.express.router}.options.templateDir"
+            source: "{that}.options.templateDirs",
+            target: "{that > gpii.express.router}.options.templateDirs"
         },
         {
             source: "{that}.options.resetCodeKey",

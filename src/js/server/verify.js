@@ -145,7 +145,7 @@ fluid.defaults("gpii.express.user.api.verify", {
         resendRouter: {
             type: "gpii.express.user.api.verify.resend",
             options: {
-                templateDir: "{gpii.express.user.api.verify}.options.templateDir"
+                templateDirs: "{gpii.express.user.api.verify}.options.templateDirs"
             }
         },
         mainRouter: {

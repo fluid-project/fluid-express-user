@@ -19,7 +19,8 @@
 "use strict";
 var fluid  = require("infusion");
 var gpii   = fluid.registerNamespace("gpii");
-var kettle = require("kettle");
+
+require("kettle");
 
 fluid.registerNamespace("gpii.express.user.couchdb.read");
 

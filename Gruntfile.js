@@ -6,7 +6,7 @@ module.exports = function (grunt) {
     // TODO:  Set up separate checks for the couchapp content, with a different .jshintrc
     grunt.initConfig({
         jshint: {
-            src: ["./**/*.js", "email/**/*.js", "front-end/**/*.js", "import/**/*.js", "test/**/*.js"],
+            src: ["./src/**/*.js", "./tests/**/*.js"],
             buildScripts: ["Gruntfile.js"],
             options: {
                 jshintrc: true
@@ -20,6 +20,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-jsonlint");
     grunt.loadNpmTasks("grunt-shell");
-    grunt.loadNpmTasks("grunt-gpii");
 
+    grunt.registerTask("lint", "Apply jshint and jsonlint", ["jshint", "jsonlint"]);
 };
