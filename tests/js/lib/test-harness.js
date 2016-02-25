@@ -37,6 +37,7 @@ fluid.defaults("gpii.express.user.tests.harness", {
     },
     // As we may commonly be working with a debugger, we need a much longer timeout for all `requestAwareRouter` and `contentAware` grades.
     timeout: 99999999,
+    templateDirs: ["%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
     distributeOptions: [
         {
             source: "{that}.options.timeout",
@@ -109,7 +110,7 @@ fluid.defaults("gpii.express.user.tests.harness", {
                     handlebars: {
                         type: "gpii.express.hb",
                         options: {
-                            templateDirs: "%gpii-express-user/src/templates",
+                            templateDirs: "{gpii.express.user.tests.harness}.options.templateDirs",
                             components: {
                                 initBlock: {
                                     options: {
@@ -140,7 +141,20 @@ fluid.defaults("gpii.express.user.tests.harness", {
                         type: "gpii.express.hb.inline",
                         options: {
                             path: "/hbs",
-                            templateDirs: "%gpii-express-user/src/templates"
+                            templateDirs: "{gpii.express.user.tests.harness}.options.templateDirs"
+                        }
+                    },
+                    schemas: {
+                        type: "gpii.express.router.static",
+                        options: {
+                            path:    "/schemas",
+                            content: "%gpii-express-user/src/schemas"
+                        }
+                    },
+                    inlineSchemas: {
+                        type: "gpii.schema.inline.router",
+                        options: {
+                            schemaDirs: "%gpii-express-user/src/schemas"
                         }
                     },
                     api: {

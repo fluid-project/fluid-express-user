@@ -16,7 +16,7 @@
     };
 
     fluid.defaults("gpii.express.user.frontend.login", {
-        gradeNames: ["gpii.express.user.frontend.canHandleStrings", "gpii.templates.templateFormControl"],
+        gradeNames: ["gpii.express.user.frontend.canHandleStrings", "gpii.schemas.client.errorAwareForm.clientSideValidation"],
         templates: {
             initial: "login-viewport",
             error:   "common-error",
@@ -25,28 +25,29 @@
         model: {
             user: null
         },
-        components: {
-            success: {
-                options: {
-                    model: {
-                        message: "{login}.model.successMessage"
-                    },
-                    modelListeners: {
-                        // TODO:  Review with Antranig to confirm why the rules in `templateMessage` aren't enough to handle this.
-                        message: {
-                            func: "{that}.renderInitialMarkup"
-                        }
-                    }
-                }
-            },
-            error: {
-                options: {
-                    model: {
-                        message: "{login}.model.errorMessage"
-                    }
-                }
-            }
-        },
+        schemaKey: "user-login.json",
+        //components: {
+            //success: {
+            //    options: {
+            //        model: {
+            //            message: "{login}.model.successMessage"
+            //        },
+            //        //modelListeners: {
+            //        //    // TODO:  Review with Antranig to confirm why the rules in `templateMessage` aren't enough to handle this.
+            //        //    message: {
+            //        //        func: "{that}.renderInitialMarkup"
+            //        //    }
+            //        //}
+            //    }
+            //},
+            //error: {
+            //    options: {
+            //        model: {
+            //            message: "{login}.model.errorMessage"
+            //        }
+            //    }
+            //}
+        //},
         ajaxOptions: {
             url:      "/api/user/login",
             method:   "POST",
