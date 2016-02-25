@@ -13,18 +13,24 @@ require("./lib/password");
 fluid.registerNamespace("gpii.express.user.api.login");
 
 gpii.express.user.api.login.post.handler.verifyPassword = function (that, response) {
-    if (that.request.body && that.request.body.username && that.request.body.password && response.salt && response.derived_key) {
+    // The user exists, so we can check the supplied password against our records.
+    if (response.username) {
         var encodedPassword = gpii.express.user.password.encode(that.request.body.password, response.salt, response.iterations, response.keyLength, response.digest);
         if (encodedPassword === response.derived_key) {
             // Transform the raw response to ensure that nothing sensitive is exposed to the user
             var user = fluid.model.transformWithRules(response, that.options.rules.user);
             that.request.session[that.options.sessionKey] = user;
-            that.sendResponse(200, { ok: true, message: "You have successfully logged in.", user: user});
-            return;
+            that.sendResponse(200, { ok: true, message: that.options.messages.success, user: user});
+        }
+        // The password didn't match.
+        else {
+            that.sendResponse(401, { ok: false, message: that.options.messages.failure});
         }
     }
-
-    that.sendResponse(401, { ok: false, message: "Invalid username or password."});
+    // The user doesn't exist, but we send the same failure message to avoid giving intruders a way to validate usernames.
+    else {
+        that.sendResponse(401, { ok: false, message: that.options.messages.failure});
+    }
 };
 
 fluid.defaults("gpii.express.user.api.login.post.handler", {
@@ -32,6 +38,10 @@ fluid.defaults("gpii.express.user.api.login.post.handler", {
     schemaKey:  "message-core.json",
     schemaUrl:  "/schemas/message-core",
     sessionKey: "_gpii_user",
+    messages: {
+        success: "You have successfully logged in.",
+        failure: "Invalid username or password."
+    },
     url:    {
         expander: {
             funcName: "fluid.stringTemplate",
@@ -61,7 +71,7 @@ fluid.defaults("gpii.express.user.api.login.post.handler", {
                     "onRead.verifyPassword": {
                         nameSpace: "gpii.express.user.api.login",
                         funcName:  "gpii.express.user.api.login.post.handler.verifyPassword",
-                        args:      ["{gpii.express.user.api.login.post.handler}", "{arguments}.0"]
+                        args:      ["{gpii.express.user.api.login.post.handler}", "{arguments}.0", "{arguments}"]
                     },
                     "onError.sendErrorResponse": {
                         func: "{gpii.express.user.api.login.post.handler}.sendResponse",
@@ -74,31 +84,12 @@ fluid.defaults("gpii.express.user.api.login.post.handler", {
 });
 
 fluid.defaults("gpii.express.user.api.login.post", {
-    gradeNames: ["gpii.express.router.passthrough"],
+    gradeNames: ["gpii.schema.middleware.requestAware.router"],
     path:       "/",
-    method:     "use",
-    components: {
-        schemaMiddleware: {
-            type: "gpii.schema.middleware",
-            options: {
-                schemaPath: "%gpii-express-user/src/schemas",
-                schemaKey:  "user-login.json",
-                rules: {
-                    requestContentToValidate: {
-                        "": "body"
-                    }
-                }
-            }
-        },
-        requestAwareRouter: {
-            type: "gpii.express.requestAware.router",
-            options: {
-                path:          "/",
-                method:        "post",
-                handlerGrades: ["gpii.express.user.api.login.post.handler"]
-            }
-        }
-    }
+    method:     "post",
+    handlerGrades: ["gpii.express.user.api.login.post.handler"],
+    schemaPath: "%gpii-express-user/src/schemas",
+    schemaKey:  "user-login.json"
 });
 
 fluid.defaults("gpii.express.user.api.login", {

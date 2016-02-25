@@ -27,7 +27,7 @@ fluid.defaults("gpii.express.user.api", {
     gradeNames: ["gpii.express.router"],
     path:       "/user",
     method:     "use",
-    templateDirs: "%gpii-express-user/src/templates",
+    templateDirs: ["%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
     couch: {
         userDbName: "_users",
         userDbUrl: {

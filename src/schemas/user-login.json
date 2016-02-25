@@ -1,17 +1,32 @@
 {
-    "type":        "object",
-    "id":          "user-login.json",
-    "title":       "gpii-express-user login schema",
-    "description": "This schema defines the format accepted when logging in.",
-    "properties": {
-        "username": {
-            "description": "You can log in using either a valid username or email address.",
-            "anyOf": [ { "$ref": "user-core.json#/definitions/email" },  {"$ref": "user-core.json#/definitions/username"}]
+  "type": "object",
+  "id": "user-login.json",
+  "title": "gpii-express-user login schema",
+  "description": "This schema defines the format accepted when logging in.",
+  "properties": {
+    "username": {
+      "anyOf": [
+        {
+          "$ref": "user-core.json#/definitions/email"
         },
-        "password": {
-            "description": "A password is required in order to log in.",
-            "type":        "string"
+        {
+          "$ref": "user-core.json#/definitions/username"
         }
+      ],
+      "errors": {
+        "anyOf": "You must provide a valid username or email address."
+      }
     },
-    "required": ["username", "password"]
+    "password": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "username",
+    "password"
+  ],
+  "errors": {
+    "#/required/0": "You must provide a username or email address.",
+    "#/required/1": "You must enter a password."
+  }
 }

@@ -21,46 +21,46 @@ gpii.express.user.api.signup.post.handler.lookupExistingUser = function (that) {
 gpii.express.user.api.signup.post.handler.checkForExistingUser = function (that, response) {
     if (response && response.username) {
         that.sendResponse(403, { ok: false, message: "A user with this email or username already exists."});
-        return;
     }
+    else {
+        // Encode the user's password
+        var salt        = gpii.express.user.password.generateSalt(that.options.saltLength);
+        var derived_key = gpii.express.user.password.encode(that.request.body.password, salt);
+        var code        = gpii.express.user.password.generateSalt(that.options.verifyCodeLength);
 
-    // Encode the user's password
-    var salt        = gpii.express.user.password.generateSalt(that.options.saltLength);
-    var derived_key = gpii.express.user.password.encode(that.request.body.password, salt);
-    var code        = gpii.express.user.password.generateSalt(that.options.verifyCodeLength);
+        // Our rules will set the defaults and pull approved values from the original submission.
+        var combinedRecord                   = fluid.model.transformWithRules(that.request.body, that.options.rules.write);
 
-    // Our rules will set the defaults and pull approved values from the original submission.
-    var combinedRecord                   = fluid.model.transformWithRules(that.request.body, that.options.rules.write);
+        // Set the "name" to the username for backward compatibility with CouchDB
+        combinedRecord.salt                  = salt;
+        combinedRecord.derived_key           = derived_key;
+        combinedRecord[that.options.codeKey] = code;
 
-    // Set the "name" to the username for backward compatibility with CouchDB
-    combinedRecord.salt                  = salt;
-    combinedRecord.derived_key           = derived_key;
-    combinedRecord[that.options.codeKey] = code;
+        // Set the ID to match the CouchDB conventions, for backward compatibility
+        combinedRecord._id = "org.couch.db.user:" + combinedRecord.username;
 
-    // Set the ID to match the CouchDB conventions, for backward compatibility
-    combinedRecord._id = "org.couch.db.user:" + combinedRecord.username;
+        // Save the record for later use in rendering the outgoing email
+        that.user = combinedRecord;
 
-    // Save the record for later use in rendering the outgoing email
-    that.user = combinedRecord;
-
-    // Write the record to couch.  TODO: Migrate this to a writable dataSource.
-    var writeOptions = {
-        url:    that.options.urls.write,
-        method: "POST",
-        json:   true,
-        body:   combinedRecord
-    };
-    request(writeOptions, function (error, response, body) {
-        if (error) {
-            return that.sendResponse(500, {ok: false, message: error});
-        }
-        else if ([200, 201].indexOf(response.statusCode) === -1) {
-            return that.sendResponse(response.statusCode, { ok: false, message: body});
-        }
-        else {
-            that.sendMessage();
-        }
-    });
+        // Write the record to couch.  TODO: Migrate this to a writable dataSource.
+        var writeOptions = {
+            url:    that.options.urls.write,
+            method: "POST",
+            json:   true,
+            body:   combinedRecord
+        };
+        request(writeOptions, function (error, response, body) {
+            if (error) {
+                that.sendResponse(500, {ok: false, message: error});
+            }
+            else if ([200, 201].indexOf(response.statusCode) === -1) {
+                that.sendResponse(response.statusCode, { ok: false, message: body});
+            }
+            else {
+                that.sendMessage();
+            }
+        });
+    }
 };
 
 fluid.defaults("gpii.express.user.api.signup.post.handler", {
@@ -122,8 +122,12 @@ fluid.defaults("gpii.express.user.api.signup.post.handler", {
 });
 
 fluid.defaults("gpii.express.user.api.signup.post", {
-    gradeNames:       ["gpii.express.router.passthrough"],
+    gradeNames:       ["gpii.schema.middleware.requestAware.router"],
     path:             "/",
+    method:           "post",
+    handlerGrades:    ["gpii.express.user.api.signup.post.handler"],
+    schemaPath:       "%gpii-express-user/src/schemas",
+    schemaKey:        "user-signup.json",
     saltLength:       32,
     verifyCodeLength: 16,
     codeKey:          "verification_code",  // Must match the value in gpii.express.user.api.verify
@@ -143,40 +147,8 @@ fluid.defaults("gpii.express.user.api.signup.post", {
     },
     termMaps: {
         read: { username: "%username", email: "%email"}
-    },
-    components: {
-        schemaMiddleware: {
-            type: "gpii.schema.middleware",
-            options: {
-                messages: {
-                    error: "Please check the information you have provided."
-                },
-                schemaPath: "%gpii-express-user/src/schemas",
-                schemaKey:  "user-signup.json",
-                schemaUrl: {
-                    expander: {
-                        funcName: "fluid.stringTemplate",
-                        args:     ["%baseUrl/schemas/%schemaKey.json", { baseUrl: "", schemaKey: "{that}.options.schemaKey"}]
-                    }
-                },
-                rules: {
-                    requestContentToValidate: {
-                        "": "body"
-                    }
-                }
-            }
-        },
-        requestAwareRouter: {
-            type: "gpii.express.requestAware.router",
-            options: {
-                method:           "post",
-                path:             "/",
-                handlerGrades:    ["gpii.express.user.api.signup.post.handler"]
-            }
-        }
     }
 });
-
 
 fluid.defaults("gpii.express.user.api.signup", {
     gradeNames: ["gpii.express.router.passthrough"],

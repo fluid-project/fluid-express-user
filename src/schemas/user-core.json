@@ -1,46 +1,83 @@
 {
-    "type":        "object",
-    "id":          "user-core.json",
-    "title":       "gpii-express-user core user schema",
-    "description": "This schema defines the common format for user data transmitted and received by the gpii-express-user library.",
-    "definitions": {
-        "email": {
-            "description": "You must provide a valid email address.",
-            "type": "string",
-            "anyOf": [
-              { "format":  "email" },
-              { "pattern": "localhost"}
-            ]
-        },
-        "username": {
-            "type": "string"
-        },
-        "password": {
-            "description": "Passwords must be at least 8 characters long, and must contain at least one uppercase letter, one lowercase letter, and one number or special character.",
-            "allOf": [
-                { "type": "string", "description": "The password must be at least 8 characters long.", "minLength": 8 },
-                { "type": "string", "description": "The password must have at least one uppercase letter.", "pattern": "[A-Z]+"},
-                { "type": "string", "description": "The password must have at least one lowercase letter.", "pattern": "[a-z]+"},
-                { "type": "string", "description": "The password must have at least one number or special character.", "pattern": "[^a-zA-Z]"}
-            ]
-        },
-        "profile": {
-            "type": "object"
-        }
+  "type": "object",
+  "id": "user-core.json",
+  "title": "gpii-express-user core user schema",
+  "description": "This schema defines the common format for user data transmitted and received by the gpii-express-user library.",
+  "definitions": {
+    "email": {
+      "type": "string",
+      "format": "email",
+      "errors": {
+        "string": "Email address must be a string.",
+        "format": "You must provide a valid email address."
+      }
     },
-    "properties": {
-        "email": {
-            "$ref": "#/definitions/email"
-        },
-        "username": {
-            "$ref": "#/definitions/username"
-        },
-        "password": {
-            "$ref": "#/definitions/password"
-        },
-        "profile": {
-            "$ref": "#/definitions/profile"
-        }
+    "username": {
+      "type": "string",
+      "errors": {
+        "type": "Username must be a string."
+      }
     },
-    "required": ["email", "username"]
+    "password": {
+      "allOf": [
+        {
+          "type": "string",
+          "errors": {
+            "minLength": "The password must be at least 8 characters long."
+          },
+          "minLength": 8
+        },
+        {
+          "type": "string",
+          "errors": {
+            "pattern": "The password must have at least one uppercase letter."
+          },
+          "pattern": "[A-Z]+"
+        },
+        {
+          "type": "string",
+          "errors": {
+            "pattern": "The password must have at least one lowercase letter."
+          },
+          "pattern": "[a-z]+"
+        },
+        {
+          "type": "string",
+          "errors": {
+            "pattern": "The password must have at least one number or special character."
+          },
+          "pattern": "[^a-zA-Z]"
+        }
+      ]
+    },
+    "confirm": {
+      "constant": {
+        "$data": "1/password"
+      },
+      "errors": {
+        "constant": "The 'confirm' field must match the 'password' field."
+      }
+    },
+    "profile": {
+      "type": "object"
+    }
+  },
+  "properties": {
+    "email": {
+      "$ref": "#/definitions/email"
+    },
+    "username": {
+      "$ref": "#/definitions/username"
+    },
+    "password": {
+      "$ref": "#/definitions/password"
+    },
+    "profile": {
+      "$ref": "#/definitions/profile"
+    }
+  },
+  "required": [
+    "email",
+    "username"
+  ]
 }

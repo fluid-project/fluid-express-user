@@ -24,7 +24,6 @@ var request = require("request");
 
 fluid.registerNamespace("gpii.express.user.api.reset.handler");
 
-// TODO: Check this against a schema using a schemaHandler
 gpii.express.user.api.reset.handler.checkResetCode = function (that, dataSourceResponse) {
     // Prepare dates that will be used in later sanity checks.
     var earliestAcceptable = new Date(Date.now() - that.options.codeExpiration);
@@ -37,10 +36,6 @@ gpii.express.user.api.reset.handler.checkResetCode = function (that, dataSourceR
     // We should not accept a reset code issued earlier than the current time minus our expiration period (a day by default).
     else if (isNaN(issueDate) || issueDate < earliestAcceptable) {
         that.sendFinalResponse(400, { ok: false, message: "Your reset code is too old.  Please request another one."});
-    }
-    // Confirm that the password and confirmation password are the same.
-    else if (that.request.body.password !== that.request.body.confirm) {
-        that.sendFinalResponse(400, { ok: false, message: "The password and confirmation passwords must match."});
     }
     else {
         var updatedUserRecord = fluid.copy(dataSourceResponse);
@@ -112,6 +107,15 @@ fluid.defaults("gpii.express.user.api.reset.handler", {
     }
 });
 
+fluid.defaults("gpii.express.user.api.reset.post", {
+    gradeNames:    ["gpii.schema.middleware.requestAware.router"],
+    path:          "/",
+    method:        "post",
+    handlerGrades: ["gpii.express.user.api.reset.post.handler"],
+    schemaPath:    "%gpii-express-user/src/schemas",
+    schemaKey:     "user-reset.json"
+});
+
 // GET /api/user/reset/:code, a `singleTemplateRouter` that just serves up the client-side form.
 fluid.defaults("gpii.express.user.api.reset.formRouter", {
     gradeNames:  ["gpii.express.singleTemplateRouter"],
@@ -167,16 +171,11 @@ fluid.defaults("gpii.express.user.api.reset", {
         }
     ],
     components: {
-        formRouter: {
+        get: {
             type: "gpii.express.user.api.reset.formRouter"
         },
-        mainRouter: {
-            type: "gpii.express.requestAware.router",
-            options: {
-                path:   ["/:code", "/"],
-                method: "post",
-                handlerGrades: ["gpii.express.user.api.reset.handler"]
-            }
+        post: {
+            type: "gpii.express.user.api.reset.post"
         }
     }
 });
