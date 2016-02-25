@@ -6,7 +6,8 @@
     fluid.registerNamespace("gpii.express.user.frontend.resend");
 
     fluid.defaults("gpii.express.user.frontend.resend", {
-        gradeNames: ["gpii.express.user.frontend.canHandleStrings", "gpii.templates.templateFormControl"],
+        gradeNames: ["gpii.express.user.frontend.canHandleStrings", "gpii.schemas.client.errorAwareForm.clientSideValidation"],
+        schemaKey: "user-resend.json",
         templates: {
             initial: "resend-viewport",
             error:   "common-error",
@@ -14,28 +15,6 @@
         },
         model: {
             user: null
-        },
-        components: {
-            success: {
-                options: {
-                    model: {
-                        message: "{resend}.model.successMessage"
-                    },
-                    modelListeners: {
-                        // TODO:  Review with Antranig to confirm why the rules in `templateMessage` aren't enough to handle this.
-                        message: {
-                            func: "{that}.renderInitialMarkup"
-                        }
-                    }
-                }
-            },
-            error: {
-                options: {
-                    model: {
-                        message: "{resend}.model.errorMessage"
-                    }
-                }
-            }
         },
         ajaxOptions: {
             url:      "/api/user/verify/resend",
@@ -47,20 +26,6 @@
             modelToRequestPayload: {
                 "":    "notfound", // Required to clear out the default rules from `templateFormControl`
                 email: "email"
-            },
-            successResponseToModel: {
-                "": "notfound",
-                successMessage: "responseJSON.message",
-                errorMessage: {
-                    literalValue: false
-                }
-            },
-            errorResponseToModel: {
-                "": "notfound",
-                errorMessage: "responseJSON.message",
-                successMessage: {
-                    literalValue: false
-                }
             }
         },
         bindings: {

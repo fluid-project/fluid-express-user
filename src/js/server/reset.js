@@ -107,13 +107,21 @@ fluid.defaults("gpii.express.user.api.reset.handler", {
     }
 });
 
+// TODO:  Expose the code parameter to the handler somehow.
 fluid.defaults("gpii.express.user.api.reset.post", {
     gradeNames:    ["gpii.schema.middleware.requestAware.router"],
     path:          "/",
     method:        "post",
-    handlerGrades: ["gpii.express.user.api.reset.post.handler"],
+    handlerGrades: ["gpii.express.user.api.reset.handler"],
     schemaPath:    "%gpii-express-user/src/schemas",
-    schemaKey:     "user-reset.json"
+    schemaKey:     "user-reset.json",
+    components: {
+        innerRouter: {
+            options: {
+                path:          "/:code"
+            }
+        }
+    }
 });
 
 // GET /api/user/reset/:code, a `singleTemplateRouter` that just serves up the client-side form.

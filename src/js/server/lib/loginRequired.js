@@ -12,7 +12,6 @@ var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
 require("gpii-express");
-require("gpii-json-schema");
 
 fluid.registerNamespace("gpii.express.user.middleware.loginRequired");
 
@@ -25,11 +24,25 @@ gpii.express.user.middleware.rejectOrForward  = function (that, req, res, next) 
     }
 };
 
-// TODO: Once this is implemented, it should be moved to `gpii-express-user`
+fluid.defaults("gpii.express.user.middleware.loginRequired.handler", {
+    gradeNames: ["gpii.schema.handler"],
+    schemaKey:  "message.json",
+    schemaUrl:  "http://ul.gpii.net/api/schemas/message.json",
+    messages: {
+        failure: "You must be logged in to use this API endpoint."
+    },
+    invokers: {
+        handleRequest: {
+            func: "{that}.sendResponse",
+            args: [401, { ok: false, message: "{that}.options.messages.failure"}]
+        }
+    }
+});
+
 fluid.defaults("gpii.express.user.middleware.loginRequired", {
-    gradeNames: ["gpii.express.middleware"],
-    failureMessage: "You must be logged in to use this API endpoint.",
-    sessionKey: "_gpii_user", // Must matched what's used in /api/user/login
+    gradeNames:    ["gpii.express.middleware", "gpii.express.requestAware.base"],
+    sessionKey:    "_gpii_user", // Must matched what's used in /api/user/login
+    handlerGrades: ["gpii.express.user.middleware.loginRequired.handler"],
     events: {
         onUnauthorizedRequest: null
     },
@@ -41,20 +54,23 @@ fluid.defaults("gpii.express.user.middleware.loginRequired", {
     },
     dynamicComponents: {
         requestHandler: {
-            createOnEvent: "onUnauthorizedRequest",
-            type:          "gpii.schema.handler",
+            createOnEvent: "onUnauthorizedRequest"
+        }
+    }
+});
+
+fluid.defaults("gpii.express.user.middleware.loginRequired.router", {
+    gradeNames: ["gpii.express.router.passthrough"],
+    components: {
+        gateKeeper: {
+            type: "gpii.express.user.middleware.loginRequired"
+        },
+        innerRouter: {
+            type: "gpii.express.requestAware.router",
             options: {
-                request:    "{arguments}.0",
-                response:   "{arguments}.1",
-                schemaKey:  "message.json",
-                schemaUrl:  "http://ul.gpii.net/api/schemas/message.json",
-                invokers: {
-                    handleRequest: {
-                        // TODO:  Why can't we just use `{that}.sendResponse` here?
-                        funcName: "gpii.schema.handler.sendResponse",
-                        args: ["{that}", 401, { ok: false, message: "{gpii.express.user.middleware.loginRequired}.options.failureMessage"}]
-                    }
-                }
+                handlerGrades: "{gpii.express.user.middleware.loginRequired.router}.options.handlerGrades",
+                method:        "{gpii.express.user.middleware.loginRequired.router}.options.method",
+                path:          "/"
             }
         }
     }

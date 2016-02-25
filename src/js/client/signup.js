@@ -3,10 +3,9 @@
 (function () {
     "use strict";
 
-    // TODO:  Once we have a client-side validation and feedback loop, this form needs it.
-
     fluid.defaults("gpii.express.user.frontend.signup", {
-        gradeNames: ["gpii.express.user.frontend.canHandleStrings", "gpii.express.user.frontend.passwordCheckingForm"],
+        gradeNames: ["gpii.express.user.frontend.canHandleStrings", "gpii.schemas.client.errorAwareForm.clientSideValidation"],
+        schemaKey: "user-signup.json",
         ajaxOptions: {
             type:   "POST",
             url:    "/api/user/signup",
@@ -29,18 +28,11 @@
                 errorMessage: {
                     literalValue: null
                 }
-            },
-            // TODO: replace this with a more general approach once https://issues.gpii.net/browse/GPII-1324 is resolved
-            errorResponseToModel: {
-                "":           "notfound",
-                errorMessage: "responseJSON.message",
-                fieldErrors:  "responseJSON.fieldErrors"
             }
         },
         templates: {
             initial: "signup-viewport",
-            success: "common-success",
-            error:   "common-schema-error"
+            success: "common-success"
         },
         selectors: {
             initial:  ".signup-viewport",
@@ -54,16 +46,9 @@
         },
         bindings: {
             "username": "username",
-            "email":    "email"
-        },
-        components: {
-            error: {
-                options: {
-                    model: {
-                        fieldErrors: "{templateFormControl}.model.fieldErrors"
-                    }
-                }
-            }
+            "email":    "email",
+            "password": "password",
+            "confirm":  "confirm"
         }
     });
 

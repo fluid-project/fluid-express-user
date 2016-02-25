@@ -69,7 +69,7 @@ fluid.defaults("gpii.express.user.api.reset.test.caseHolder", {
         bogusResetRequest: {
             type: "gpii.express.user.api.reset.test.request",
             options: {
-                endpoint: "reset",
+                endpoint: "reset/NONSENSE",
                 method:   "POST"
             }
         },

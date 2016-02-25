@@ -19,9 +19,9 @@
   "homepage": "https://github.com/the-t-in-rtf/gpii-express-user",
   "dependencies": {
     "gpii-binder": "git://github.com/the-t-in-rtf/gpii-binder#c83ff8cde8ba37c72f7e26bebf81c44d1a681c36",
-    "gpii-express": "git://github.com/the-t-in-rtf/gpii-express#4d0314d123ccc543da41a4cd1fc5471d4260e24a",
-    "gpii-handlebars": "git://github.com/the-t-in-rtf/gpii-handlebars.git#7170310e040fcaeadbf97506344b4502aa161dd3",
-    "gpii-json-schema": "git://github.com/the-t-in-rtf/gpii-json-schema.git#2cb3019b31851aed75a425dcb453e3734cc0018a",
+    "gpii-express": "git://github.com/the-t-in-rtf/gpii-express#d4eee18a0f2286624fe70c7e0565a51a9fda3d0e",
+    "gpii-handlebars": "git://github.com/the-t-in-rtf/gpii-handlebars.git#ec9b56e0987a766c7b9d7c1b216704d541dbfcec",
+    "gpii-json-schema": "git://github.com/the-t-in-rtf/gpii-json-schema.git#a9d36d91964f195900efe74e6479bbdc006f4559",
     "handlebars": "4.0.0",
     "infusion": "2.0.0-dev.20151211T025229Z.eabb4fc",
     "kettle": "git://github.com/amb26/kettle.git#2517cc1d9d047d58aef70db48d1580da718ffc16",

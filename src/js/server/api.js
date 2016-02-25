@@ -19,12 +19,8 @@ require("./verify.js");
 
 fluid.registerNamespace("gpii.express.user.api");
 
-gpii.express.user.api.handleRoute = function (that, request, response, next) {
-    that.options.router(request, response, next);
-};
-
 fluid.defaults("gpii.express.user.api", {
-    gradeNames: ["gpii.express.router"],
+    gradeNames: ["gpii.express.router.passthrough"],
     path:       "/user",
     method:     "use",
     templateDirs: ["%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
@@ -95,13 +91,6 @@ fluid.defaults("gpii.express.user.api", {
         },
         verify: {
             type: "gpii.express.user.api.verify"
-        }
-    },
-    // We are a router that only has child components, so we wire the route invoker directly into our router.
-    invokers: {
-        route: {
-            funcName: "gpii.express.user.api.handleRoute",
-            args:     ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
         }
     }
 });

@@ -24,7 +24,6 @@ fluid.defaults("gpii.express.user.api.loginRequired.request", {
 
 fluid.registerNamespace("gpii.express.user.api.loginRequired.test.caseHolder");
 
-
 fluid.defaults("gpii.express.user.api.loginRequired.test.caseHolder", {
     gradeNames: ["gpii.express.user.tests.caseHolder"],
     components: {

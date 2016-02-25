@@ -16,9 +16,8 @@ fluid.defaults("gpii.express.user.tests.harness.gated.handler", {
     gradeNames: ["gpii.express.handler"],
     invokers: {
         handleRequest: {
-            // TODO:  Why can't we use `{that}.sendResponse` here?
             funcName: "gpii.express.handler.sendResponse",
-            args:     ["{that}", 200, { ok: true, message: "You are in the club!"}]
+            args: ["{that}", "{that}.response", 200, { ok: true, message: "You are in the club!"}]
         }
     }
 });
@@ -184,19 +183,10 @@ fluid.defaults("gpii.express.user.tests.harness", {
                     },
                     // A "gated" endpoint that can only be accessed if the user is logged in
                     gated: {
-                        type: "gpii.express.requestAware.router",
+                        type: "gpii.express.user.middleware.loginRequired.router",
                         options: {
-                            path:          "/gated",
-                            method:        "use",
-                            handlerGrades: ["gpii.express.user.tests.harness.gated.handler"],
-                            components: {
-                                gatekeeper: {
-                                    type: "gpii.express.user.middleware.loginRequired",
-                                    options: {
-                                        method: "get"
-                                    }
-                                }
-                            }
+                            path: "/gated",
+                            handlerGrades: ["gpii.express.user.tests.harness.gated.handler"]
                         }
                     }
                 }
