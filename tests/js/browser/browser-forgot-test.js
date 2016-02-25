@@ -67,7 +67,7 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                         {
                             event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.evaluate",
-                            args:     [gpii.tests.browser.tests.elementMatches, ".reset-error", "The passwords you have entered don't match."]
+                            args:     [gpii.tests.browser.tests.elementMatches, ".fieldError", "The 'confirm' field must match the 'password' field."]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",
