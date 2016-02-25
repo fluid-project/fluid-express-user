@@ -5,7 +5,6 @@ var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
 var fs         = require("fs");
-var path       = require("path");
 var jqUnit     = require("node-jqunit");
 var MailParser = require("mailparser").MailParser;
 
