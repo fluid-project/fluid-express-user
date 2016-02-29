@@ -8,7 +8,7 @@
     fluid.registerNamespace("gpii.express.user.frontend.reset");
 
     fluid.defaults("gpii.express.user.frontend.reset", {
-        gradeNames: ["gpii.express.user.frontend.canHandleStrings", "gpii.schemas.client.errorAwareForm.clientSideValidation"],
+        gradeNames: ["gpii.schemas.client.errorAwareForm.clientSideValidation"],
         schemaKey:  "user-reset.json",
         ajaxOptions: {
             type:    "POST",

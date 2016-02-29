@@ -16,7 +16,7 @@
     };
 
     fluid.defaults("gpii.express.user.frontend.login", {
-        gradeNames: ["gpii.express.user.frontend.canHandleStrings", "gpii.schemas.client.errorAwareForm.clientSideValidation"],
+        gradeNames: ["gpii.schemas.client.errorAwareForm.clientSideValidation"],
         templates: {
             initial: "login-viewport",
             success: "common-success"

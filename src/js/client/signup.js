@@ -4,7 +4,7 @@
     "use strict";
 
     fluid.defaults("gpii.express.user.frontend.signup", {
-        gradeNames: ["gpii.express.user.frontend.canHandleStrings", "gpii.schemas.client.errorAwareForm.clientSideValidation"],
+        gradeNames: ["gpii.schemas.client.errorAwareForm.clientSideValidation"],
         schemaKey: "user-signup.json",
         ajaxOptions: {
             type:   "POST",

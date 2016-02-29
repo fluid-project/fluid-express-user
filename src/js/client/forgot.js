@@ -3,7 +3,7 @@
 (function () {
     "use strict";
     fluid.defaults("gpii.express.user.frontend.forgot", {
-        gradeNames: ["gpii.express.user.frontend.canHandleStrings", "gpii.schemas.client.errorAwareForm.clientSideValidation"],
+        gradeNames: ["gpii.schemas.client.errorAwareForm.clientSideValidation"],
         schemaKey:   "user-forgot.json",
         ajaxOptions: {
             type:        "POST",

@@ -6,7 +6,7 @@
     fluid.registerNamespace("gpii.express.user.frontend.resend");
 
     fluid.defaults("gpii.express.user.frontend.resend", {
-        gradeNames: ["gpii.express.user.frontend.canHandleStrings", "gpii.schemas.client.errorAwareForm.clientSideValidation"],
+        gradeNames: ["gpii.schemas.client.errorAwareForm.clientSideValidation"],
         schemaKey: "user-resend.json",
         templates: {
             initial: "resend-viewport",
