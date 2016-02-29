@@ -16,13 +16,15 @@
             <div class="controls-message"></div>
                 {{#if user}}
                     <ul>
-                        <li class="user-menu-logout selectable"  tabindex="0">Log Out</li>
+                        <li class="user-menu-logout selectable" tabindex="0">Log Out</li>
+                        <li class="user-controls-toggle selectable" tabindex="0">Cancel</li>
                     </ul>
                 {{else}}
-                    <p>You must log in before you can make changes.</p>
+                    <p class="panel">You must log in before you can make changes.</p>
                     <ul>
-                        <li><a href="/api/user/login{{#if path}}?source={{path}}{{/if}}" tabindex="0">Log in</a></li>
+                        <li><a class="selectable" href="/api/user/login{{#if path}}?source={{path}}{{/if}}" tabindex="0">Log in</a></li>
                         <li><a class="selectable" href="/api/user/signup{{#if path}}?source={{path}}{{/if}}" tabindex="0">Create an Account</a></li>
+                        <li class="user-controls-toggle selectable" tabindex="0">Cancel</li>
                     </ul>
                 {{/if}}
         </div>
