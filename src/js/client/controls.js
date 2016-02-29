@@ -1,39 +1,10 @@
 // Present a standard set of user controls with login/logout/profile links
-// TODO: Convert this to use a common "toggler" grade once that has been sufficiently exercised and moved somewhere central.
+
 /* global fluid, jQuery */
 (function ($) {
     "use strict";
     var gpii = fluid.registerNamespace("gpii");
     fluid.registerNamespace("gpii.express.user.frontend.controls");
-
-    gpii.express.user.frontend.controls.handleMenuKeys = function (that, event) {
-        switch (event.keyCode) {
-            case 27: // escape
-                that.toggleMenu();
-                break;
-        }
-
-        // TODO:  Eventually, we may want to take over control of "natural" arrow key handling using event.preventDefault()
-    };
-
-    gpii.express.user.frontend.controls.handleToggleKeys = function (that, event) {
-        switch (event.keyCode) {
-            case 27: // escape
-                that.toggleMenu();
-                break;
-            case 13: // enter
-                that.toggleMenu();
-                break;
-        }
-    };
-
-    gpii.express.user.frontend.controls.handleLogoutKeys = function (that, event) {
-        switch (event.keyCode) {
-            case 13: // enter
-                that.submitForm(event);
-                break;
-        }
-    };
 
     gpii.express.user.frontend.controls.toggleMenu = function (that) {
         var toggle = that.locate("toggle");
@@ -91,14 +62,6 @@
             toggleMenu: {
                 funcName: "gpii.express.user.frontend.controls.toggleMenu",
                 args:     [ "{that}"]
-            },
-            handleMenuKeys: {
-                funcName: "gpii.express.user.frontend.controls.handleMenuKeys",
-                args:     [ "{that}", "{arguments}.0"]
-            },
-            handleToggleKeys: {
-                funcName: "gpii.express.user.frontend.controls.handleToggleKeys",
-                args:     [ "{that}", "{arguments}.0"]
             }
         },
         listeners: {
@@ -108,9 +71,8 @@
                 "args":   "{that}.submitForm"
             },
             "onMarkupRendered.bindLogoutKeys": {
-                "this":   "{that}.dom.logout",
-                "method": "keydown",
-                "args":   "{that}.handleLogoutKeys"
+                "listener": "fluid.activatable",
+                "args":     ["{that}.dom.logout", "{that}.submitForm"]
             },
             "onMarkupRendered.bindToggleClick": {
                 "this":   "{that}.dom.toggle",
@@ -118,14 +80,12 @@
                 "args":   "{that}.toggleMenu"
             },
             "onMarkupRendered.bindToggleKeys": {
-                "this":   "{that}.dom.toggle",
-                "method": "keydown",
-                "args":   "{that}.handleToggleKeys"
+                "listener": "fluid.activatable",
+                "args":     ["{that}.dom.toggle", "{that}.toggleMenu"]
             },
-            "onMarkupRendered.bindMenuKeys": {
-                "this":   "{that}.dom.menu",
-                "method": "keydown",
-                "args":   "{that}.handleMenuKeys"
+            "onMarkupRendered.makeMenuItemsSelectable": {
+                "listener": "fluid.selectable",
+                "args":     ["{that}.dom.menu", { onSelect: "{that}.tattle", onLeaveContainer: "{that}.toggleMenu"}]
             }
         }
     });
