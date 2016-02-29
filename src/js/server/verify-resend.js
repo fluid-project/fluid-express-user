@@ -15,7 +15,7 @@ var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
 require("gpii-handlebars");
-require("./lib/hasMailerHandler");
+require("./lib/withMailHandler");
 
 fluid.registerNamespace("gpii.express.user.api.verify.resend.handler");
 
@@ -36,7 +36,7 @@ gpii.express.user.api.verify.resend.handler.getVerificationCode = function (that
 };
 
 fluid.defaults("gpii.express.user.api.verify.resend.handler", {
-    gradeNames: ["gpii.express.user.api.hasMailHandler"],
+    gradeNames: ["gpii.express.user.api.withMailHandler"],
     templates: {
         mail: {
             text:  "email-verify-text",

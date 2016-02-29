@@ -7,7 +7,7 @@ var request = require("request"); // TODO:  Replace this with a writable data so
 require("gpii-handlebars");
 
 require("./lib/datasource");
-require("./lib/hasMailerHandler");
+require("./lib/withMailHandler");
 require("./lib/mailer");
 require("./lib/password");
 
@@ -64,7 +64,7 @@ gpii.express.user.api.signup.post.handler.checkForExistingUser = function (that,
 };
 
 fluid.defaults("gpii.express.user.api.signup.post.handler", {
-    gradeNames: ["gpii.express.user.api.hasMailHandler"],
+    gradeNames: ["gpii.express.user.api.withMailHandler"],
     templates: {
         mail: {
             text:  "email-verify-text",

@@ -20,7 +20,7 @@ var gpii   = fluid.registerNamespace("gpii");
 var request = require("request");
 
 require("./lib/password");
-require("./lib/hasMailerHandler");
+require("./lib/withMailHandler");
 require("gpii-handlebars");
 
 fluid.registerNamespace("gpii.express.user.api.forgot.post.handler");
@@ -58,7 +58,7 @@ gpii.express.user.api.forgot.post.handler.handleRequestResponse = function (that
 };
 
 fluid.defaults("gpii.express.user.api.forgot.post.handler", {
-    gradeNames: ["gpii.express.user.api.hasMailHandler"],
+    gradeNames: ["gpii.express.user.api.withMailHandler"],
     messages: {
         success: "A password reset code and instructions have been sent to your email address.",
         error:   "A password reset code could not be sent.  Contact an administrator."

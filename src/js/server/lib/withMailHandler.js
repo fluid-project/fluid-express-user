@@ -1,6 +1,6 @@
 /*
 
- `gpii.express.user.api.hasMailHandler` is an instance of `gpii.express.handler` that has an additional invoker to
+ `gpii.express.user.api.withMailHandler` is an instance of `gpii.express.handler` that has an additional invoker to
  send outgoing mail.  The underlying mailer uses `gpii-handlebars` to render the content, and expects to be passed
  raw configuration data, which we generate using our data and rules, as follows:
 
@@ -30,16 +30,16 @@ var gpii   = fluid.registerNamespace("gpii");
 
 require("gpii-express");
 
-fluid.registerNamespace("gpii.express.user.api.hasMailHandler");
+fluid.registerNamespace("gpii.express.user.api.withMailHandler");
 
-gpii.express.user.api.hasMailHandler.sendMessage = function (that) {
+gpii.express.user.api.withMailHandler.sendMessage = function (that) {
     var mailOptions     = fluid.model.transformWithRules(that, that.options.rules.mailOptions, {});
     var templateContext = fluid.model.transformWithRules(that, that.options.rules.mailTemplateContext, {});
 
     that.mailer.sendMessage(mailOptions, templateContext);
 };
 
-fluid.defaults("gpii.express.user.api.hasMailHandler", {
+fluid.defaults("gpii.express.user.api.withMailHandler", {
     gradeNames:   ["gpii.express.handler"],
     replyAddress: "noreply@ul.gpii.net",
     config:       "{gpii.express}.options.config",
@@ -65,17 +65,17 @@ fluid.defaults("gpii.express.user.api.hasMailHandler", {
         mailer: {
             type: "gpii.express.user.mailer.handlebars",
             options: {
-                messages:        "{gpii.express.user.api.hasMailHandler}.options.messages",
-                templateDirs:    "{gpii.express.user.api.hasMailHandler}.options.templateDirs",
-                htmlTemplateKey: "{gpii.express.user.api.hasMailHandler}.options.templates.mail.html",
-                textTemplateKey: "{gpii.express.user.api.hasMailHandler}.options.templates.mail.text",
+                messages:        "{gpii.express.user.api.withMailHandler}.options.messages",
+                templateDirs:    "{gpii.express.user.api.withMailHandler}.options.templateDirs",
+                htmlTemplateKey: "{gpii.express.user.api.withMailHandler}.options.templates.mail.html",
+                textTemplateKey: "{gpii.express.user.api.withMailHandler}.options.templates.mail.text",
                 listeners: {
                     "onSuccess.sendResponse": {
-                        func: "{gpii.express.user.api.hasMailHandler}.sendResponse",
+                        func: "{gpii.express.user.api.withMailHandler}.sendResponse",
                         args: [200, { ok: true, message: "{that}.options.messages.success"}]
                     },
                     "onError.sendResponse": {
-                        func: "{gpii.express.user.api.hasMailHandler}.sendResponse",
+                        func: "{gpii.express.user.api.withMailHandler}.sendResponse",
                         args: [500, { ok: false, message: "{that}.options.messages.error"}]
                     },
                     // The error handler is passed the error and a text response.  Log the response.
@@ -90,7 +90,7 @@ fluid.defaults("gpii.express.user.api.hasMailHandler", {
     },
     invokers: {
         sendMessage: {
-            funcName: "gpii.express.user.api.hasMailHandler.sendMessage",
+            funcName: "gpii.express.user.api.withMailHandler.sendMessage",
             args:     ["{that}"]
         }
     }
