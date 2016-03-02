@@ -40,7 +40,7 @@ gpii.express.user.password.tests.runTests = function (that) {
         jqUnit.assertEquals("The salt string should be of twice the byte length...", 48, saltString.length);
 
         var saltInt = parseInt(saltString, 16);
-        jqUnit.assertNotEquals("The salt string should evaluate to a number when parsed as hex...", NaN, saltInt);
+        jqUnit.assertTrue("The salt string should evaluate to a number when parsed as hex...", Number.isInteger(saltInt));
 
         var secondSaltString = gpii.express.user.password.generateSalt(24);
         jqUnit.assertNotEquals("A different salt should be returned each time...", saltString, secondSaltString);
