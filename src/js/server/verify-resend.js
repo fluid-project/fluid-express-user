@@ -59,6 +59,7 @@ fluid.defaults("gpii.express.user.api.verify.resend.handler", {
     },
     components: {
         reader: {
+            // TODO:  Replace with the new "asymmetric" dataSource once that code has been reviewed
             type: "gpii.express.user.couchdb.read",
             options: {
                 url:     "{gpii.express.user.api.verify.resend}.options.urls.read",

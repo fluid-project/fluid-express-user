@@ -1,3 +1,5 @@
+// TODO:  Replace with the new "asymmetric" dataSource once that code has been reviewed
+//
 // A rewritten version of `kettle.dataSource.CouchDB.read` that allows rewriting of the response using the
 // transformation rules found in `options.rules.read`.  We cannot directly extend the existing couch grade in Kettle
 // because it has a non-namespaced listener for `onRead`, which we cannot replace. The `gradeNames` and `listener` block

@@ -71,6 +71,7 @@ fluid.defaults("gpii.express.user.api.reset.handler", {
     gradeNames:  ["gpii.express.handler"],
     components: {
         reader: {
+            // TODO:  Replace with the new "asymmetric" dataSource once that code has been reviewed
             type: "gpii.express.user.couchdb.read",
             options: {
                 url: "{gpii.express.user.api.reset}.options.urls.read",
