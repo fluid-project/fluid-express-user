@@ -20,11 +20,16 @@ gpii.express.user.api.test.extractCode = function (testEnvironment, pattern) {
     // If this gets any deeper, refactor to use a separate function
     mailParser.on("end", function (mailObject) {
         var content = mailObject.text;
-        var verificationCodeRegexp = new RegExp(pattern, "i");
-        var matches = content.toString().match(verificationCodeRegexp);
+        if (content) {
+            var verificationCodeRegexp = new RegExp(pattern, "i");
+            var matches = content.toString().match(verificationCodeRegexp);
 
-        if (matches) {
-            promise.resolve(matches[1]);
+            if (matches) {
+                promise.resolve(matches[1]);
+            }
+            else {
+                promise.reject();
+            }
         }
         else {
             promise.reject();
