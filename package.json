@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/the-t-in-rtf/gpii-express-user"
+    "url": "https://github.com/GPII/gpii-express-user"
   },
   "author": "Tony Atkins <tony@raisingthefloor.org>",
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/the-t-in-rtf/gpii-express-user/issues"
+    "url": "https://github.com/GPII/gpii-express-user/issues"
   },
-  "homepage": "https://github.com/the-t-in-rtf/gpii-express-user",
+  "homepage": "https://github.com/GPII/gpii-express-user",
   "dependencies": {
     "gpii-binder": "git://github.com/the-t-in-rtf/gpii-binder#c83ff8cde8ba37c72f7e26bebf81c44d1a681c36",
     "gpii-express": "git://github.com/the-t-in-rtf/gpii-express#d4eee18a0f2286624fe70c7e0565a51a9fda3d0e",
