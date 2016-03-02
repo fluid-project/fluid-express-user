@@ -24,6 +24,7 @@
         },
         rules: {
             successResponseToModel: {
+                // TODO:  Review once https://issues.gpii.net/browse/GPII-1587 is resolved
                 successMessage: {
                     literalValue: "Your password has been reset."
                 }

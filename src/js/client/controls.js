@@ -34,6 +34,7 @@
         },
         rules: {
             successResponseToModel: {
+                // TODO:  Refactor once https://issues.gpii.net/browse/GPII-1587 is resolved
                 "":        "notfound",
                 user: {
                     literalValue: false

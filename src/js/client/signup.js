@@ -12,6 +12,7 @@
             json:   true
         },
         rules: {
+            // TODO:  Review once https://issues.gpii.net/browse/GPII-1587 is resolved
             modelToRequestPayload: {
                 name:     "username",
                 password: "password",
