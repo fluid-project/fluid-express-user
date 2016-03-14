@@ -19,7 +19,7 @@ fluid.defaults("gpii.express.api.docs.router", {
     method:     "get",
     template:   "pages/docs",
     title:      "API Documentation",
-    mdFile:     "%gpii-express-user/docs/api.md",
+    mdFile:     "%gpii-express-user/docs/apidocs.md",
     invokers: {
         route: {
             funcName: "gpii.express.api.docs.router.route",
