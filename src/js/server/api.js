@@ -23,6 +23,19 @@ fluid.defaults("gpii.express.user.api", {
     path:       "/user",
     method:     "use",
     templateDirs: ["%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
+    schemaDirs:    "%gpii-express-user/src/schemas",
+    events: {
+        onLoginReady:  "null",
+        onResetReady:  "null",
+        onSignupReady: "null",
+        onReady: {
+            events: {
+                onLoginReady:  "onLoginReady",
+                onResetReady:  "onResetReady",
+                onSignupReady: "onSignupReady"
+            }
+        }
+    },
     couch: {
         userDbName: "_users",
         userDbUrl: {
@@ -40,6 +53,10 @@ fluid.defaults("gpii.express.user.api", {
         {
             source: "{that}.options.app",
             target: "{that gpii.express.router}.options.app"
+        },
+        {
+            source: "{that}.options.schemaDirs",
+            target: "{that gpii.express.router}.options.schemaDirs"
         }
     ],
     components: {
@@ -77,16 +94,37 @@ fluid.defaults("gpii.express.user.api", {
             type: "gpii.express.user.api.forgot"
         },
         login: {
-            type: "gpii.express.user.api.login"
+            type: "gpii.express.user.api.login",
+            options: {
+                listeners: {
+                    "onSchemasDereferenced.notifyParent": {
+                        func: "{gpii.express.user.api}.events.onLoginReady.fire"
+                    }
+                }
+            }
         },
         logout: {
             type: "gpii.express.user.api.logout"
         },
         reset: {
-            type: "gpii.express.user.api.reset"
+            type: "gpii.express.user.api.reset",
+            options: {
+                listeners: {
+                    "onSchemasDereferenced.notifyParent": {
+                        func: "{gpii.express.user.api}.events.onResetReady.fire"
+                    }
+                }
+            }
         },
         signup: {
-            type: "gpii.express.user.api.signup"
+            type: "gpii.express.user.api.signup",
+            options: {
+                listeners: {
+                    "onSchemasDereferenced.notifyParent": {
+                        func: "{gpii.express.user.api}.events.onSignupReady.fire"
+                    }
+                }
+            }
         },
         verify: {
             type: "gpii.express.user.api.verify"

@@ -54,6 +54,7 @@ fluid.defaults("gpii.express.user.tests.harness", {
     ],
     events: {
         onApiDone:             null,
+        onApiReady:            null,
         onApiStarted:          null,
         onMailDone:            null,
         onMailReady:           null,
@@ -64,6 +65,7 @@ fluid.defaults("gpii.express.user.tests.harness", {
             events: {
                 onPouchStarted: "onPouchStarted",
                 onApiStarted:   "onApiStarted",
+                onApiReady:     "onApiReady",
                 onMailReady:    "onMailReady"
             }
         },
@@ -168,6 +170,12 @@ fluid.defaults("gpii.express.user.tests.harness", {
                                         funcName: "fluid.stringTemplate",
                                         args:     ["http://localhost:%port/%userDbName", "{that}.options.couch"]
                                     }
+                                }
+                            },
+                            listeners: {
+                                "onReady.notifyHarness": {
+                                    func: "{harness}.events.onApiReady.fire"
+
                                 }
                             },
                             app: "{gpii.express}.options.config.app"

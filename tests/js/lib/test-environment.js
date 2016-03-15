@@ -39,6 +39,12 @@ fluid.defaults("gpii.express.user.tests.environment", {
     pouchPort:  "9599",
     mailPort:   "2525",
     components: {
+        // Currently, the browser's `onLoaded` event will fail frequently if the browser is not visible.
+        browser: {
+            options: {
+                nightmareOptions: { show: true }
+            }
+        },
         harness: {
             type:          "gpii.express.user.tests.harness",
             createOnEvent: "constructFixtures",

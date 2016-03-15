@@ -317,7 +317,7 @@ gpii.express.user.tests.environment({
     apiPort:   7533,
     pouchPort: 7534,
     mailPort:  4082,
-    ajaxWait:  500, // The standard time we give our AJAX calls to complete
+    ajaxWait:  1500, // The standard time we give our AJAX calls to complete
     resetPattern: "(http.+reset/[a-z0-9-]+)",
     forgotUrl: {
         expander: {
@@ -340,13 +340,6 @@ gpii.express.user.tests.environment({
     components: {
         testCaseHolder: {
             type: "gpii.express.user.tests.forgot.client.caseHolder"
-        },
-        harness: {
-            options: {
-                events: {
-                    onReadyToDie: null
-                }
-            }
         }
     }
 });

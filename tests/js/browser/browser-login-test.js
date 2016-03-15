@@ -180,7 +180,7 @@ gpii.express.user.tests.environment({
     apiPort:     7542,
     pouchPort:   7524,
     mailPort:    4099,
-    waitTimeout: 750,
+    waitTimeout: 1500,
     loginUrl: {
         expander: {
             funcName: "fluid.stringTemplate",

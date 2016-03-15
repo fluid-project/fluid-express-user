@@ -9,6 +9,7 @@
 var fluid        = require("infusion");
 var gpii         = fluid.registerNamespace("gpii");
 
+require("../../../");
 require("../lib/");
 
 var jqUnit       = require("node-jqunit");

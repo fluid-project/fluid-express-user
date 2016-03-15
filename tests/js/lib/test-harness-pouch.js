@@ -1,7 +1,7 @@
 // Just the PouchDB bits of the test harness (which we use independently in testing our datasource grades)
 var fluid = require("infusion");
 
-require("gpii-pouch");
+require("gpii-pouchdb");
 
 fluid.defaults("gpii.express.user.tests.pouch", {
     gradeNames: ["gpii.express"],

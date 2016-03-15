@@ -127,7 +127,6 @@ fluid.defaults("gpii.express.user.api.signup.post", {
     path:             "/",
     method:           "post",
     handlerGrades:    ["gpii.express.user.api.signup.post.handler"],
-    schemaPath:       "%gpii-express-user/src/schemas",
     schemaKey:        "user-signup.json",
     saltLength:       32,
     verifyCodeLength: 16,
@@ -154,6 +153,9 @@ fluid.defaults("gpii.express.user.api.signup.post", {
 fluid.defaults("gpii.express.user.api.signup", {
     gradeNames: ["gpii.express.router.passthrough"],
     path:       "/signup",
+    events: {
+        onSchemasDereferenced: null
+    },
     rules: {
         user: {
             "username": "name", // Default configuration is designed for CouchDB and express-couchUser field naming conventions.
@@ -182,7 +184,14 @@ fluid.defaults("gpii.express.user.api.signup", {
             }
         },
         postRouter: {
-            type: "gpii.express.user.api.signup.post"
+            type: "gpii.express.user.api.signup.post",
+            options: {
+                listeners: {
+                    "onSchemasDereferenced.notifyParent": {
+                        func: "{gpii.express.user.api.signup}.events.onSchemasDereferenced.fire"
+                    }
+                }
+            }
         }
     }
 });

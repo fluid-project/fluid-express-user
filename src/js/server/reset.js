@@ -114,7 +114,6 @@ fluid.defaults("gpii.express.user.api.reset.post", {
     path:          "/",
     method:        "post",
     handlerGrades: ["gpii.express.user.api.reset.handler"],
-    schemaPath:    "%gpii-express-user/src/schemas",
     schemaKey:     "user-reset.json",
     components: {
         innerRouter: {
@@ -137,6 +136,9 @@ fluid.defaults("gpii.express.user.api.reset", {
     gradeNames:    ["gpii.express.router.passthrough"],
     method:        "use",
     path:          "/reset",
+    events: {
+        onSchemasDereferenced: null
+    },
     // The next two variables must match the value in gpii.express.user.api.forgot
     codeKey:       "reset_code",
     codeIssuedKey: "reset_code_issued",
@@ -184,7 +186,15 @@ fluid.defaults("gpii.express.user.api.reset", {
             type: "gpii.express.user.api.reset.formRouter"
         },
         post: {
-            type: "gpii.express.user.api.reset.post"
+            type: "gpii.express.user.api.reset.post",
+            options: {
+                listeners: {
+                    "onSchemasDereferenced.notifyParent": {
+                        func: "{gpii.express.user.api.reset}.events.onSchemasDereferenced.fire"
+                    }
+
+                }
+            }
         }
     }
 });
