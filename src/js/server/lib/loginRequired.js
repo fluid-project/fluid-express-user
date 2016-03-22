@@ -42,6 +42,7 @@ fluid.defaults("gpii.express.user.middleware.loginRequired.handler", {
 fluid.defaults("gpii.express.user.middleware.loginRequired", {
     gradeNames:    ["gpii.express.middleware", "gpii.express.requestAware.base"],
     sessionKey:    "_gpii_user", // Must matched what's used in /api/user/login
+    namespace:     "loginRequired", // Namespace to allow other middleware to put themselves in the chain before or after us.
     handlerGrades: ["gpii.express.user.middleware.loginRequired.handler"],
     events: {
         onUnauthorizedRequest: null
@@ -66,7 +67,8 @@ fluid.defaults("gpii.express.user.middleware.loginRequired.router", {
             type: "gpii.express.user.middleware.loginRequired"
         },
         innerRouter: {
-            type: "gpii.express.requestAware.router",
+            type:     "gpii.express.requestAware.router",
+            priority: "after:loginRequired",
             options: {
                 handlerGrades: "{gpii.express.user.middleware.loginRequired.router}.options.handlerGrades",
                 method:        "{gpii.express.user.middleware.loginRequired.router}.options.method",

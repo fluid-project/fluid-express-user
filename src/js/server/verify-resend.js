@@ -109,6 +109,7 @@ fluid.defaults("gpii.express.user.api.verify.resend.handler.json", {
 
 fluid.defaults("gpii.express.user.api.verify.resend", {
     gradeNames: ["gpii.express.router.passthrough"],
+    namespace:  "resend", // Namespace to allow other routers to put themselves in the chain before or after us.
     path:       "/resend",
     method:     "use",
     urls: {

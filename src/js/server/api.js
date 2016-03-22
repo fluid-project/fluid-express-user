@@ -62,20 +62,27 @@ fluid.defaults("gpii.express.user.api", {
     components: {
         // Required middleware
         json: {
-            type: "gpii.express.middleware.bodyparser.json"
+            type: "gpii.express.middleware.bodyparser.json",
+            priority: "before:session"
         },
         urlencoded: {
-            type: "gpii.express.middleware.bodyparser.urlencoded"
+            type: "gpii.express.middleware.bodyparser.urlencoded",
+            priority: "before:session"
         },
         cookieparser: {
-            type: "gpii.express.middleware.cookieparser"
+            type:     "gpii.express.middleware.cookieparser",
+            priority: "before:session"
         },
         docs: {
-            type: "gpii.express.api.docs.router"
+            type:     "gpii.express.api.docs.router",
+            priority: "before:session"
         },
         session: {
             type: "gpii.express.middleware.session",
             options: {
+                // We use "session" as the last bit of middleware in the chain so that we can ensure all middleware is
+                // loaded before our routers.
+                namespace: "session",
                 config: {
                     express: {
                         session: {
@@ -88,13 +95,16 @@ fluid.defaults("gpii.express.user.api", {
 
         // API Endpoints (routers)
         current: {
-            type: "gpii.express.user.api.current"
+            type:     "gpii.express.user.api.current",
+            priority: "after:session"
         },
         forgot: {
-            type: "gpii.express.user.api.forgot"
+            type:     "gpii.express.user.api.forgot",
+            priority: "after:session"
         },
         login: {
             type: "gpii.express.user.api.login",
+            priority: "after:session",
             options: {
                 listeners: {
                     "onSchemasDereferenced.notifyParent": {
@@ -104,10 +114,12 @@ fluid.defaults("gpii.express.user.api", {
             }
         },
         logout: {
-            type: "gpii.express.user.api.logout"
+            type:     "gpii.express.user.api.logout",
+            priority: "after:session"
         },
         reset: {
             type: "gpii.express.user.api.reset",
+            priority: "after:session",
             options: {
                 listeners: {
                     "onSchemasDereferenced.notifyParent": {
@@ -117,7 +129,8 @@ fluid.defaults("gpii.express.user.api", {
             }
         },
         signup: {
-            type: "gpii.express.user.api.signup",
+            type:     "gpii.express.user.api.signup",
+            priority: "after:session",
             options: {
                 listeners: {
                     "onSchemasDereferenced.notifyParent": {
@@ -127,7 +140,8 @@ fluid.defaults("gpii.express.user.api", {
             }
         },
         verify: {
-            type: "gpii.express.user.api.verify"
+            type:     "gpii.express.user.api.verify",
+            priority: "after:session"
         }
     }
 });

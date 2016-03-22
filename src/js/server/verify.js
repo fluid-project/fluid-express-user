@@ -151,6 +151,7 @@ fluid.defaults("gpii.express.user.api.verify", {
         },
         mainRouter: {
             type: "gpii.express.contentAware.router",
+            priority: "after:resend",
             options: {
                 path:        ["/:code", "/"],
                 method:      "get",
