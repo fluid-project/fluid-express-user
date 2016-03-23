@@ -19,9 +19,9 @@
   "homepage": "https://github.com/GPII/gpii-express-user",
   "dependencies": {
     "gpii-binder": "git://github.com/the-t-in-rtf/gpii-binder#c83ff8cde8ba37c72f7e26bebf81c44d1a681c36",
-    "gpii-express": "git://github.com/the-t-in-rtf/gpii-express#2f2b9418f02e7a4251a46fe8602ae482b5eac83e",
-    "gpii-handlebars": "git://github.com/the-t-in-rtf/gpii-handlebars.git#852fd55cc6589cbb6c028dd3788426039819313c",
-    "gpii-json-schema": "git://github.com/the-t-in-rtf/gpii-json-schema.git#ec7bbda086c7edbbef589dd432b75f4ff9fc967c",
+    "gpii-express": "git://github.com/the-t-in-rtf/gpii-express#59e852d74d5a198bb96190d47073b97fff224fd9",
+    "gpii-handlebars": "git://github.com/the-t-in-rtf/gpii-handlebars.git#29f6ba242ef97a43f92e3588ba310ae46d336974",
+    "gpii-json-schema": "git://github.com/the-t-in-rtf/gpii-json-schema.git#1f2e57f02113bb55c7cce7a06e805c4c84023970",
     "handlebars": "4.0.0",
     "infusion": "2.0.0-dev.20151211T025229Z.eabb4fc",
     "kettle": "git://github.com/amb26/kettle.git#2517cc1d9d047d58aef70db48d1580da718ffc16",
@@ -32,8 +32,8 @@
   },
   "devDependencies": {
     "cookie":     "^0.2.0",
-    "gpii-mail-test": "git://github.com/the-t-in-rtf/gpii-mail-test.git#16b80683803ed3d3dc1552b9c110ad654685e177",
-    "gpii-pouchdb": "git://github.com/the-t-in-rtf/gpii-pouchdb.git#9594fa1d97a8df3afdfe95dbcdf9d6254000618d",
+    "gpii-mail-test": "git://github.com/the-t-in-rtf/gpii-mail-test.git#22500bab7fa5d32e94acdccbfa7b3666b2357e58",
+    "gpii-pouchdb": "git://github.com/the-t-in-rtf/gpii-pouchdb.git#0d2878d35b4100a1b90277e903467e6b9a18cffe",
     "gpii-test-browser": "git://github.com/the-t-in-rtf/gpii-test-browser#04a45c1683e69ae9453f55b049c96b90cac32c39",
     "grunt": "0.4.4",
     "grunt-contrib-jshint": "0.9.0",
