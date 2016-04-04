@@ -24,6 +24,11 @@ fluid.defaults("gpii.express.user.tests.signup.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onLoaded",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.waitAfterLoad"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.type",
                             args:     ["[name='username']", "duplicate"]
                         },
@@ -83,6 +88,11 @@ fluid.defaults("gpii.express.user.tests.signup.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onLoaded",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.waitAfterLoad"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.type",
                             args:     ["[name='username']", "existing"]
                         },
@@ -142,6 +152,11 @@ fluid.defaults("gpii.express.user.tests.signup.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onLoaded",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.waitAfterLoad"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.type",
                             args:     ["[name='username']", "newbie"]
                         },
@@ -201,6 +216,11 @@ fluid.defaults("gpii.express.user.tests.signup.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onLoaded",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.waitAfterLoad"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.evaluate",
                             args: [gpii.tests.browser.tests.elementMatches, ".alert", "You must provide a valid verification code to use this interface."]
                         },
@@ -230,6 +250,11 @@ fluid.defaults("gpii.express.user.tests.signup.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onLoaded",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.waitAfterLoad"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.type",
                             args:     ["[name='username']", "newbie"]
                         },
@@ -268,11 +293,21 @@ fluid.defaults("gpii.express.user.tests.signup.client.caseHolder", {
                         // We wait for this to load, and confirm that our account has been created by logging in.
                         {
                             event:    "{testEnvironment}.browser.events.onLoaded",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.waitAfterLoad"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.goto",
                             args:     ["{testEnvironment}.options.loginUrl"]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onLoaded",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.waitAfterLoad"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.type",
                             args:     ["[name='username']", "newbie"]
                         },
@@ -327,6 +362,7 @@ gpii.express.user.tests.environment.withBrowser({
     pouchPort: 7542,
     mailPort:  4089,
     ajaxWait:  500,
+    waitAfterLoad: 1500,
     verifyPattern: "(http.+verify/[a-z0-9-]+)",
     bogusVerifyUrl: {
         expander: {

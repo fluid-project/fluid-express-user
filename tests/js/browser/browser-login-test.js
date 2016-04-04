@@ -27,6 +27,11 @@ fluid.defaults("gpii.express.user.tests.login.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onLoaded",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.waitAfterLoad"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.type",
                             args:     ["[name='username']", "existing"]
                         },
@@ -127,6 +132,11 @@ fluid.defaults("gpii.express.user.tests.login.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onLoaded",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.waitAfterLoad"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.type",
                             args:     ["[name='username']", "bogus"]
                         },
@@ -181,6 +191,7 @@ gpii.express.user.tests.environment.withBrowser({
     pouchPort:   7524,
     mailPort:    4099,
     waitTimeout: 1500,
+    waitAfterLoad: 1500,
     loginUrl: {
         expander: {
             funcName: "fluid.stringTemplate",
