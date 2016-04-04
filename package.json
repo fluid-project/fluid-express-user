@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "cookie":     "^0.2.0",
-    "gpii-mail-test": "git://github.com/the-t-in-rtf/gpii-mail-test.git#22500bab7fa5d32e94acdccbfa7b3666b2357e58",
+    "gpii-mail-test": "git://github.com/the-t-in-rtf/gpii-mail-test.git#18c2391b608fe2a9bf83c232e5fa35b51ec23f85",
     "gpii-pouchdb": "git://github.com/the-t-in-rtf/gpii-pouchdb.git#0d2878d35b4100a1b90277e903467e6b9a18cffe",
     "gpii-test-browser": "git://github.com/the-t-in-rtf/gpii-test-browser#04a45c1683e69ae9453f55b049c96b90cac32c39",
     "grunt": "0.4.4",
