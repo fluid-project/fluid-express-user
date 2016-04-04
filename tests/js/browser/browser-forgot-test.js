@@ -24,6 +24,11 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onLoaded",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.waitAfterLoad"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.type",
                             args:     ["[name='email']", "existing@localhost"]
                         },
@@ -41,6 +46,11 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                         // We wait for this to load, and fill in the form.
                         {
                             event:    "{testEnvironment}.browser.events.onLoaded",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.waitAfterLoad"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.type",
                             args:     ["[name='password']", "NewPass12345!"]
                         },
@@ -95,6 +105,11 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onLoaded",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.waitAfterLoad"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.type",
                             args:     ["[name='email']", "nowhere.man@localhost"]
                         },
@@ -144,6 +159,11 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onLoaded",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.waitAfterLoad"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.type",
                             args:     ["[name='password']", "Password1!"]
                         },
@@ -198,6 +218,11 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onLoaded",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.waitAfterLoad"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.type",
                             args:     ["[name='email']", "existing@localhost"]
                         },
@@ -215,6 +240,11 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                         // We wait for this to load, and fill in the form.
                         {
                             event:    "{testEnvironment}.browser.events.onLoaded",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.waitAfterLoad"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.type",
                             args:     ["[name='password']", "NewPass12345!"]
                         },
@@ -264,6 +294,11 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onLoaded",
+                            listener: "{testEnvironment}.browser.wait",
+                            args:     ["{testEnvironment}.options.waitAfterLoad"]
+                        },
+                        {
+                            event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.type",
                             args:     ["[name='username']", "existing@localhost"]
                         },
@@ -318,6 +353,7 @@ gpii.express.user.tests.environment.withBrowser({
     pouchPort: 7534,
     mailPort:  4082,
     ajaxWait:  1500, // The standard time we give our AJAX calls to complete
+    waitAfterLoad: 1500, // How long to wait for the page to render
     resetPattern: "(http.+reset/[a-z0-9-]+)",
     forgotUrl: {
         expander: {
