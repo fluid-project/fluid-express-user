@@ -10,7 +10,7 @@ require("gpii-test-browser");
 gpii.tests.browser.loadTestingSupport();
 
 fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
-    gradeNames: ["gpii.express.user.tests.caseHolder"],
+    gradeNames: ["gpii.express.user.tests.caseHolder.withBrowser"],
     rawModules: [
         {
             tests: [
@@ -313,7 +313,7 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
     ]
 });
 
-gpii.express.user.tests.environment({
+gpii.express.user.tests.environment.withBrowser({
     apiPort:   7533,
     pouchPort: 7534,
     mailPort:  4082,

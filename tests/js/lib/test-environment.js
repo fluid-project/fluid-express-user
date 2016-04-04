@@ -12,7 +12,7 @@ require("gpii-test-browser");
 gpii.tests.browser.loadTestingSupport();
 
 fluid.defaults("gpii.express.user.tests.environment", {
-    gradeNames: ["gpii.tests.browser.environment"],
+    gradeNames: ["fluid.test.testEnvironment"],
     apiPort:    "3959",
     baseUrl: {
         expander: {
@@ -21,17 +21,16 @@ fluid.defaults("gpii.express.user.tests.environment", {
         }
     },
     events: {
+        constructFixtures: null,
         onHarnessDone: null,
         onHarnessReady: null,
         onReady: {
             events: {
-                onBrowserReady: "onBrowserReady",
                 onHarnessReady: "onHarnessReady"
             }
         },
         onAllDone: {
             events: {
-                onBrowserDone: "onBrowserDone",
                 onHarnessDone: "onHarnessDone"
             }
         }
@@ -39,12 +38,6 @@ fluid.defaults("gpii.express.user.tests.environment", {
     pouchPort:  "9599",
     mailPort:   "2525",
     components: {
-        // Currently, the browser's `onLoaded` event will fail frequently if the browser is not visible.
-        browser: {
-            options: {
-                nightmareOptions: { show: true }
-            }
-        },
         harness: {
             type:          "gpii.express.user.tests.harness",
             createOnEvent: "constructFixtures",
@@ -60,6 +53,34 @@ fluid.defaults("gpii.express.user.tests.environment", {
                         func: "{testEnvironment}.events.onHarnessDone.fire"
                     }
                 }
+            }
+        }
+    }
+});
+
+
+
+fluid.defaults("gpii.express.user.tests.environment.withBrowser", {
+    gradeNames: ["gpii.express.user.tests.environment", "gpii.tests.browser.environment"],
+    events: {
+        onReady: {
+            events: {
+                onBrowserReady: "onBrowserReady",
+                onHarnessReady: "onHarnessReady"
+            }
+        },
+        onAllDone: {
+            events: {
+                onBrowserDone: "onBrowserDone",
+                onHarnessDone: "onHarnessDone"
+            }
+        }
+    },
+    components: {
+        // Currently, the browser's `onLoaded` event will fail frequently if the browser is not visible.
+        browser: {
+            options: {
+                nightmareOptions: { show: true }
             }
         }
     }

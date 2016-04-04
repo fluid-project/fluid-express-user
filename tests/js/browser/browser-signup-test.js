@@ -10,7 +10,7 @@ var gpii          = fluid.registerNamespace("gpii");
 require("../lib/");
 
 fluid.defaults("gpii.express.user.tests.signup.client.caseHolder", {
-    gradeNames: ["gpii.express.user.tests.caseHolder"],
+    gradeNames: ["gpii.express.user.tests.caseHolder.withBrowser"],
     rawModules: [
         {
             tests: [
@@ -322,7 +322,7 @@ fluid.defaults("gpii.express.user.tests.signup.client.caseHolder", {
     ]
 });
 
-gpii.express.user.tests.environment({
+gpii.express.user.tests.environment.withBrowser({
     apiPort:   7532,
     pouchPort: 7542,
     mailPort:  4089,
