@@ -34,7 +34,7 @@
     "cookie":     "^0.2.0",
     "gpii-mail-test": "git://github.com/the-t-in-rtf/gpii-mail-test.git#18c2391b608fe2a9bf83c232e5fa35b51ec23f85",
     "gpii-pouchdb": "git://github.com/the-t-in-rtf/gpii-pouchdb.git#0d2878d35b4100a1b90277e903467e6b9a18cffe",
-    "gpii-test-browser": "git://github.com/the-t-in-rtf/gpii-test-browser#04a45c1683e69ae9453f55b049c96b90cac32c39",
+    "gpii-test-browser": "git://github.com/the-t-in-rtf/gpii-test-browser#dc66ced403922dd1e29d7359cd051a780ea22749",
     "grunt": "0.4.4",
     "grunt-contrib-jshint": "0.9.0",
     "grunt-jsonlint": "1.0.4",
