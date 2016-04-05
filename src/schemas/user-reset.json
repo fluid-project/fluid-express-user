@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "id": "user-reset.json",
+  "title": "gpii-express-user user password reset schema",
+  "description": "This schema defines the format accepted when resetting a user's password.",
+  "properties": {
+    "password": {
+      "$ref": "user-core.json#/definitions/password"
+    },
+    "confirm": {
+      "$ref": "user-core.json#/definitions/confirm"
+    }
+  },
+  "required": [
+    "password",
+    "confirm"
+  ],
+  "errors": {
+    "#/required/0": "You must enter a password.",
+    "#/required/1": "You must enter the same password a second time."
+  }
+}

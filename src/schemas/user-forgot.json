@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "id": "user-forgot.json",
+  "title": "gpii-express-user user forgot password schema",
+  "description": "This schema defines the format accepted when requesting a password reset.",
+  "properties": {
+    "email": {
+      "$ref": "user-core.json#/definitions/email"
+    }
+  },
+  "required": [ "email" ],
+  "errors": {
+    "#/required/0": "You must enter an email address."
+  }
+}
