@@ -88,37 +88,11 @@ fluid.defaults("gpii.express.user.tests.harness", {
                     "afterDestroy.notifyParent": "{harness}.events.onApiDone.fire"
                 },
                 components: {
-                    session: {
-                        type: "gpii.express.middleware.session",
-                        options: {
-                            config: {
-                                express: {
-                                    session: {
-                                        secret: "Printer, printer take a hint-ter."
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    handlebars: {
-                        type: "gpii.express.hb",
-                        options: {
-                            templateDirs: "{gpii.express.user.tests.harness}.options.templateDirs",
-                            components: {
-                                initBlock: {
-                                    options: {
-                                        contextToOptionsRules: {
-                                            req: "req"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
                     // Front-end content used by some GET calls
                     modules: {
                         type:  "gpii.express.router.static",
                         options: {
+                            priority: "after:session",
                             path:    "/modules",
                             content: "%gpii-express-user/node_modules"
                         }
@@ -126,6 +100,7 @@ fluid.defaults("gpii.express.user.tests.harness", {
                     bc: {
                         type:  "gpii.express.router.static",
                         options: {
+                            priority: "after:session",
                             path:    "/bc",
                             content: "%gpii-express-user/bower_components"
                         }
@@ -133,6 +108,7 @@ fluid.defaults("gpii.express.user.tests.harness", {
                     inline: {
                         type: "gpii.express.hb.inline",
                         options: {
+                            priority: "after:session",
                             path: "/hbs",
                             templateDirs: "{gpii.express.user.tests.harness}.options.templateDirs"
                         }
@@ -140,6 +116,7 @@ fluid.defaults("gpii.express.user.tests.harness", {
                     schemas: {
                         type: "gpii.express.router.static",
                         options: {
+                            priority: "after:session",
                             path:    "/schemas",
                             content: "%gpii-express-user/src/schemas"
                         }
@@ -147,13 +124,15 @@ fluid.defaults("gpii.express.user.tests.harness", {
                     inlineSchemas: {
                         type: "gpii.schema.inline.router",
                         options: {
+                            priority: "after:session",
                             schemaDirs: "%gpii-express-user/src/schemas"
                         }
                     },
                     api: {
                         type: "gpii.express.user.api",
                         options: {
-                            path:        "/api/user",
+                            path:     "/api/user",
+                            priority: "after:session",
                             couch:  {
                                 port: "{harness}.options.pouchPort",
                                 userDbName: "users",
@@ -181,7 +160,17 @@ fluid.defaults("gpii.express.user.tests.harness", {
                         type: "gpii.express.user.middleware.loginRequired.router",
                         options: {
                             path: "/gated",
+                            priority: "after:session",
                             handlerGrades: ["gpii.express.user.tests.harness.gated.handler"]
+                        }
+                    },
+                    // Serve up the rest of our static content (JS source, etc.)
+                    src: {
+                        type:  "gpii.express.router.static",
+                        options: {
+                            path:     "/",
+                            priority: "last",
+                            content:  "%gpii-express-user/src"
                         }
                     }
                 }
