@@ -68,8 +68,8 @@ fluid.defaults("gpii.express.user.middleware.loginRequired.router", {
         },
         innerRouter: {
             type:     "gpii.express.requestAware.router",
-            priority: "after:loginRequired",
             options: {
+                priority:      "after:loginRequired",
                 handlerGrades: "{gpii.express.user.middleware.loginRequired.router}.options.handlerGrades",
                 method:        "{gpii.express.user.middleware.loginRequired.router}.options.method",
                 path:          "/"
