@@ -26,7 +26,8 @@
     "tests"
   ],
   "dependencies": {
-    "gpii-handlebars": "git://github.com/the-t-in-rtf/gpii-handlebars.git#fcb84ac34b73ec15fc3d52c8dbdad413c03e7504",
-    "foundation":      "~5.5.2"
+    "foundation": "~5.5.2",
+    "handlebars": "4.0.5",
+    "pagedown":   "1.1.0"
   }
 }
