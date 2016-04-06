@@ -75,13 +75,5 @@ fluid.defaults("gpii.express.user.tests.environment.withBrowser", {
                 onHarnessDone: "onHarnessDone"
             }
         }
-    },
-    components: {
-        // Currently, the browser's `onLoaded` event will fail frequently if the browser is not visible.
-        browser: {
-            options: {
-                nightmareOptions: { show: true }
-            }
-        }
     }
 });
