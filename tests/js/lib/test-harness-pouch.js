@@ -5,12 +5,7 @@ require("gpii-pouchdb");
 
 fluid.defaults("gpii.express.user.tests.pouch", {
     gradeNames: ["gpii.express"],
-    pouchPort: "3579",
-    config: {
-        express: {
-            port: "{that}.options.pouchPort"
-        }
-    },
+    port: "3579",
     events: {
         onPouchStarted: null,
         onAllStarted: {

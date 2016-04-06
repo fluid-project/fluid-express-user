@@ -141,10 +141,16 @@ fluid.defaults("gpii.express.user.api.signup.post", {
         },
         write: "{that}.options.couch.userDbUrl"
     },
-    distributeOptions: {
-        source: "{that}.options.rules",
-        target: "{that gpii.express.handler}.options.rules"
-    },
+    distributeOptions: [
+        {
+            source: "{that}.options.rules",
+            target: "{that gpii.express.handler}.options.rules"
+        },
+        {
+            source: "{that}.options.app",
+            target: "{that gpii.express.user.api.withMailHandler}.options.app"
+        }
+    ],
     termMaps: {
         read: { username: "%username", email: "%email"}
     }

@@ -81,16 +81,8 @@ fluid.defaults("gpii.express.user.tests.harness", {
         api: {
             type: "gpii.express",
             options: {
-                config: {
-                    express: {
-                        port:  "{harness}.options.apiPort",
-                        views: "%gpii-express-user/src/templates"
-                    },
-                    app: {
-                        name: "Express User Test Harness",
-                        url:  "{harness}.options.baseUrl"
-                    }
-                },
+                gradeNames: ["gpii.express.user.api.withRequiredMiddleware"],
+                port:  "{harness}.options.apiPort",
                 listeners: {
                     "onStarted.notifyParent": "{harness}.events.onApiStarted.fire",
                     "afterDestroy.notifyParent": "{harness}.events.onApiDone.fire"
@@ -178,15 +170,10 @@ fluid.defaults("gpii.express.user.tests.harness", {
 
                                 }
                             },
-                            app: "{gpii.express}.options.config.app"
-                        }
-                    },
-                    // Serve up the rest of our static content (JS source, etc.)
-                    src: {
-                        type:  "gpii.express.router.static",
-                        options: {
-                            path:    "/",
-                            content: "%gpii-express-user/src"
+                            app: {
+                                name: "gpii-express-user API test harness...",
+                                url:  "{harness}.options.baseUrl"
+                            }
                         }
                     },
                     // A "gated" endpoint that can only be accessed if the user is logged in
@@ -203,7 +190,7 @@ fluid.defaults("gpii.express.user.tests.harness", {
         pouch: {
             type: "gpii.express.user.tests.pouch",
             options: {
-                pouchPort: "{harness}.options.pouchPort",
+                port: "{harness}.options.pouchPort",
                 listeners: {
                     onAllStarted: "{harness}.events.onPouchStarted.fire",
                     "afterDestroy.notifyParent": "{harness}.events.onPouchDone.fire"

@@ -178,6 +178,10 @@ fluid.defaults("gpii.express.user.api.forgot", {
         {
             source: "{that}.options.codeIssuedKey",
             target: "{that gpii.express.handler}.options.codeIssuedKey"
+        },
+        {
+            source: "{that}.options.app",
+            target: "{that gpii.express.user.api.withMailHandler}.options.app"
         }
     ],
     components: {

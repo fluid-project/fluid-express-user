@@ -239,7 +239,6 @@ fluid.defaults("gpii.express.user.datasource.tests", {
             type:          "gpii.express.user.tests.pouch",
             createOnEvent: "constructServer",
             options: {
-                pouchPort: "{that}.options.pouchPort",
                 listeners: {
                     "onAllStarted.notifyParent": {
                         func: "{testEnvironment}.events.onStarted.fire"

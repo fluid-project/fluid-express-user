@@ -42,7 +42,6 @@ gpii.express.user.api.withMailHandler.sendMessage = function (that) {
 fluid.defaults("gpii.express.user.api.withMailHandler", {
     gradeNames:   ["gpii.express.handler"],
     replyAddress: "noreply@ul.gpii.net",
-    config:       "{gpii.express}.options.config",
     templateDirs: "{gpii.express.user.api}.options.templateDirs",
     messages: {
         success: "Email sent.",
@@ -57,7 +56,7 @@ fluid.defaults("gpii.express.user.api.withMailHandler", {
             from: "options.replyAddress"
         },
         mailTemplateContext: {
-            app:  "options.config.app", // The express options pulled in above.  Allows us to pick up the app name, etc.
+            app:  "options.app",
             user: "user" // You must set `that.user` before sending a message for this to be visible.
         }
     },
