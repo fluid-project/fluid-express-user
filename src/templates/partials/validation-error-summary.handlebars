@@ -1,0 +1,12 @@
+{{#if message}}
+    <div data-alert class="alert-box alert" tabindex="0" aria-live="assertive" role="alertdialog">
+        <p>{{message}}</p>
+        <div class="fieldErrors">
+            <ul>
+                {{#each fieldErrors}}
+                    <li>{{message}}</li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+{{/if}}

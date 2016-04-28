@@ -40,7 +40,7 @@ gpii.mailer.tests.checkResponse = function (mailServerComponent, expected) {
 };
 
 fluid.defaults("gpii.mailer.tests.caseHolder", {
-    gradeNames: ["gpii.express.tests.caseHolder"],
+    gradeNames: ["gpii.test.express.caseHolder"],
     expected: {
         textMessage: {
             from:    [ { address: "sample@localhost", name: "" }],
@@ -74,6 +74,7 @@ fluid.defaults("gpii.mailer.tests.caseHolder", {
     },
     rawModules: [
         {
+            name: "Testing outgoing mail handling...",
             tests: [
                 {
                     name: "Test sending a simple message...",

@@ -7,12 +7,13 @@ var gpii       = fluid.registerNamespace("gpii");
 require("../lib/");
 
 require("gpii-test-browser");
-gpii.tests.browser.loadTestingSupport();
+gpii.test.browser.loadTestingSupport();
 
 fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
-    gradeNames: ["gpii.express.user.tests.caseHolder.withBrowser"],
+    gradeNames: ["gpii.test.express.user.caseHolder.withBrowser"],
     rawModules: [
         {
+            name: "Testing password reset functions with a test browser...",
             tests: [
                 {
                     name: "Confirm that passwords must match...",
@@ -77,7 +78,7 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                         {
                             event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.evaluate",
-                            args:     [gpii.tests.browser.tests.elementMatches, ".fieldError", "The 'confirm' field must match the 'password' field."]
+                            args:     [gpii.test.browser.elementMatches, ".fieldError", "The 'confirm' field must match the 'password' field."]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",
@@ -86,7 +87,7 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                         },
                         {
                             func: "{testEnvironment}.browser.evaluate",
-                            args: [gpii.tests.browser.tests.lookupFunction, ".reset-success", "innerHTML"]
+                            args: [gpii.test.browser.lookupFunction, ".reset-success", "innerHTML"]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",
@@ -131,7 +132,7 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                         {
                             event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.evaluate",
-                            args:     [gpii.tests.browser.tests.elementMatches, ".forgot-error .alert", "No matching user found."]
+                            args:     [gpii.test.browser.elementMatches, ".forgot-error .alert", "No matching user found."]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",
@@ -140,7 +141,7 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                         },
                         {
                             func: "{testEnvironment}.browser.evaluate",
-                            args: [gpii.tests.browser.tests.lookupFunction, ".forgot-success", "innerHTML"]
+                            args: [gpii.test.browser.lookupFunction, ".forgot-success", "innerHTML"]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",
@@ -190,7 +191,7 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                         {
                             event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.evaluate",
-                            args:     [gpii.tests.browser.tests.elementMatches, ".reset-error .alert", "You must provide a valid reset code to use this interface."]
+                            args:     [gpii.test.browser.elementMatches, ".reset-error .alert", "You must provide a valid reset code to use this interface."]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",
@@ -199,7 +200,7 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                         },
                         {
                             func: "{testEnvironment}.browser.evaluate",
-                            args: [gpii.tests.browser.tests.lookupFunction, ".reset-success", "innerHTML"]
+                            args: [gpii.test.browser.lookupFunction, ".reset-success", "innerHTML"]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",
@@ -271,7 +272,7 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                         {
                             event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.evaluate",
-                            args:     [gpii.tests.browser.tests.elementMatches, ".reset-success", "Your password has been reset."]
+                            args:     [gpii.test.browser.elementMatches, ".reset-success", "Your password has been reset."]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",
@@ -280,7 +281,7 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                         },
                         {
                             func: "{testEnvironment}.browser.evaluate",
-                            args: [gpii.tests.browser.tests.lookupFunction, ".reset-failure", "innerHTML"]
+                            args: [gpii.test.browser.lookupFunction, ".reset-failure", "innerHTML"]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",
@@ -325,7 +326,7 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                         {
                             event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.evaluate",
-                            args:     [gpii.tests.browser.tests.elementMatches, ".login-success", "You have successfully logged in."]
+                            args:     [gpii.test.browser.elementMatches, ".login-success", "You have successfully logged in."]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",
@@ -334,7 +335,7 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                         },
                         {
                             func: "{testEnvironment}.browser.evaluate",
-                            args: [gpii.tests.browser.tests.lookupFunction, ".login-failure", "innerHTML"]
+                            args: [gpii.test.browser.lookupFunction, ".login-failure", "innerHTML"]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",

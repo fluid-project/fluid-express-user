@@ -17,9 +17,9 @@ var gpii  = fluid.registerNamespace("gpii");
 require("gpii-handlebars");
 require("./lib/withMailHandler");
 
-fluid.registerNamespace("gpii.express.user.api.verify.resend.handler");
+fluid.registerNamespace("gpii.express.user.verify.resend.handler");
 
-gpii.express.user.api.verify.resend.handler.getVerificationCode = function (that, user) {
+gpii.express.user.verify.resend.handler.getVerificationCode = function (that, user) {
     if (!user || !user.username) {
         that.sendFinalResponse(404, { ok: false, message: "I couldn't find an account that matches the email address you provided."});
     }
@@ -35,8 +35,8 @@ gpii.express.user.api.verify.resend.handler.getVerificationCode = function (that
     }
 };
 
-fluid.defaults("gpii.express.user.api.verify.resend.handler", {
-    gradeNames: ["gpii.express.user.api.withMailHandler"],
+fluid.defaults("gpii.express.user.verify.resend.handler", {
+    gradeNames: ["gpii.express.user.withMailHandler"],
     templates: {
         mail: {
             text:  "email-verify-text",
@@ -54,7 +54,7 @@ fluid.defaults("gpii.express.user.api.verify.resend.handler", {
     invokers: {
         handleRequest: {
             func: "{reader}.get",
-            args: ["{that}.request.body"]
+            args: ["{that}.options.request.body"]
         }
     },
     components: {
@@ -62,17 +62,17 @@ fluid.defaults("gpii.express.user.api.verify.resend.handler", {
             // TODO:  Replace with the new "asymmetric" dataSource once that code has been reviewed
             type: "gpii.express.user.couchdb.read",
             options: {
-                url:     "{gpii.express.user.api.verify.resend}.options.urls.read",
+                url:     "{gpii.express.user.verify.resend}.options.urls.read",
                 rules: {
                     read: {
-                        "":         "rows.0.value"
+                        "": "rows.0.value"
                     }
                 },
                 termMap: { "email": "%email" },
                 listeners: {
                     "onRead.getVerificationCode": {
-                        funcName: "gpii.express.user.api.verify.resend.handler.getVerificationCode",
-                        args:     ["{gpii.express.user.api.verify.resend.handler}", "{arguments}.0"]
+                        funcName: "gpii.express.user.verify.resend.handler.getVerificationCode",
+                        args:     ["{gpii.express.user.verify.resend.handler}", "{arguments}.0"]
                     }
                 }
             }
@@ -80,25 +80,25 @@ fluid.defaults("gpii.express.user.api.verify.resend.handler", {
     }
 });
 
-fluid.registerNamespace("gpii.express.user.api.verify.resend.handler.html");
+fluid.registerNamespace("gpii.express.user.verify.resend.handler.html");
 
-gpii.express.user.api.verify.resend.handler.html.sendFinalResponse = function (that, statusCode, context) {
-    that.response.status(statusCode).render(that.options.templateKey, context);
+gpii.express.user.verify.resend.handler.html.sendFinalResponse = function (that, statusCode, context) {
+    that.options.response.status(statusCode).render(that.options.templateKey, context);
 };
 
-fluid.defaults("gpii.express.user.api.verify.resend.handler.html", {
-    gradeNames: ["gpii.express.user.api.verify.resend.handler"],
-    templateKey: "{gpii.express.user.api.verify.resend}.options.templates.html",
+fluid.defaults("gpii.express.user.verify.resend.handler.html", {
+    gradeNames: ["gpii.express.user.verify.resend.handler"],
+    templateKey: "{gpii.express.user.verify.resend}.options.templates.html",
     invokers: {
         sendFinalResponse: {
-            funcName: "gpii.express.user.api.verify.resend.handler.text.sendFinalResponse",
+            funcName: "gpii.express.user.verify.resend.handler.text.sendFinalResponse",
             args:     ["{that}", "{arguments}.0", "{arguments}.1"] // status code, template context
         }
     }
 });
 
-fluid.defaults("gpii.express.user.api.verify.resend.handler.json", {
-    gradeNames: ["gpii.express.user.api.verify.resend.handler"],
+fluid.defaults("gpii.express.user.verify.resend.handler.json", {
+    gradeNames: ["gpii.express.user.verify.resend.handler"],
     invokers: {
         sendFinalResponse: {
             func: "{that}.sendResponse",
@@ -107,11 +107,12 @@ fluid.defaults("gpii.express.user.api.verify.resend.handler.json", {
     }
 });
 
-fluid.defaults("gpii.express.user.api.verify.resend", {
-    gradeNames: ["gpii.express.router.passthrough"],
+fluid.defaults("gpii.express.user.verify.resend", {
+    gradeNames: ["gpii.express.router"],
     namespace:  "resend", // Namespace to allow other routers to put themselves in the chain before or after us.
     path:       "/resend",
     method:     "use",
+    templateDirs: "{gpii.express.user.api}.options.templateDirs",
     urls: {
         read: {
             expander: {
@@ -122,7 +123,7 @@ fluid.defaults("gpii.express.user.api.verify.resend", {
     },
     components: {
         postRouter: {
-            type: "gpii.express.contentAware.router",
+            type: "gpii.express.middleware.contentAware",
             options: {
                 path: ["/"],
                 templates: {
@@ -131,18 +132,18 @@ fluid.defaults("gpii.express.user.api.verify.resend", {
                 handlers: {
                     json: {
                         contentType:   "application/json",
-                        handlerGrades: ["gpii.express.user.api.verify.resend.handler.json"]
+                        handlerGrades: ["gpii.express.user.verify.resend.handler.json"]
                     },
                     text: {
                         contentType:   ["text/html", "text/plain"],
-                        handlerGrades: ["gpii.express.user.api.verify.resend.handler.html"]
+                        handlerGrades: ["gpii.express.user.verify.resend.handler.html"]
                     }
                 },
                 method: "post"
             }
         },
         formRouter: {
-            type: "gpii.express.singleTemplateRouter",
+            type: "gpii.express.singleTemplateMiddleware",
             options: {
                 templateKey: "pages/verify-resend",
                 method:      "get"

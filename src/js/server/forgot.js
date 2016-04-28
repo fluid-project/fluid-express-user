@@ -1,16 +1,8 @@
 /*
 
-  Provides the first part of a two-step password reset mechanism.  A user enters their email address or username, and
-  is sent a special link with a reset code.  They can use this link to reset their password.  That functionality is
-  handled by the `reset` module in this directory.
+    Provides the first part of a two-step password reset mechanism.  See the documentation for more details:
 
-  This module consists of two parts:
-
-    1. A `GET` router that serves up the initial form.
-    2. A `POST` router and handlers that check to see if the user exists before generating a reset code and sending them an email.
-
-  Unlike the API endpoints that we expect people to hit directly with their browser, this endpoint only returns a JSON
-  message.
+    https://github.com/GPII/gpii-express-user/blob/master/docs/forgotComponent.md
 
  */
 "use strict";
@@ -23,8 +15,14 @@ require("./lib/password");
 require("./lib/withMailHandler");
 require("gpii-handlebars");
 
-fluid.registerNamespace("gpii.express.user.api.forgot.post.handler");
-gpii.express.user.api.forgot.post.handler.checkUser = function (that, user) {
+fluid.registerNamespace("gpii.express.user.forgot.post.handler");
+
+/**
+ *
+ * @param that {Object} - The handler component itself.
+ * @param user {Object} - The user object we are working with
+ */
+gpii.express.user.forgot.post.handler.checkUser = function (that, user) {
     if (!user || !user.username) {
         that.sendResponse(404, { ok: false, message: "No matching user found."});
     }
@@ -45,7 +43,17 @@ gpii.express.user.api.forgot.post.handler.checkUser = function (that, user) {
     }
 };
 
-gpii.express.user.api.forgot.post.handler.handleRequestResponse = function (that, error, response, body) {
+/**
+ *
+ * @param that {Object} The handler component instance itself.
+ * @param error {Object} The error message (if any) received in response to our CouchDB lookup.
+ * @param response {Object} The Express response object.
+ * @param body {Object} The response body.
+ *
+ * Process a response from CouchDB and send the results and/or error message via the `response` object.
+ *
+ */
+gpii.express.user.forgot.post.handler.handleRequestResponse = function (that, error, response, body) {
     if (error) {
         that.sendResponse(500, { ok: false, message: error.message, stack: error.stack });
     }
@@ -57,21 +65,15 @@ gpii.express.user.api.forgot.post.handler.handleRequestResponse = function (that
     }
 };
 
-fluid.defaults("gpii.express.user.api.forgot.post.handler", {
-    gradeNames: ["gpii.express.user.api.withMailHandler"],
+fluid.defaults("gpii.express.user.forgot.post.handler", {
+    gradeNames: ["gpii.express.user.withMailHandler"],
     messages: {
         success: "A password reset code and instructions have been sent to your email address.",
         error:   "A password reset code could not be sent.  Contact an administrator."
     },
-    templates: {
-        mail: {
-            text:  "email-forgot-text",
-            html:  "email-forgot-html"
-        }
-    },
     rules: {
         mailOptions: {
-            to:      "request.body.email",
+            to:      "user.email",
             subject: { literalValue: "Reset your password..."}
         }
     },
@@ -81,10 +83,10 @@ fluid.defaults("gpii.express.user.api.forgot.post.handler", {
     invokers: {
         handleRequest: {
             func: "{reader}.get",
-            args: ["{that}.request.body"]
+            args: ["{that}.options.request.body"]
         },
         handleRequestResponse: {
-            funcName: "gpii.express.user.api.forgot.post.handler.handleRequestResponse",
+            funcName: "gpii.express.user.forgot.post.handler.handleRequestResponse",
             args:     ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"] // error, response, body
         }
 
@@ -94,7 +96,7 @@ fluid.defaults("gpii.express.user.api.forgot.post.handler", {
             // TODO:  Replace with the new "asymmetric" dataSource once that code has been reviewed
             type: "gpii.express.user.couchdb.read",
             options: {
-                url:     "{gpii.express.user.api.forgot}.options.urls.read",
+                url:     "{gpii.express.user.forgot}.options.urls.read",
                 termMap: { email: "%email"},
                 rules: {
                     read: {
@@ -103,8 +105,8 @@ fluid.defaults("gpii.express.user.api.forgot.post.handler", {
                 },
                 listeners: {
                     "onRead.checkUser": {
-                        func:     "gpii.express.user.api.forgot.post.handler.checkUser",
-                        args:     ["{gpii.express.user.api.forgot.post.handler}", "{arguments}.0"] // The response from our dataSource
+                        func:     "gpii.express.user.forgot.post.handler.checkUser",
+                        args:     ["{gpii.express.user.forgot.post.handler}", "{arguments}.0"] // The response from our dataSource
                     }
                 }
             }
@@ -112,20 +114,20 @@ fluid.defaults("gpii.express.user.api.forgot.post.handler", {
     }
 });
 
-fluid.registerNamespace("gpii.express.user.api.forgot.post");
-fluid.defaults("gpii.express.user.api.forgot.post", {
-    gradeNames: ["gpii.express.requestAware.router"],
+fluid.registerNamespace("gpii.express.user.forgot.post");
+fluid.defaults("gpii.express.user.forgot.post", {
+    gradeNames: ["gpii.express.middleware.requestAware"],
     path:       "/",
     method:     "post",
-    distributeOptions: {
-        source: "{that}.options.urls",
-        target: "{that > gpii.express.handler}.options.urls"
-    },
-    handlerGrades: ["gpii.express.user.api.forgot.post.handler"]
+    // distributeOptions: {
+    //     source: "{that}.options.urls",
+    //     target: "{that > gpii.express.handler}.options.urls"
+    // },
+    handlerGrades: ["gpii.express.user.forgot.post.handler"]
 });
 
-fluid.defaults("gpii.express.user.api.forgot", {
-    gradeNames: ["gpii.express.router.passthrough"],
+fluid.defaults("gpii.express.user.forgot", {
+    gradeNames: ["gpii.express.router"],
     path:       "/forgot",
     templates: {
         form:     "pages/forgot",
@@ -155,13 +157,17 @@ fluid.defaults("gpii.express.user.api.forgot", {
         }
     },
     resetCodeLength: 16,
-    // Both of these should match what is used in `gpii.express.user.api.reset`
+    // Both of these should match what is used in `gpii.express.user.reset`
     resetCodeKey:   "reset_code",
     codeIssuedKey:  "reset_code_issued",
     distributeOptions: [
         {
             source: "{that}.options.urls",
-            target: "{that > gpii.express.router}.options.urls"
+            target: "{that gpii.express.handler}.options.urls"
+        },
+        {
+            source: "{that}.options.templates",
+            target: "{that gpii.express.handler}.options.templates"
         },
         {
             source: "{that}.options.templateDirs",
@@ -181,19 +187,19 @@ fluid.defaults("gpii.express.user.api.forgot", {
         },
         {
             source: "{that}.options.app",
-            target: "{that gpii.express.user.api.withMailHandler}.options.app"
+            target: "{that gpii.express.user.withMailHandler}.options.app"
         }
     ],
     components: {
         getRouter: {
-            type: "gpii.express.singleTemplateRouter",
+            type: "gpii.express.singleTemplateMiddleware",
             options: {
-                templateKey: "{gpii.express.user.api.forgot}.options.templates.form",
-                defaultContext: "{gpii.express.user.api.forgot}.options.defaultContext"
+                templateKey: "{gpii.express.user.forgot}.options.templates.form",
+                defaultContext: "{gpii.express.user.forgot}.options.defaultContext"
             }
         },
         postRouter: {
-            type: "gpii.express.user.api.forgot.post"
+            type: "gpii.express.user.forgot.post"
         }
     }
 });

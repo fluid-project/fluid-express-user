@@ -3,10 +3,10 @@ var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
 require("gpii-test-browser");
-gpii.tests.browser.loadTestingSupport();
+gpii.test.browser.loadTestingSupport();
 
-fluid.defaults("gpii.express.user.tests.caseHolder.base", {
-    gradeNames: ["gpii.express.tests.caseHolder.base"],
+fluid.defaults("gpii.test.express.user.caseHolder.base", {
+    gradeNames: ["gpii.test.express.caseHolder.base"],
     sequenceStart: [
         {
             func: "{testEnvironment}.events.constructFixtures.fire"
@@ -18,8 +18,8 @@ fluid.defaults("gpii.express.user.tests.caseHolder.base", {
     ]
 });
 
-fluid.defaults("gpii.express.user.tests.caseHolder", {
-    gradeNames: ["gpii.express.user.tests.caseHolder.base"],
+fluid.defaults("gpii.test.express.user.caseHolder", {
+    gradeNames: ["gpii.test.express.user.caseHolder.base"],
     sequenceEnd: [
         {
             func: "{testEnvironment}.harness.destroy"
@@ -31,8 +31,8 @@ fluid.defaults("gpii.express.user.tests.caseHolder", {
     ]
 });
 
-fluid.defaults("gpii.express.user.tests.caseHolder.withBrowser", {
-    gradeNames: ["gpii.express.user.tests.caseHolder.base"],
+fluid.defaults("gpii.test.express.user.caseHolder.withBrowser", {
+    gradeNames: ["gpii.test.express.user.caseHolder.base"],
     sequenceEnd: [
         {
             func: "{testEnvironment}.harness.destroy"

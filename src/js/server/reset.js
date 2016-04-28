@@ -22,14 +22,14 @@ require("./lib/datasource");
 // TODO:  Replace this with a writable `dataSource`
 var request = require("request");
 
-fluid.registerNamespace("gpii.express.user.api.reset.handler");
+fluid.registerNamespace("gpii.express.user.reset.handler");
 
-gpii.express.user.api.reset.handler.checkResetCode = function (that, dataSourceResponse) {
+gpii.express.user.reset.handler.checkResetCode = function (that, dataSourceResponse) {
     // Prepare dates that will be used in later sanity checks.
     var earliestAcceptable = new Date(Date.now() - that.options.codeExpiration);
     var issueDate          = new Date(dataSourceResponse[that.options.codeIssuedKey]);
 
-    if (!dataSourceResponse || !dataSourceResponse[that.options.codeKey] || (that.request.params.code !== dataSourceResponse[that.options.codeKey])) {
+    if (!dataSourceResponse || !dataSourceResponse[that.options.codeKey] || (that.options.request.params.code !== dataSourceResponse[that.options.codeKey])) {
         that.sendFinalResponse(400, { ok: false, message: "You must provide a valid reset code to use this interface."});
     }
     // We cannot perform the next two checks using JSON Schema, so we must do it here.
@@ -43,7 +43,7 @@ gpii.express.user.api.reset.handler.checkResetCode = function (that, dataSourceR
 
         var salt                      = gpii.express.user.password.generateSalt(that.options.saltLength);
         updatedUserRecord.salt        = salt;
-        updatedUserRecord.derived_key = gpii.express.user.password.encode(that.request.body.password, salt);
+        updatedUserRecord.derived_key = gpii.express.user.password.encode(that.options.request.body.password, salt);
 
         // TODO:  Convert this to use a writable dataSource
         var writeUrl = fluid.stringTemplate(that.options.urls.write, { id: updatedUserRecord._id});
@@ -67,14 +67,14 @@ gpii.express.user.api.reset.handler.checkResetCode = function (that, dataSourceR
     }
 };
 
-fluid.defaults("gpii.express.user.api.reset.handler", {
+fluid.defaults("gpii.express.user.reset.handler", {
     gradeNames:  ["gpii.express.handler"],
     components: {
         reader: {
             // TODO:  Replace with the new "asymmetric" dataSource once that code has been reviewed
             type: "gpii.express.user.couchdb.read",
             options: {
-                url: "{gpii.express.user.api.reset}.options.urls.read",
+                url: "{gpii.express.user.reset}.options.urls.read",
                 rules: {
                     read: {
                         "": "rows.0.value"
@@ -83,12 +83,12 @@ fluid.defaults("gpii.express.user.api.reset.handler", {
                 termMap: { code: "%code"},
                 listeners: {
                     "onRead.checkResetCode": {
-                        nameSpace: "gpii.express.user.api.reset",
-                        funcName:  "gpii.express.user.api.reset.handler.checkResetCode",
+                        nameSpace: "gpii.express.user.reset",
+                        funcName:  "gpii.express.user.reset.handler.checkResetCode",
                         args:      ["{gpii.express.handler}", "{arguments}.0"] // dataSource response
                     },
                     "onError.sendErrorResponse": {
-                        func: "{gpii.express.user.api.reset.handler}.sendFinalResponse",
+                        func: "{gpii.express.user.reset.handler}.sendFinalResponse",
                         args: [500, { ok: false, message: "{arguments}.0"}]
                     }
                 }
@@ -99,7 +99,7 @@ fluid.defaults("gpii.express.user.api.reset.handler", {
     invokers: {
         handleRequest: {
             func: "{that}.reader.get",
-            args: ["{that}.request.params"]
+            args: ["{that}.options.request.params"]
         },
         sendFinalResponse: {
             func: "{that}.sendResponse",
@@ -108,42 +108,41 @@ fluid.defaults("gpii.express.user.api.reset.handler", {
     }
 });
 
-// TODO:  Expose the code parameter to the handler somehow.
-fluid.defaults("gpii.express.user.api.reset.post", {
-    gradeNames:    ["gpii.schema.middleware.requestAware.router"],
-    path:          "/",
+fluid.defaults("gpii.express.user.reset.post", {
+    gradeNames:    ["gpii.express.user.validationGatedRouter"],
     method:        "post",
-    handlerGrades: ["gpii.express.user.api.reset.handler"],
-    schemaKey:     "user-reset.json",
-    components: {
-        innerRouter: {
-            options: {
-                path:          "/:code"
-            }
-        }
+    path:          "/:code",
+    routerOptions: {
+        mergeParams: true
+    },
+    schemaKey: "user-reset.json",
+    handlerGrades: ["gpii.express.user.reset.handler"],
+    events: {
+        onSchemasDereferenced: null
     }
 });
 
+
 // GET /api/user/reset/:code, a `singleTemplateRouter` that just serves up the client-side form.
-fluid.defaults("gpii.express.user.api.reset.formRouter", {
-    gradeNames:  ["gpii.express.singleTemplateRouter"],
+fluid.defaults("gpii.express.user.reset.formRouter", {
+    gradeNames:  ["gpii.express.singleTemplateMiddleware"],
     path:        "/:code",
     method:      "get",
     templateKey: "pages/reset"
 });
 
-fluid.defaults("gpii.express.user.api.reset", {
-    gradeNames:    ["gpii.express.router.passthrough"],
+fluid.defaults("gpii.express.user.reset", {
+    gradeNames:    ["gpii.express.router"],
     method:        "use",
     path:          "/reset",
     events: {
         onSchemasDereferenced: null
     },
-    // The next two variables must match the value in gpii.express.user.api.forgot
+    // The next two variables must match the value in gpii.express.user.forgot
     codeKey:       "reset_code",
     codeIssuedKey: "reset_code_issued",
     codeExpiration: 86400000, // How long a reset code is valid, in milliseconds.  Defaults to a day.
-    // The salt length should match what's used in gpii.express.user.api.signup
+    // The salt length should match what's used in gpii.express.user.signup
     saltLength:    32,
     urls: {
         read: {
@@ -183,14 +182,14 @@ fluid.defaults("gpii.express.user.api.reset", {
     ],
     components: {
         get: {
-            type: "gpii.express.user.api.reset.formRouter"
+            type: "gpii.express.user.reset.formRouter"
         },
         post: {
-            type: "gpii.express.user.api.reset.post",
+            type: "gpii.express.user.reset.post",
             options: {
                 listeners: {
                     "onSchemasDereferenced.notifyParent": {
-                        func: "{gpii.express.user.api.reset}.events.onSchemasDereferenced.fire"
+                        func: "{gpii.express.user.reset}.events.onSchemasDereferenced.fire"
                     }
 
                 }

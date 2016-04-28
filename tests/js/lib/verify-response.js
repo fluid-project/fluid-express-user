@@ -9,10 +9,10 @@ var gpii  = fluid.registerNamespace("gpii");
 
 var jqUnit = require("node-jqunit");
 
-fluid.registerNamespace("gpii.express.user.api.test");
-gpii.express.user.api.test.verifyResponse = function (response, body, statusCode, truthy, falsy) {
+fluid.registerNamespace("gpii.express.user.test");
+gpii.express.user.test.verifyResponse = function (response, body, statusCode, truthy, falsy) {
     if (!statusCode) { statusCode = 200; }
-    gpii.express.tests.helpers.isSaneResponse(response, body, statusCode);
+    gpii.test.express.helpers.isSaneResponse(response, body, statusCode);
 
     var data = typeof body === "string" ? JSON.parse(body): body;
 

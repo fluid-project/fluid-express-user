@@ -2,7 +2,7 @@
 "use strict";
 var fluid = require("infusion");
 
-require("../../../index");
+require("../../../");
 
 
 require("gpii-express");
@@ -17,10 +17,11 @@ fluid.defaults("gpii.express.user.tests.harness.gated.handler", {
     invokers: {
         handleRequest: {
             funcName: "gpii.express.handler.sendResponse",
-            args: ["{that}", "{that}.response", 200, { ok: true, message: "You are in the club!"}]
+            args: ["{that}", "{that}.options.response", 200, { ok: true, message: "You are in the club!"}]
         }
     }
 });
+
 
 // TODO:  Update this to use the new version of gpii-mail-test once we have a Zombie version that works in 0.12 or higher.
 fluid.defaults("gpii.express.user.tests.harness", {
@@ -81,58 +82,68 @@ fluid.defaults("gpii.express.user.tests.harness", {
         api: {
             type: "gpii.express",
             options: {
-                gradeNames: ["gpii.express.user.api.withRequiredMiddleware"],
+                gradeNames: ["gpii.express.user.withRequiredMiddleware"],
                 port:  "{harness}.options.apiPort",
                 listeners: {
                     "onStarted.notifyParent": "{harness}.events.onApiStarted.fire",
                     "afterDestroy.notifyParent": "{harness}.events.onApiDone.fire"
+                },
+                distributeOptions: {
+                    record: 1000000,
+                    target: "{that gpii.express.handlerDispatcher}.options.timeout"
                 },
                 components: {
                     // Front-end content used by some GET calls
                     modules: {
                         type:  "gpii.express.router.static",
                         options: {
-                            priority: "after:session",
-                            path:    "/modules",
-                            content: "%gpii-express-user/node_modules"
+                            namespace: "modules",
+                            priority:  "after:session",
+                            path:      "/modules",
+                            content:   "%gpii-express-user/node_modules"
                         }
                     },
                     bc: {
                         type:  "gpii.express.router.static",
                         options: {
-                            priority: "after:session",
-                            path:    "/bc",
-                            content: "%gpii-express-user/bower_components"
+                            namespace: "bc",
+                            priority:  "after:modules",
+                            path:      "/bc",
+                            content:   "%gpii-express-user/bower_components"
                         }
                     },
                     inline: {
-                        type: "gpii.express.hb.inline",
+                        type: "gpii.handlebars.inlineTemplateBundlingMiddleware",
                         options: {
-                            priority: "after:session",
-                            path: "/hbs",
+                            namespace:    "inline",
+                            priority:     "after:bc",
+                            path:         "/hbs",
                             templateDirs: "{gpii.express.user.tests.harness}.options.templateDirs"
                         }
                     },
                     schemas: {
                         type: "gpii.express.router.static",
                         options: {
-                            priority: "after:session",
-                            path:    "/schemas",
-                            content: "%gpii-express-user/src/schemas"
+                            namespace: "schemas",
+                            priority:  "after:inline",
+                            path:      "/schemas",
+                            content:   "%gpii-express-user/src/schemas"
                         }
                     },
                     inlineSchemas: {
-                        type: "gpii.schema.inline.router",
+                        type: "gpii.schema.inlineMiddleware",
                         options: {
-                            priority: "after:session",
+                            namespace:  "inlineSchemas",
+                            priority:   "after:schemas",
                             schemaDirs: "%gpii-express-user/src/schemas"
                         }
                     },
                     api: {
                         type: "gpii.express.user.api",
                         options: {
-                            path:     "/api/user",
-                            priority: "after:session",
+                            path:      "/api/user",
+                            namespace: "api",
+                            priority:  "after:inlineSchemas",
                             couch:  {
                                 port: "{harness}.options.pouchPort",
                                 userDbName: "users",
@@ -150,7 +161,7 @@ fluid.defaults("gpii.express.user.tests.harness", {
                                 }
                             },
                             app: {
-                                name: "gpii-express-user API test harness...",
+                                name: "gpii-express.user test harness...",
                                 url:  "{harness}.options.baseUrl"
                             }
                         }
@@ -159,8 +170,9 @@ fluid.defaults("gpii.express.user.tests.harness", {
                     gated: {
                         type: "gpii.express.user.middleware.loginRequired.router",
                         options: {
-                            path: "/gated",
-                            priority: "after:session",
+                            namespace:     "gated",
+                            path:          "/gated",
+                            priority:      "after:api",
                             handlerGrades: ["gpii.express.user.tests.harness.gated.handler"]
                         }
                     },
@@ -168,9 +180,24 @@ fluid.defaults("gpii.express.user.tests.harness", {
                     src: {
                         type:  "gpii.express.router.static",
                         options: {
-                            path:     "/",
-                            priority: "last",
-                            content:  "%gpii-express-user/src"
+                            namespace: "src",
+                            path:      "/",
+                            priority:  "after:gated",
+                            content:   "%gpii-express-user/src"
+                        }
+                    },
+                    errorHeaders: {
+                        type: "gpii.schema.schemaLinkMiddleware",
+                        options: {
+                            priority:  "after:src",
+                            schemaKey: "message.json",
+                            schemaUrl: "http://ul.gpii.net/api/schemas/message.json"
+                        }
+                    },
+                    jsonErrors: {
+                        type: "gpii.express.middleware.error",
+                        options: {
+                            priority: "after:schemaLinkMiddleware"
                         }
                     }
                 }

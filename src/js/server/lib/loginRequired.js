@@ -20,54 +20,33 @@ gpii.express.user.middleware.rejectOrForward  = function (that, req, res, next) 
         next();
     }
     else {
-        that.events.onUnauthorizedRequest.fire(req, res);
+        next({ isError: true, statusCode: 401, message: that.options.messages.failure});
     }
 };
 
-fluid.defaults("gpii.express.user.middleware.loginRequired.handler", {
-    gradeNames: ["gpii.schema.handler"],
-    schemaKey:  "message.json",
-    schemaUrl:  "http://ul.gpii.net/api/schemas/message.json",
+fluid.defaults("gpii.express.user.middleware.loginRequired", {
+    gradeNames:    ["gpii.express.middleware"],
     messages: {
         failure: "You must be logged in to use this API endpoint."
     },
-    invokers: {
-        handleRequest: {
-            func: "{that}.sendResponse",
-            args: [401, { ok: false, message: "{that}.options.messages.failure"}]
-        }
-    }
-});
-
-fluid.defaults("gpii.express.user.middleware.loginRequired", {
-    gradeNames:    ["gpii.express.middleware", "gpii.express.requestAware.base"],
     sessionKey:    "_gpii_user", // Must matched what's used in /api/user/login
     namespace:     "loginRequired", // Namespace to allow other middleware to put themselves in the chain before or after us.
-    handlerGrades: ["gpii.express.user.middleware.loginRequired.handler"],
-    events: {
-        onUnauthorizedRequest: null
-    },
     invokers: {
         middleware: {
             funcName: "gpii.express.user.middleware.rejectOrForward",
             args:     ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
         }
-    },
-    dynamicComponents: {
-        requestHandler: {
-            createOnEvent: "onUnauthorizedRequest"
-        }
     }
 });
 
 fluid.defaults("gpii.express.user.middleware.loginRequired.router", {
-    gradeNames: ["gpii.express.router.passthrough"],
+    gradeNames: ["gpii.express.router"],
     components: {
         gateKeeper: {
             type: "gpii.express.user.middleware.loginRequired"
         },
         innerRouter: {
-            type:     "gpii.express.requestAware.router",
+            type:     "gpii.express.middleware.requestAware",
             options: {
                 priority:      "after:loginRequired",
                 handlerGrades: "{gpii.express.user.middleware.loginRequired.router}.options.handlerGrades",

@@ -9,7 +9,7 @@ var kettle = require("kettle");
 kettle.loadTestingSupport();
 
 require("gpii-test-browser");
-gpii.tests.browser.loadTestingSupport();
+gpii.test.browser.loadTestingSupport();
 
 fluid.defaults("gpii.express.user.tests.environment", {
     gradeNames: ["fluid.test.testEnvironment"],
@@ -61,7 +61,7 @@ fluid.defaults("gpii.express.user.tests.environment", {
 
 
 fluid.defaults("gpii.express.user.tests.environment.withBrowser", {
-    gradeNames: ["gpii.express.user.tests.environment", "gpii.tests.browser.environment"],
+    gradeNames: ["gpii.express.user.tests.environment", "gpii.test.browser.environment"],
     events: {
         onReady: {
             events: {

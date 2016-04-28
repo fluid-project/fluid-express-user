@@ -67,7 +67,7 @@ fluid.defaults("gpii.express.user.datasource.tests.writable", {
 });
 
 fluid.defaults("gpii.express.users.datasource.tests.caseHolder", {
-    gradeNames: ["gpii.express.tests.caseHolder"],
+    gradeNames: ["gpii.test.express.caseHolder"],
     expected: {
         sample: {
             "username": "sample",
@@ -94,6 +94,7 @@ fluid.defaults("gpii.express.users.datasource.tests.caseHolder", {
     },
     rawModules: [
         {
+            name: "Testing our custom dataSource grade...",
             tests: [
                 {
                     name: "Retrieve a record by a its id...",

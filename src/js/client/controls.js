@@ -21,7 +21,7 @@
     };
 
     fluid.defaults("gpii.express.user.frontend.controls", {
-        gradeNames: ["gpii.templates.templateFormControl"],
+        gradeNames: ["gpii.handlebars.templateFormControl"],
         container:  ".controls-viewport",
         ajaxOptions: {
             type:     "GET",

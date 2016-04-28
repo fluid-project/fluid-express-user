@@ -10,12 +10,13 @@ var gpii       = fluid.registerNamespace("gpii");
 require("../lib/");
 
 require("gpii-test-browser");
-gpii.tests.browser.loadTestingSupport();
+gpii.test.browser.loadTestingSupport();
 
 fluid.defaults("gpii.express.user.tests.login.client.caseHolder", {
-    gradeNames: ["gpii.express.user.tests.caseHolder.withBrowser"],
+    gradeNames: ["gpii.test.express.user.caseHolder.withBrowser"],
     rawModules: [
         {
+            name: "Testing login functions with a test browser...",
             tests: [
                 {
                     name: "Login with a valid username and password and then log out...",
@@ -62,7 +63,7 @@ fluid.defaults("gpii.express.user.tests.login.client.caseHolder", {
                         {
                             event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.evaluate",
-                            args:     [gpii.tests.browser.tests.elementMatches, ".login-success", "You have successfully logged in."]
+                            args:     [gpii.test.browser.elementMatches, ".login-success", "You have successfully logged in."]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",
@@ -71,7 +72,7 @@ fluid.defaults("gpii.express.user.tests.login.client.caseHolder", {
                         },
                         {
                             func: "{testEnvironment}.browser.evaluate",
-                            args: [gpii.tests.browser.tests.lookupFunction, ".login-error", "innerHTML"]
+                            args: [gpii.test.browser.lookupFunction, ".login-error", "innerHTML"]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",
@@ -104,7 +105,7 @@ fluid.defaults("gpii.express.user.tests.login.client.caseHolder", {
                         {
                             event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.evaluate",
-                            args:     [gpii.tests.browser.tests.elementMatches, ".user-controls-toggle", "Not Logged In"]
+                            args:     [gpii.test.browser.elementMatches, ".user-controls-toggle", "Not Logged In"]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",
@@ -163,7 +164,7 @@ fluid.defaults("gpii.express.user.tests.login.client.caseHolder", {
                         {
                             event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.evaluate",
-                            args: [gpii.tests.browser.tests.elementMatches, ".login-error .alert", "Invalid username or password."]
+                            args: [gpii.test.browser.elementMatches, ".login-error .alert", "Invalid username or password."]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",
@@ -172,7 +173,7 @@ fluid.defaults("gpii.express.user.tests.login.client.caseHolder", {
                         },
                         {
                             func: "{testEnvironment}.browser.evaluate",
-                            args: [gpii.tests.browser.tests.lookupFunction, ".login-success", "innerHTML"]
+                            args: [gpii.test.browser.lookupFunction, ".login-success", "innerHTML"]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",

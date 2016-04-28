@@ -12,11 +12,11 @@ require("../lib/");
 
 var jqUnit = require("node-jqunit");
 
-fluid.registerNamespace("gpii.express.user.api.signup.test.caseHolder");
+fluid.registerNamespace("gpii.tests.express.user.signup.caseHolder");
 
-gpii.express.user.api.signup.test.caseHolder.verifyResponse = function (response, body, statusCode, truthy, falsy, hasCurrentUser) {
+gpii.tests.express.user.signup.caseHolder.verifyResponse = function (response, body, statusCode, truthy, falsy, hasCurrentUser) {
     if (!statusCode) { statusCode = 200; }
-    gpii.express.tests.helpers.isSaneResponse(response, body, statusCode);
+    gpii.test.express.helpers.isSaneResponse(response, body, statusCode);
 
     var data = typeof body === "string" ? JSON.parse(body): body;
 
@@ -38,8 +38,8 @@ gpii.express.user.api.signup.test.caseHolder.verifyResponse = function (response
 };
 
 // Listen for the email with the verification code and launch the verification request
-gpii.express.user.api.signup.test.caseHolder.fullSignupVerifyEmail = function (signupRequest, verificationRequest, testEnvironment) {
-    gpii.express.user.api.signup.test.caseHolder.extractVerificationCode(testEnvironment).then(gpii.express.user.api.signup.test.caseHolder.checkVerificationCode).then(function (code) {
+gpii.tests.express.user.signup.caseHolder.fullSignupVerifyEmail = function (signupRequest, verificationRequest, testEnvironment) {
+    gpii.tests.express.user.signup.caseHolder.extractVerificationCode(testEnvironment).then(gpii.tests.express.user.signup.caseHolder.checkVerificationCode).then(function (code) {
         signupRequest.code = code;
         var path = "/api/user/verify/" + signupRequest.code;
 
@@ -49,21 +49,21 @@ gpii.express.user.api.signup.test.caseHolder.fullSignupVerifyEmail = function (s
     });
 };
 
-gpii.express.user.api.signup.test.caseHolder.checkVerificationCode = function (code) {
+gpii.tests.express.user.signup.caseHolder.checkVerificationCode = function (code) {
     jqUnit.assertNotNull("There should be a verification code in the email sent to the user.", code);
 
     return code;
 };
 
-gpii.express.user.api.signup.test.caseHolder.checkEnvironmentForVerificationCode = function (testEnvironment) {
-    gpii.express.user.api.signup.test.caseHolder.extractVerificationCode(testEnvironment).then(gpii.express.user.api.signup.test.caseHolder.checkVerificationCode);
+gpii.tests.express.user.signup.caseHolder.checkEnvironmentForVerificationCode = function (testEnvironment) {
+    gpii.tests.express.user.signup.caseHolder.extractVerificationCode(testEnvironment).then(gpii.tests.express.user.signup.caseHolder.checkVerificationCode);
 };
 
-gpii.express.user.api.signup.test.caseHolder.extractVerificationCode = function (testEnvironment) {
-    return gpii.express.user.api.test.extractCode(testEnvironment, "https?://[^/]+/api/user/verify/([a-z0-9-]+)");
+gpii.tests.express.user.signup.caseHolder.extractVerificationCode = function (testEnvironment) {
+    return gpii.express.user.test.extractCode(testEnvironment, "https?://[^/]+/api/user/verify/([a-z0-9-]+)");
 };
 
-fluid.defaults("gpii.express.user.api.signup.test.request", {
+fluid.defaults("gpii.tests.express.user.signup.request", {
     gradeNames: ["kettle.test.request.httpCookie"],
     path: {
         expander: {
@@ -71,65 +71,68 @@ fluid.defaults("gpii.express.user.api.signup.test.request", {
             args:     ["%baseUrl%endpoint", { baseUrl: "{testEnvironment}.options.baseUrl", endpoint: "{that}.options.endpoint"}]
         }
     },
+    headers: {
+        accept: "application/json"
+    },
     port: "{testEnvironment}.options.apiPort"
 });
 
 // Each test has a request instance of `kettle.test.request.http` or `kettle.test.request.httpCookie`, and a test module that wires the request to the listener that handles its results.
-fluid.defaults("gpii.express.user.api.signup.test.caseHolder", {
-    gradeNames: ["gpii.express.user.tests.caseHolder"],
+fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
+    gradeNames: ["gpii.test.express.user.caseHolder"],
     components: {
         cookieJar: {
             type: "kettle.test.cookieJar"
         },
         duplicateUserCreateRequest: {
-            type: "gpii.express.user.api.signup.test.request",
+            type: "gpii.tests.express.user.signup.request",
             options: {
                 endpoint: "signup",
                 method:   "POST"
             }
         },
         incompleteUserCreateRequest: {
-            type: "gpii.express.user.api.signup.test.request",
+            type: "gpii.tests.express.user.signup.request",
             options: {
                 endpoint: "signup",
                 method:   "POST"
             }
         },
         bogusVerificationRequest: {
-            type: "gpii.express.user.api.signup.test.request",
+            type: "gpii.tests.express.user.signup.request",
             options: {
                 endpoint: "verify/xxxxxxxxx",
                 method: "GET"
             }
         },
         resendVerification: {
-            type: "gpii.express.user.api.signup.test.request",
+            type: "gpii.tests.express.user.signup.request",
             options: {
                 endpoint: "verify/resend",
                 method: "POST"
             }
         },
         resendVerificationForVerifiedUser: {
-            type: "gpii.express.user.api.signup.test.request",
+            type: "gpii.tests.express.user.signup.request",
             options: {
                 endpoint: "verify/resend",
                 method: "POST"
             }
         },
         resendVerificationForBogusUser: {
-            type: "gpii.express.user.api.signup.test.request",
+            type: "gpii.tests.express.user.signup.request",
             options: {
                 endpoint: "verify/resend",
                 method: "POST"
             }
         },
         fullSignupInitialRequest: {
-            type: "gpii.express.user.api.signup.test.request",
+            type: "gpii.tests.express.user.signup.request",
             options: {
                 endpoint: "signup",
                 user: {
                     expander: {
-                        funcName: "gpii.express.user.api.signup.test.generateUser"
+                        funcName: "gpii.test.express.user.generateUser"
                     }
                 },
                 method: "POST"
@@ -143,7 +146,7 @@ fluid.defaults("gpii.express.user.api.signup.test.caseHolder", {
             }
         },
         fullSignupLoginRequest: {
-            type: "gpii.express.user.api.signup.test.request",
+            type: "gpii.tests.express.user.signup.request",
             options: {
                 endpoint: "login",
                 method:   "POST"
@@ -152,6 +155,7 @@ fluid.defaults("gpii.express.user.api.signup.test.caseHolder", {
     },
     rawModules: [
         {
+            name: "Testing self signup mechanism...",
             tests: [
                 {
                     name: "Testing creating an account with the same email address as an existing account...",
@@ -162,7 +166,7 @@ fluid.defaults("gpii.express.user.api.signup.test.caseHolder", {
                             args: [{ username: "new", password: "new", confirm: "new", email: "reset@localhost"}]
                         },
                         {
-                            listener: "gpii.express.user.api.signup.test.caseHolder.verifyResponse",
+                            listener: "gpii.tests.express.user.signup.caseHolder.verifyResponse",
                             event:    "{duplicateUserCreateRequest}.events.onComplete",
                             args:     ["{duplicateUserCreateRequest}.nativeResponse", "{arguments}.0", 400, null, ["ok", "user"]]
                         }
@@ -177,7 +181,7 @@ fluid.defaults("gpii.express.user.api.signup.test.caseHolder", {
                             args: [{}]
                         },
                         {
-                            listener: "gpii.express.user.api.signup.test.caseHolder.verifyResponse",
+                            listener: "gpii.tests.express.user.signup.caseHolder.verifyResponse",
                             event:    "{incompleteUserCreateRequest}.events.onComplete",
                             args:     ["{incompleteUserCreateRequest}.nativeResponse", "{arguments}.0", 400, null, ["ok", "user"]]
                         }
@@ -192,7 +196,7 @@ fluid.defaults("gpii.express.user.api.signup.test.caseHolder", {
                             args: [{}, { headers: { "Accept": "application/json" }}]
                         },
                         {
-                            listener: "gpii.express.user.api.signup.test.caseHolder.verifyResponse",
+                            listener: "gpii.tests.express.user.signup.caseHolder.verifyResponse",
                             event:    "{bogusVerificationRequest}.events.onComplete",
                             args:     ["{bogusVerificationRequest}.nativeResponse", "{arguments}.0", 401, null, ["ok", "user"]]
                         }
@@ -207,12 +211,12 @@ fluid.defaults("gpii.express.user.api.signup.test.caseHolder", {
                             args: [ { email: "unverified@localhost"} ]
                         },
                         {
-                            listener: "gpii.express.user.api.signup.test.caseHolder.checkEnvironmentForVerificationCode",
+                            listener: "gpii.tests.express.user.signup.caseHolder.checkEnvironmentForVerificationCode",
                             event:    "{testEnvironment}.harness.smtp.mailServer.events.onMessageReceived",
                             args:     ["{testEnvironment}"]
                         },
                         {
-                            listener: "gpii.express.user.api.signup.test.caseHolder.verifyResponse",
+                            listener: "gpii.tests.express.user.signup.caseHolder.verifyResponse",
                             event:    "{resendVerification}.events.onComplete",
                             args:     ["{resendVerification}.nativeResponse", "{arguments}.0", 200]
                         }
@@ -227,7 +231,7 @@ fluid.defaults("gpii.express.user.api.signup.test.caseHolder", {
                             args: [ { email: "existing@localhost"} ]
                         },
                         {
-                            listener: "gpii.express.user.api.signup.test.caseHolder.verifyResponse",
+                            listener: "gpii.tests.express.user.signup.caseHolder.verifyResponse",
                             event:    "{resendVerificationForVerifiedUser}.events.onComplete",
                             args:     ["{resendVerificationForVerifiedUser}.nativeResponse", "{arguments}.0", 200]
                         }
@@ -242,7 +246,7 @@ fluid.defaults("gpii.express.user.api.signup.test.caseHolder", {
                             args: [ { email: "bogus@localhost"} ]
                         },
                         {
-                            listener: "gpii.express.user.api.signup.test.caseHolder.verifyResponse",
+                            listener: "gpii.tests.express.user.signup.caseHolder.verifyResponse",
                             event:    "{resendVerificationForBogusUser}.events.onComplete",
                             args:     ["{resendVerificationForBogusUser}.nativeResponse", "{arguments}.0", 404]
                         }
@@ -257,17 +261,17 @@ fluid.defaults("gpii.express.user.api.signup.test.caseHolder", {
                             args: [ "{fullSignupInitialRequest}.options.user" ]
                         },
                         {
-                            listener: "gpii.express.user.api.signup.test.caseHolder.fullSignupVerifyEmail",
+                            listener: "gpii.tests.express.user.signup.caseHolder.fullSignupVerifyEmail",
                             event:    "{testEnvironment}.harness.smtp.events.onMessageReceived",
                             args:     ["{fullSignupInitialRequest}", "{fullSignupVerifyVerificationRequest}", "{testEnvironment}"]
                         },
                         {
-                            listener: "gpii.express.user.api.signup.test.caseHolder.verifyResponse",
+                            listener: "gpii.tests.express.user.signup.caseHolder.verifyResponse",
                             event:    "{fullSignupInitialRequest}.events.onComplete",
                             args:     ["{fullSignupInitialRequest}.nativeResponse", "{arguments}.0", 200]
                         },
                         {
-                            listener: "gpii.express.user.api.signup.test.caseHolder.verifyResponse",
+                            listener: "gpii.tests.express.user.signup.caseHolder.verifyResponse",
                             event:    "{fullSignupVerifyVerificationRequest}.events.onComplete",
                             args:     ["{fullSignupVerifyVerificationRequest}.nativeResponse", "{arguments}.0", 200, ["ok"]]
                         },
@@ -276,7 +280,7 @@ fluid.defaults("gpii.express.user.api.signup.test.caseHolder", {
                             args: [{ username: "{fullSignupInitialRequest}.options.user.username", password: "{fullSignupInitialRequest}.options.user.password" }]
                         },
                         {
-                            listener: "gpii.express.user.api.signup.test.caseHolder.verifyResponse",
+                            listener: "gpii.tests.express.user.signup.caseHolder.verifyResponse",
                             event:    "{fullSignupLoginRequest}.events.onComplete",
                             args:     ["{fullSignupLoginRequest}.nativeResponse", "{arguments}.0", 200]
                         }
@@ -293,7 +297,7 @@ gpii.express.user.tests.environment({
     mailPort:  8725,
     components: {
         caseHolder: {
-            type: "gpii.express.user.api.signup.test.caseHolder"
+            type: "gpii.tests.express.user.signup.caseHolder"
         }
     }
 });

@@ -10,9 +10,10 @@ var gpii          = fluid.registerNamespace("gpii");
 require("../lib/");
 
 fluid.defaults("gpii.express.user.tests.signup.client.caseHolder", {
-    gradeNames: ["gpii.express.user.tests.caseHolder.withBrowser"],
+    gradeNames: ["gpii.test.express.user.caseHolder.withBrowser"],
     rawModules: [
         {
+            name: "Testing self signup functions with a test browser...",
             tests: [
                 {
                     name: "Try to create a user with the same email address as an existing user...",
@@ -60,7 +61,7 @@ fluid.defaults("gpii.express.user.tests.signup.client.caseHolder", {
                         {
                             event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.evaluate",
-                            args: [gpii.tests.browser.tests.elementMatches, ".signup-error .alert", "A user with this email or username already exists."]
+                            args:     [gpii.test.browser.elementMatches, ".signup-error .alert", "A user with this email or username already exists."]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",
@@ -69,7 +70,7 @@ fluid.defaults("gpii.express.user.tests.signup.client.caseHolder", {
                         },
                         {
                             func: "{testEnvironment}.browser.evaluate",
-                            args: [gpii.tests.browser.tests.lookupFunction, ".signup-success", "innerHTML"]
+                            args: [gpii.test.browser.lookupFunction, ".signup-success", "innerHTML"]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",
@@ -124,7 +125,7 @@ fluid.defaults("gpii.express.user.tests.signup.client.caseHolder", {
                         {
                             event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.evaluate",
-                            args: [gpii.tests.browser.tests.elementMatches, ".signup-error .alert", "A user with this email or username already exists."]
+                            args: [gpii.test.browser.elementMatches, ".signup-error .alert", "A user with this email or username already exists."]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",
@@ -133,7 +134,7 @@ fluid.defaults("gpii.express.user.tests.signup.client.caseHolder", {
                         },
                         {
                             func: "{testEnvironment}.browser.evaluate",
-                            args: [gpii.tests.browser.tests.lookupFunction, ".signup-success", "innerHTML"]
+                            args: [gpii.test.browser.lookupFunction, ".signup-success", "innerHTML"]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",
@@ -188,7 +189,7 @@ fluid.defaults("gpii.express.user.tests.signup.client.caseHolder", {
                         {
                             event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.evaluate",
-                            args: [gpii.tests.browser.tests.elementMatches, ".signup-error .alert", "The 'confirm' field must match the 'password' field."]
+                            args: [gpii.test.browser.elementMatches, ".signup-error .alert ul li", "The 'confirm' field must match the 'password' field."]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",
@@ -197,7 +198,7 @@ fluid.defaults("gpii.express.user.tests.signup.client.caseHolder", {
                         },
                         {
                             func: "{testEnvironment}.browser.evaluate",
-                            args: [gpii.tests.browser.tests.lookupFunction, ".signup-success", "innerHTML"]
+                            args: [gpii.test.browser.lookupFunction, ".signup-success", "innerHTML"]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",
@@ -222,7 +223,7 @@ fluid.defaults("gpii.express.user.tests.signup.client.caseHolder", {
                         {
                             event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.evaluate",
-                            args: [gpii.tests.browser.tests.elementMatches, ".alert", "You must provide a valid verification code to use this interface."]
+                            args: [gpii.test.browser.elementMatches, ".alert", "You must provide a valid verification code to use this interface."]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",
@@ -231,7 +232,7 @@ fluid.defaults("gpii.express.user.tests.signup.client.caseHolder", {
                         },
                         {
                             func: "{testEnvironment}.browser.evaluate",
-                            args: [gpii.tests.browser.tests.lookupFunction, ".verify-form", "innerHTML"]
+                            args: [gpii.test.browser.lookupFunction, ".verify-form", "innerHTML"]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",
@@ -334,7 +335,7 @@ fluid.defaults("gpii.express.user.tests.signup.client.caseHolder", {
                         {
                             event:    "{testEnvironment}.browser.events.onWaitComplete",
                             listener: "{testEnvironment}.browser.evaluate",
-                            args:     [gpii.tests.browser.tests.elementMatches, ".login-success", "You have successfully logged in."]
+                            args:     [gpii.test.browser.elementMatches, ".login-success", "You have successfully logged in."]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",
@@ -343,7 +344,7 @@ fluid.defaults("gpii.express.user.tests.signup.client.caseHolder", {
                         },
                         {
                             func: "{testEnvironment}.browser.evaluate",
-                            args: [gpii.tests.browser.tests.lookupFunction, ".login-failure", "innerHTML"]
+                            args: [gpii.test.browser.lookupFunction, ".login-failure", "innerHTML"]
                         },
                         {
                             event:    "{testEnvironment}.browser.events.onEvaluateComplete",
@@ -385,6 +386,11 @@ gpii.express.user.tests.environment.withBrowser({
     components: {
         testCaseHolder: {
             type: "gpii.express.user.tests.signup.client.caseHolder"
+        },
+        browser: {
+            options: {
+                nightmareOptions: { show: true, dock: true}
+            }
         }
     }
 });

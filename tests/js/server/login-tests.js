@@ -14,10 +14,10 @@ require("../lib/");
 
 var jqUnit       = require("node-jqunit");
 
-fluid.registerNamespace("gpii.express.user.api.login.test.caseHolder");
+fluid.registerNamespace("gpii.express.user.login.test.caseHolder");
 
 // An expander to generate a new username every time
-gpii.express.user.api.login.test.caseHolder.generateUser = function () {
+gpii.express.user.login.test.caseHolder.generateUser = function () {
     var timestamp = Date.now();
     return {
         username: "user-" + timestamp,
@@ -28,13 +28,13 @@ gpii.express.user.api.login.test.caseHolder.generateUser = function () {
 };
 
 // An expander to generate a new password so that we can confirm that the password reset function actually works more than once.
-gpii.express.user.api.login.test.caseHolder.generatePassword = function () {
+gpii.express.user.login.test.caseHolder.generatePassword = function () {
     var timestamp = Date.now();
     return "password-" + timestamp;
 };
 
-gpii.express.user.api.login.test.caseHolder.verifyResponse = function (response, body, statusCode, truthy, falsy, hasCurrentUser) {
-    gpii.express.user.api.test.verifyResponse(response, body, statusCode, truthy, falsy);
+gpii.express.user.login.test.caseHolder.verifyResponse = function (response, body, statusCode, truthy, falsy, hasCurrentUser) {
+    gpii.express.user.test.verifyResponse(response, body, statusCode, truthy, falsy);
 
     var data = typeof body === "string" ? JSON.parse(body): body;
 
@@ -44,8 +44,8 @@ gpii.express.user.api.login.test.caseHolder.verifyResponse = function (response,
 };
 
 // Each test has a request instance of `kettle.test.request.http` or `kettle.test.request.httpCookie`, and a test module that wires the request to the listener that handles its results.
-fluid.defaults("gpii.express.user.api.login.test.caseHolder", {
-    gradeNames: ["gpii.express.user.tests.caseHolder"],
+fluid.defaults("gpii.express.user.login.test.caseHolder", {
+    gradeNames: ["gpii.test.express.user.caseHolder"],
     components: {
         cookieJar: {
             type: "kettle.test.cookieJar"
@@ -132,6 +132,7 @@ fluid.defaults("gpii.express.user.api.login.test.caseHolder", {
     },
     rawModules: [
         {
+            name: "Testing login functions...",
             tests: [
                 {
                     name: "Testing full login/logout cycle...",
@@ -142,7 +143,7 @@ fluid.defaults("gpii.express.user.api.login.test.caseHolder", {
                             args: [{ username: "existing", password: "password" }]
                         },
                         {
-                            listener: "gpii.express.user.api.login.test.caseHolder.verifyResponse",
+                            listener: "gpii.express.user.login.test.caseHolder.verifyResponse",
                             event: "{loginRequest}.events.onComplete",
                             args: ["{loginRequest}.nativeResponse", "{arguments}.0", 200, ["ok", "user"], null, true]
                         },
@@ -150,7 +151,7 @@ fluid.defaults("gpii.express.user.api.login.test.caseHolder", {
                             func: "{currentUserLoggedInRequest}.send"
                         },
                         {
-                            listener: "gpii.express.user.api.login.test.caseHolder.verifyResponse",
+                            listener: "gpii.express.user.login.test.caseHolder.verifyResponse",
                             event: "{currentUserLoggedInRequest}.events.onComplete",
                             args: ["{currentUserLoggedInRequest}.nativeResponse", "{arguments}.0", 200, ["ok", "user"], null, true]
                         },
@@ -158,7 +159,7 @@ fluid.defaults("gpii.express.user.api.login.test.caseHolder", {
                             func: "{logoutRequest}.send"
                         },
                         {
-                            listener: "gpii.express.user.api.login.test.caseHolder.verifyResponse",
+                            listener: "gpii.express.user.login.test.caseHolder.verifyResponse",
                             event: "{logoutRequest}.events.onComplete",
                             args: ["{logoutRequest}.nativeResponse", "{arguments}.0", 200, ["ok"], ["user"]]
                         },
@@ -166,7 +167,7 @@ fluid.defaults("gpii.express.user.api.login.test.caseHolder", {
                             func: "{currentUserLoggedOutRequest}.send"
                         },
                         {
-                            listener: "gpii.express.user.api.login.test.caseHolder.verifyResponse",
+                            listener: "gpii.express.user.login.test.caseHolder.verifyResponse",
                             event: "{currentUserLoggedOutRequest}.events.onComplete",
                             args: ["{currentUserLoggedOutRequest}.nativeResponse", "{arguments}.0",  401, null, ["ok", "user"]]
                         }
@@ -181,7 +182,7 @@ fluid.defaults("gpii.express.user.api.login.test.caseHolder", {
                             args: [{ username: "bogus", password: "bogus" }]
                         },
                         {
-                            listener: "gpii.express.user.api.login.test.caseHolder.verifyResponse",
+                            listener: "gpii.express.user.login.test.caseHolder.verifyResponse",
                             event: "{bogusLoginRequest}.events.onComplete",
                             args: ["{bogusLoginRequest}.nativeResponse", "{arguments}.0", 401, null, ["ok", "user"]]
                         }
@@ -196,7 +197,7 @@ fluid.defaults("gpii.express.user.api.login.test.caseHolder", {
                             args: [{ username: "unverified", password: "unverified" }]
                         },
                         {
-                            listener: "gpii.express.user.api.login.test.caseHolder.verifyResponse",
+                            listener: "gpii.express.user.login.test.caseHolder.verifyResponse",
                             event: "{unverifiedLoginRequest}.events.onComplete",
                             args: ["{unverifiedLoginRequest}.nativeResponse", "{arguments}.0", 401, null, ["ok", "user"]]
                         }
@@ -213,7 +214,7 @@ gpii.express.user.tests.environment({
     mailPort:  8725,
     components: {
         caseHolder: {
-            type: "gpii.express.user.api.login.test.caseHolder"
+            type: "gpii.express.user.login.test.caseHolder"
         }
     }
 });

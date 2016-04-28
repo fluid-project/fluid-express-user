@@ -4,7 +4,7 @@
     "use strict";
 
     fluid.defaults("gpii.express.user.frontend.signup", {
-        gradeNames: ["gpii.schemas.client.errorAwareForm.clientSideValidation"],
+        gradeNames: ["gpii.schemas.client.errorAwareForm"],
         schemaKey: "user-signup.json",
         ajaxOptions: {
             type:   "POST",
@@ -23,11 +23,10 @@
                 }
             },
             successResponseToModel: {
+                fieldErrors:  { literalValue: [] },
+                errorMessage: { literalValue: false },
                 successMessage: {
                     literalValue: "You have successfully created an account.  Check your email for further instructions."
-                },
-                errorMessage: {
-                    literalValue: null
                 }
             }
         },

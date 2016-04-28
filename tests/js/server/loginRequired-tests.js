@@ -9,7 +9,7 @@ var gpii  = fluid.registerNamespace("gpii");
 
 require("../lib/");
 
-fluid.defaults("gpii.express.user.api.loginRequired.request", {
+fluid.defaults("gpii.express.user.loginRequired.request", {
     gradeNames: ["kettle.test.request.httpCookie"],
     port:     "{testEnvironment}.options.apiPort",
     endpoint: "gated",
@@ -22,36 +22,31 @@ fluid.defaults("gpii.express.user.api.loginRequired.request", {
     }
 });
 
-fluid.registerNamespace("gpii.express.user.api.loginRequired.test.caseHolder");
+fluid.registerNamespace("gpii.express.user.loginRequired.test.caseHolder");
 
-fluid.defaults("gpii.express.user.api.loginRequired.test.caseHolder", {
-    gradeNames: ["gpii.express.user.tests.caseHolder"],
+fluid.defaults("gpii.express.user.loginRequired.test.caseHolder", {
+    gradeNames: ["gpii.test.express.user.caseHolder"],
     components: {
         cookieJar: {
             type: "kettle.test.cookieJar"
         },
         anonymousGatedRequest: {
-            type: "gpii.express.user.api.loginRequired.request"
+            type: "gpii.express.user.loginRequired.request"
         },
         loginRequest: {
-            type: "gpii.express.user.api.loginRequired.request",
+            type: "gpii.express.user.loginRequired.request",
             options: {
                 endpoint: "api/user/login",
                 method:   "POST"
             }
         },
         loggedInGatedRequest: {
-            type: "gpii.express.user.api.loginRequired.request"
-        },
-        alternateMethodGatedRequest: {
-            type: "gpii.express.user.api.loginRequired.request",
-            options: {
-                method: "DELETE"
-            }
+            type: "gpii.express.user.loginRequired.request"
         }
     },
     rawModules: [
         {
+            name: "Testing 'login required' grade...",
             tests: [
 
                 {
@@ -62,9 +57,9 @@ fluid.defaults("gpii.express.user.api.loginRequired.test.caseHolder", {
                             func: "{anonymousGatedRequest}.send"
                         },
                         {
-                            listener: "gpii.express.user.api.test.verifyResponse",
+                            listener: "gpii.express.user.test.verifyResponse",
                             event:    "{anonymousGatedRequest}.events.onComplete",
-                            args:     ["{anonymousGatedRequest}.nativeResponse", "{arguments}.0", 401, ["message"], ["ok"]] // response, body, statusCode, truthy, falsy
+                            args:     ["{anonymousGatedRequest}.nativeResponse", "{arguments}.0", 401, ["isError", "message"]] // response, body, statusCode, truthy, falsy
                         }
                     ]
                 },
@@ -84,23 +79,9 @@ fluid.defaults("gpii.express.user.api.loginRequired.test.caseHolder", {
                             func: "{loggedInGatedRequest}.send"
                         },
                         {
-                            listener: "gpii.express.user.api.test.verifyResponse",
+                            listener: "gpii.express.user.test.verifyResponse",
                             event:    "{loggedInGatedRequest}.events.onComplete",
-                            args:     ["{loggedInGatedRequest}.nativeResponse", "{arguments}.0", 200, ["ok", "message"]] // response, body, statusCode, truthy, falsy
-                        }
-                    ]
-                },
-                {
-                    name: "Testing accessing a non-gated method...",
-                    type: "test",
-                    sequence: [
-                        {
-                            func: "{alternateMethodGatedRequest}.send"
-                        },
-                        {
-                            listener: "gpii.express.user.api.test.verifyResponse",
-                            event:    "{alternateMethodGatedRequest}.events.onComplete",
-                            args:     ["{alternateMethodGatedRequest}.nativeResponse", "{arguments}.0", 200, ["ok", "message"]] // response, body, statusCode, truthy, falsy
+                            args:     ["{loggedInGatedRequest}.nativeResponse", "{arguments}.0", 200, ["message"]] // response, body, statusCode, truthy, falsy
                         }
                     ]
                 }
@@ -115,7 +96,7 @@ gpii.express.user.tests.environment({
     mailPort:  7925,
     components: {
         testCaseHolder: {
-            type: "gpii.express.user.api.loginRequired.test.caseHolder"
+            type: "gpii.express.user.loginRequired.test.caseHolder"
         }
     }
 });
