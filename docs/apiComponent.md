@@ -3,13 +3,14 @@
 This is a `gpii.express.router` grade that mounts all parts of the user API under it.  In terms of the default path
 (`/user`), these endpoints include:
 
-# [`/user/current`](currentComponent.md)
-# [`/user/forgot`](forgotComponent.md)
-# [`/user/login`](loginComponent.md)
-# [`/user/logout`](logoutComponent.md)
-# [`/user/reset`](resetComponent.md)
-# [`/user/signup`](signupComponent.md)
-# [`/user/verify`](verifyComponent.md)
+
+* [`/user/current`](currentComponent.md)
+* [`/user/forgot`](forgotComponent.md)
+* [`/user/login`](loginComponent.md)
+* [`/user/logout`](logoutComponent.md)
+* [`/user/reset`](resetComponent.md)
+* [`/user/signup`](signupComponent.md)
+* [`/user/verify`](verifyComponent.md)
 
 For details about making REST calls against the API endpoints provided by this component, see the [API docs](apidocs.md),
 which are returned by default when `/user` is requested with no additional path information.
