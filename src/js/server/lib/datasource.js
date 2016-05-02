@@ -142,7 +142,9 @@ fluid.defaults("gpii.express.user.couchdb.writable", {
         }
     },
     events: {
-        onRead: null
+        onError: null,
+        onRead: null,
+        onWrite: null
     },
     components: {
         //urlResolver: {

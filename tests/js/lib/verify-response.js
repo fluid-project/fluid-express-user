@@ -9,8 +9,8 @@ var gpii  = fluid.registerNamespace("gpii");
 
 var jqUnit = require("node-jqunit");
 
-fluid.registerNamespace("gpii.express.user.test");
-gpii.express.user.test.verifyResponse = function (response, body, statusCode, truthy, falsy) {
+fluid.registerNamespace("gpii.test.express");
+gpii.test.express.user.verifyResponse = function (response, body, statusCode, truthy, falsy) {
     if (!statusCode) { statusCode = 200; }
     gpii.test.express.helpers.isSaneResponse(response, body, statusCode);
 

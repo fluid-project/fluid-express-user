@@ -33,22 +33,8 @@ gpii.tests.express.user.reset.caseHolder.checkEnvironmentForResetCode = function
 };
 
 gpii.tests.express.user.reset.caseHolder.extractResetCode = function (testEnvironment) {
-    return gpii.express.user.test.extractCode(testEnvironment, "https?://[^/]+/api/user/reset/([a-z0-9-]+)");
+    return gpii.test.express.user.extractCode(testEnvironment, "https?://[^/]+/api/user/reset/([a-z0-9-]+)");
 };
-
-fluid.defaults("gpii.express.user.reset.test.request", {
-    gradeNames: ["kettle.test.request.httpCookie"],
-    headers: {
-        accept: "application/json"
-    },
-    path: {
-        expander: {
-            funcName: "fluid.stringTemplate",
-            args:     ["%baseUrl%endpoint", { baseUrl: "{testEnvironment}.options.baseUrl", endpoint: "{that}.options.endpoint"}]
-        }
-    },
-    port: "{testEnvironment}.options.apiPort"
-});
 
 // Each test has a request instance of `kettle.test.request.http` or `kettle.test.request.httpCookie`, and a test module that wires the request to the listener that handles its results.
 fluid.defaults("gpii.tests.express.user.reset.caseHolder", {
@@ -63,38 +49,38 @@ fluid.defaults("gpii.tests.express.user.reset.caseHolder", {
             type: "kettle.test.cookieJar"
         },
         loginRequest: {
-            type: "gpii.express.user.reset.test.request",
+            type: "gpii.test.express.user.request",
             options: {
-                endpoint: "login",
+                endpoint: "api/user/login",
                 method:   "POST"
             }
         },
         bogusResetRequest: {
-            type: "gpii.express.user.reset.test.request",
+            type: "gpii.test.express.user.request",
             options: {
-                endpoint: "reset/NONSENSE",
+                endpoint: "api/user/reset/NONSENSE",
                 method:   "POST"
             }
         },
         fullResetForgotRequest: {
-            type: "gpii.express.user.reset.test.request",
+            type: "gpii.test.express.user.request",
             options: {
-                endpoint: "forgot",
+                endpoint: "api/user/forgot",
                 method:   "POST"
             }
         },
         fullResetVerifyResetRequest: {
-            type: "gpii.express.user.reset.test.request",
+            type: "gpii.test.express.user.request",
             options: {
                 user: "{caseHolder}.options.testUser",
-                endpoint: "reset/%code",
+                endpoint: "api/user/reset/%code",
                 method:   "POST"
             }
         },
         fullResetLoginRequest: {
-            type: "gpii.express.user.reset.test.request",
+            type: "gpii.test.express.user.request",
             options: {
-                endpoint: "login",
+                endpoint: "api/user/login",
                 method:   "POST"
             }
         }
@@ -210,7 +196,7 @@ gpii.tests.express.user.reset.caseHolder.fullResetVerifyEmail = function (resetR
 };
 
 fluid.defaults("gpii.tests.express.user.reset.environment", {
-    gradeNames: ["gpii.express.user.tests.environment"],
+    gradeNames: ["gpii.test.express.user.environment"],
     apiPort:   8779,
     pouchPort: 8765,
     mailPort:  8825,

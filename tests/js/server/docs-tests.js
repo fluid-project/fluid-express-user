@@ -23,11 +23,9 @@ fluid.defaults("gpii.tests.express.user.docs.caseHolder", {
             type: "kettle.test.cookieJar"
         },
         docsRequest: {
-            type: "kettle.test.request.httpCookie",
+            type: "gpii.test.express.user.request",
             options: {
-                path: "{testEnvironment}.options.baseUrl",
-                port: "{testEnvironment}.options.apiPort",
-                method: "GET"
+                endpoint: "api/user/"
             }
         }
     },
@@ -43,7 +41,6 @@ fluid.defaults("gpii.tests.express.user.docs.caseHolder", {
                             func: "{docsRequest}.send",
                             args: []
                         },
-                        // TODO: Use express verify function
                         {
                             listener: "gpii.test.express.helpers.isSaneResponse",
                             event:    "{docsRequest}.events.onComplete",
@@ -57,7 +54,7 @@ fluid.defaults("gpii.tests.express.user.docs.caseHolder", {
 });
 
 fluid.defaults("gpii.tests.express.user.docs.environment", {
-    gradeNames: ["gpii.express.user.tests.environment"],
+    gradeNames: ["gpii.test.express.user.environment"],
     apiPort:    8778,
     pouchPort:  8764,
     mailPort:   8725,

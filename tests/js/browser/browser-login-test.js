@@ -12,7 +12,7 @@ require("../lib/");
 require("gpii-test-browser");
 gpii.test.browser.loadTestingSupport();
 
-fluid.defaults("gpii.express.user.tests.login.client.caseHolder", {
+fluid.defaults("gpii.tests.express.user.login.client.caseHolder", {
     gradeNames: ["gpii.test.express.user.caseHolder.withBrowser"],
     rawModules: [
         {
@@ -187,11 +187,12 @@ fluid.defaults("gpii.express.user.tests.login.client.caseHolder", {
     ]
 });
 
-gpii.express.user.tests.environment.withBrowser({
-    apiPort:     7542,
-    pouchPort:   7524,
-    mailPort:    4099,
-    waitTimeout: 1500,
+fluid.defaults("gpii.tests.express.user.login.client.environment", {
+    gradeNames:   ["gpii.test.express.user.environment.withBrowser"],
+    apiPort:       7542,
+    pouchPort:     7524,
+    mailPort:      4099,
+    waitTimeout:   1500,
     waitAfterLoad: 1500,
     loginUrl: {
         expander: {
@@ -201,8 +202,9 @@ gpii.express.user.tests.environment.withBrowser({
     },
     components: {
         testCaseHolder: {
-            type: "gpii.express.user.tests.login.client.caseHolder"
+            type: "gpii.tests.express.user.login.client.caseHolder"
         }
     }
 });
 
+fluid.test.runTests("gpii.tests.express.user.login.client.environment");

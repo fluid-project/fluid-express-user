@@ -53,9 +53,7 @@ fluid.defaults("gpii.express.user.datasource.tests.writable", {
         write: { _id: "%_id"}
     },
     events: {
-        onResult: null,
-        onWrite:  null, // TODO:  Why is this not picked up from the parent grade?
-        onError:  null // TODO:  Why is this not picked up from the parent grade?
+        onResult: null
     },
     listeners: {
         "onError.fail": {
@@ -237,7 +235,7 @@ fluid.defaults("gpii.express.user.datasource.tests", {
     },
     components: {
         pouch: {
-            type:          "gpii.express.user.tests.pouch",
+            type:          "gpii.test.express.user.pouch",
             createOnEvent: "constructServer",
             options: {
                 listeners: {
@@ -253,4 +251,4 @@ fluid.defaults("gpii.express.user.datasource.tests", {
     }
 });
 
-gpii.express.user.datasource.tests();
+fluid.test.runTests("gpii.express.user.datasource.tests");

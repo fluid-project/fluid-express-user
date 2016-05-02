@@ -9,7 +9,7 @@ require("../lib/");
 require("gpii-test-browser");
 gpii.test.browser.loadTestingSupport();
 
-fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
+fluid.defaults("gpii.tests.express.user.forgot.client.caseHolder", {
     gradeNames: ["gpii.test.express.user.caseHolder.withBrowser"],
     rawModules: [
         {
@@ -39,7 +39,7 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                             args:     [".forgot-button"]
                         },
                         {
-                            listener: "gpii.express.user.tests.client.continueFromEmail",
+                            listener: "gpii.test.express.user.client.continueFromEmail",
                             event:    "{testEnvironment}.harness.smtp.events.onMessageReceived",
                             args:     ["{testEnvironment}", "{testEnvironment}.options.resetPattern"]
                         },
@@ -233,7 +233,7 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
                             args:     [".forgot-button"]
                         },
                         {
-                            listener: "gpii.express.user.tests.client.continueFromEmail",
+                            listener: "gpii.test.express.user.client.continueFromEmail",
                             event:    "{testEnvironment}.harness.smtp.events.onMessageReceived",
                             args:     ["{testEnvironment}", "{testEnvironment}.options.resetPattern"]
                         },
@@ -349,7 +349,8 @@ fluid.defaults("gpii.express.user.tests.forgot.client.caseHolder", {
     ]
 });
 
-gpii.express.user.tests.environment.withBrowser({
+fluid.defaults("gpii.tests.express.user.forgot.client.environment", {
+    gradeNames: ["gpii.test.express.user.environment.withBrowser"],
     apiPort:   7533,
     pouchPort: 7534,
     mailPort:  4082,
@@ -376,7 +377,9 @@ gpii.express.user.tests.environment.withBrowser({
     },
     components: {
         testCaseHolder: {
-            type: "gpii.express.user.tests.forgot.client.caseHolder"
+            type: "gpii.tests.express.user.forgot.client.caseHolder"
         }
     }
 });
+
+fluid.test.runTests("gpii.tests.express.user.forgot.client.environment");

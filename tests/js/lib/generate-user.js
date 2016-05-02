@@ -9,14 +9,14 @@ gpii.test.express.user.generateUser = function () {
     var timestamp = Date.now();
     return {
         username: "user-" + timestamp,
-        password: gpii.express.user.test.generatePassword(timestamp),
-        confirm:  gpii.express.user.test.generatePassword(timestamp),
+        password: gpii.test.express.user.generatePassword(timestamp),
+        confirm:  gpii.test.express.user.generatePassword(timestamp),
         email:    "email-" + timestamp + "@localhost"
     };
 };
 
 // Generate a simple password that meets our rules.  Used in testing both the signup and reset functions.
-gpii.express.user.test.generatePassword = function (timestamp) {
+gpii.test.express.user.generatePassword = function (timestamp) {
     if (!timestamp) {
         timestamp = Date.now();
     }

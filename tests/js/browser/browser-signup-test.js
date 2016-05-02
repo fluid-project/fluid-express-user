@@ -9,7 +9,7 @@ var gpii          = fluid.registerNamespace("gpii");
 
 require("../lib/");
 
-fluid.defaults("gpii.express.user.tests.signup.client.caseHolder", {
+fluid.defaults("gpii.tests.express.user.signup.client.caseHolder", {
     gradeNames: ["gpii.test.express.user.caseHolder.withBrowser"],
     rawModules: [
         {
@@ -19,6 +19,10 @@ fluid.defaults("gpii.express.user.tests.signup.client.caseHolder", {
                     name: "Try to create a user with the same email address as an existing user...",
                     type: "test",
                     sequence: [
+                        {
+                            func: "console.log",
+                            args: ["URL:", "{testEnvironment}.options.signupUrl"]
+                        },
                         {
                             func: "{testEnvironment}.browser.goto",
                             args: ["{testEnvironment}.options.signupUrl"]
@@ -286,7 +290,7 @@ fluid.defaults("gpii.express.user.tests.signup.client.caseHolder", {
                         },
                         // We should have successfully submitted our form and should be able to continue from email.
                         {
-                            listener: "gpii.express.user.tests.client.continueFromEmail",
+                            listener: "gpii.test.express.user.client.continueFromEmail",
                             event:    "{testEnvironment}.harness.smtp.events.onMessageReceived",
                             args:     ["{testEnvironment}", "{testEnvironment}.options.verifyPattern"]
                         },
@@ -358,7 +362,8 @@ fluid.defaults("gpii.express.user.tests.signup.client.caseHolder", {
     ]
 });
 
-gpii.express.user.tests.environment.withBrowser({
+fluid.defaults("gpii.tests.express.user.signup.client.environment", {
+    gradeNames: ["gpii.test.express.user.environment.withBrowser"],
     apiPort:   7532,
     pouchPort: 7542,
     mailPort:  4089,
@@ -385,13 +390,9 @@ gpii.express.user.tests.environment.withBrowser({
     },
     components: {
         testCaseHolder: {
-            type: "gpii.express.user.tests.signup.client.caseHolder"
-        },
-        browser: {
-            options: {
-                nightmareOptions: { show: true, dock: true}
-            }
+            type: "gpii.tests.express.user.signup.client.caseHolder"
         }
     }
 });
 
+fluid.test.runTests("gpii.tests.express.user.signup.client.environment");

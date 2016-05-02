@@ -65,7 +65,7 @@ fluid.defaults("gpii.express.user.withMailHandler", {
             type: "gpii.express.user.mailer.handlebars",
             options: {
                 messages:        "{gpii.express.user.withMailHandler}.options.messages",
-                templateDirs:    "{gpii.express.user.withMailHandler}.options.templateDirs",
+                templateDirs:    "{gpii.express.user.api}.options.templateDirs",
                 htmlTemplateKey: "{gpii.express.user.withMailHandler}.options.templates.mail.html",
                 textTemplateKey: "{gpii.express.user.withMailHandler}.options.templates.mail.text",
                 listeners: {

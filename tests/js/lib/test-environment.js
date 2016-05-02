@@ -11,13 +11,13 @@ kettle.loadTestingSupport();
 require("gpii-test-browser");
 gpii.test.browser.loadTestingSupport();
 
-fluid.defaults("gpii.express.user.tests.environment", {
+fluid.defaults("gpii.test.express.user.environment", {
     gradeNames: ["fluid.test.testEnvironment"],
     apiPort:    "3959",
     baseUrl: {
         expander: {
             funcName: "fluid.stringTemplate",
-            args:     ["http://localhost:%port/api/user/", { port: "{that}.options.apiPort"}]
+            args:     ["http://localhost:%port/", { port: "{that}.options.apiPort"}]
         }
     },
     events: {
@@ -39,7 +39,7 @@ fluid.defaults("gpii.express.user.tests.environment", {
     mailPort:   "2525",
     components: {
         harness: {
-            type:          "gpii.express.user.tests.harness",
+            type:          "gpii.test.express.user.harness",
             createOnEvent: "constructFixtures",
             options: {
                 apiPort:   "{testEnvironment}.options.apiPort",
@@ -60,8 +60,8 @@ fluid.defaults("gpii.express.user.tests.environment", {
 
 
 
-fluid.defaults("gpii.express.user.tests.environment.withBrowser", {
-    gradeNames: ["gpii.express.user.tests.environment", "gpii.test.browser.environment"],
+fluid.defaults("gpii.test.express.user.environment.withBrowser", {
+    gradeNames: ["gpii.test.express.user.environment", "gpii.test.browser.environment"],
     events: {
         onReady: {
             events: {

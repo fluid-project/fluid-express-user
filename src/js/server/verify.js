@@ -110,7 +110,6 @@ fluid.defaults("gpii.express.user.verify.handler.html", {
 });
 
 // The JSON handler just passes the response payload on to gpii.express.handler.sendResponse
-// TODO: Make this extend a schema handler instead
 fluid.defaults("gpii.express.user.verify.handler.json", {
     gradeNames: ["gpii.express.user.verify.handler"],
     invokers: {

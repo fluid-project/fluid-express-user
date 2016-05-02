@@ -180,4 +180,4 @@ fluid.defaults("gpii.mailer.tests.environment", {
 
 });
 
-gpii.mailer.tests.environment();
+fluid.test.runTests("gpii.mailer.tests.environment");

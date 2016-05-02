@@ -2,7 +2,7 @@
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
-fluid.registerNamespace("gpii.express.user.tests.client");
+fluid.registerNamespace("gpii.test.express.user.client");
 
 var fs         = require("fs");
 var MailParser = require("mailparser").MailParser;
@@ -16,7 +16,7 @@ var MailParser = require("mailparser").MailParser;
 //
 // See the "forgot" and "signup" tests for concrete examples.
 //
-gpii.express.user.tests.client.continueFromEmail = function (environment, urlPatternString) {
+gpii.test.express.user.client.continueFromEmail = function (environment, urlPatternString) {
     // This is a MIME message, it will mangle the lines and special characters unless we decode it.
     var mailparser = new MailParser();
 

@@ -2,7 +2,6 @@
 
 module.exports = function (grunt) {
 
-    // TODO:  Clean up the project structure into cleanly separated pieces with their own standard src and tests.
     // TODO:  Set up separate checks for the couchapp content, with a different .jshintrc
     grunt.initConfig({
         jshint: {

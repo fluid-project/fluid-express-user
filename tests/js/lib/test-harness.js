@@ -12,7 +12,7 @@ require("gpii-mail-test");
 require("./test-harness-pouch");
 
 
-fluid.defaults("gpii.express.user.tests.harness.gated.handler", {
+fluid.defaults("gpii.test.express.user.harness.gated.handler", {
     gradeNames: ["gpii.express.handler"],
     invokers: {
         handleRequest: {
@@ -23,12 +23,12 @@ fluid.defaults("gpii.express.user.tests.harness.gated.handler", {
 });
 
 
-// TODO:  Update this to use the new version of gpii-mail-test once we have a Zombie version that works in 0.12 or higher.
-fluid.defaults("gpii.express.user.tests.harness", {
+fluid.defaults("gpii.test.express.user.harness", {
     gradeNames: ["fluid.component"],
     pouchPort:  "9735",
     apiPort:    "5379",
     mailPort:   "5225",
+    templateDirs: ["%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
     baseUrl: {
         expander: {
             funcName: "fluid.stringTemplate",
@@ -37,7 +37,6 @@ fluid.defaults("gpii.express.user.tests.harness", {
     },
     // As we may commonly be working with a debugger, we need a much longer timeout for all `requestAwareRouter` and `contentAware` grades.
     timeout: 99999999,
-    templateDirs: ["%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
     distributeOptions: [
         {
             source: "{that}.options.timeout",
@@ -61,7 +60,6 @@ fluid.defaults("gpii.express.user.tests.harness", {
         onMailReady:           null,
         onPouchDone:           null,
         onPouchStarted:        null,
-        onPouchExpressStarted: null, // TODO:  Remove?
         onStarted: {
             events: {
                 onPouchStarted: "onPouchStarted",
@@ -118,7 +116,7 @@ fluid.defaults("gpii.express.user.tests.harness", {
                             namespace:    "inline",
                             priority:     "after:bc",
                             path:         "/hbs",
-                            templateDirs: "{gpii.express.user.tests.harness}.options.templateDirs"
+                            templateDirs: "{gpii.test.express.user.harness}.options.templateDirs"
                         }
                     },
                     schemas: {
@@ -144,6 +142,7 @@ fluid.defaults("gpii.express.user.tests.harness", {
                             path:      "/api/user",
                             namespace: "api",
                             priority:  "after:inlineSchemas",
+                            templateDirs: "{gpii.test.express.user.harness}.options.templateDirs",
                             couch:  {
                                 port: "{harness}.options.pouchPort",
                                 userDbName: "users",
@@ -173,7 +172,7 @@ fluid.defaults("gpii.express.user.tests.harness", {
                             namespace:     "gated",
                             path:          "/gated",
                             priority:      "after:api",
-                            handlerGrades: ["gpii.express.user.tests.harness.gated.handler"]
+                            handlerGrades: ["gpii.test.express.user.harness.gated.handler"]
                         }
                     },
                     // Serve up the rest of our static content (JS source, etc.)
@@ -204,7 +203,7 @@ fluid.defaults("gpii.express.user.tests.harness", {
             }
         },
         pouch: {
-            type: "gpii.express.user.tests.pouch",
+            type: "gpii.test.express.user.pouch",
             options: {
                 port: "{harness}.options.pouchPort",
                 listeners: {

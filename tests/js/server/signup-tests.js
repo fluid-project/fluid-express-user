@@ -60,22 +60,8 @@ gpii.tests.express.user.signup.caseHolder.checkEnvironmentForVerificationCode = 
 };
 
 gpii.tests.express.user.signup.caseHolder.extractVerificationCode = function (testEnvironment) {
-    return gpii.express.user.test.extractCode(testEnvironment, "https?://[^/]+/api/user/verify/([a-z0-9-]+)");
+    return gpii.test.express.user.extractCode(testEnvironment, "https?://[^/]+/api/user/verify/([a-z0-9-]+)");
 };
-
-fluid.defaults("gpii.tests.express.user.signup.request", {
-    gradeNames: ["kettle.test.request.httpCookie"],
-    path: {
-        expander: {
-            funcName: "fluid.stringTemplate",
-            args:     ["%baseUrl%endpoint", { baseUrl: "{testEnvironment}.options.baseUrl", endpoint: "{that}.options.endpoint"}]
-        }
-    },
-    headers: {
-        accept: "application/json"
-    },
-    port: "{testEnvironment}.options.apiPort"
-});
 
 // Each test has a request instance of `kettle.test.request.http` or `kettle.test.request.httpCookie`, and a test module that wires the request to the listener that handles its results.
 fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
@@ -85,51 +71,51 @@ fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
             type: "kettle.test.cookieJar"
         },
         duplicateUserCreateRequest: {
-            type: "gpii.tests.express.user.signup.request",
+            type: "gpii.test.express.user.request",
             options: {
-                endpoint: "signup",
+                endpoint: "api/user/signup",
                 method:   "POST"
             }
         },
         incompleteUserCreateRequest: {
-            type: "gpii.tests.express.user.signup.request",
+            type: "gpii.test.express.user.request",
             options: {
-                endpoint: "signup",
+                endpoint: "api/user/signup",
                 method:   "POST"
             }
         },
         bogusVerificationRequest: {
-            type: "gpii.tests.express.user.signup.request",
+            type: "gpii.test.express.user.request",
             options: {
-                endpoint: "verify/xxxxxxxxx",
+                endpoint: "api/user/verify/xxxxxxxxx",
                 method: "GET"
             }
         },
         resendVerification: {
-            type: "gpii.tests.express.user.signup.request",
+            type: "gpii.test.express.user.request",
             options: {
-                endpoint: "verify/resend",
+                endpoint: "api/user/verify/resend",
                 method: "POST"
             }
         },
         resendVerificationForVerifiedUser: {
-            type: "gpii.tests.express.user.signup.request",
+            type: "gpii.test.express.user.request",
             options: {
-                endpoint: "verify/resend",
+                endpoint: "api/user/verify/resend",
                 method: "POST"
             }
         },
         resendVerificationForBogusUser: {
-            type: "gpii.tests.express.user.signup.request",
+            type: "gpii.test.express.user.request",
             options: {
-                endpoint: "verify/resend",
+                endpoint: "api/user/verify/resend",
                 method: "POST"
             }
         },
         fullSignupInitialRequest: {
-            type: "gpii.tests.express.user.signup.request",
+            type: "gpii.test.express.user.request",
             options: {
-                endpoint: "signup",
+                endpoint: "api/user/signup",
                 user: {
                     expander: {
                         funcName: "gpii.test.express.user.generateUser"
@@ -146,9 +132,9 @@ fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
             }
         },
         fullSignupLoginRequest: {
-            type: "gpii.tests.express.user.signup.request",
+            type: "gpii.test.express.user.request",
             options: {
-                endpoint: "login",
+                endpoint: "api/user/login",
                 method:   "POST"
             }
         }
@@ -291,7 +277,9 @@ fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
     ]
 });
 
-gpii.express.user.tests.environment({
+
+fluid.defaults("gpii.tests.express.user.signup.environment", {
+    gradeNames: ["gpii.test.express.user.environment"],
     apiPort:   8778,
     pouchPort: 8764,
     mailPort:  8725,

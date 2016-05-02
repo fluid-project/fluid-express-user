@@ -14,10 +14,10 @@ require("../lib/");
 
 var jqUnit       = require("node-jqunit");
 
-fluid.registerNamespace("gpii.express.user.login.test.caseHolder");
+fluid.registerNamespace("gpii.tests.express.user.login.caseHolder");
 
 // An expander to generate a new username every time
-gpii.express.user.login.test.caseHolder.generateUser = function () {
+gpii.tests.express.user.login.caseHolder.generateUser = function () {
     var timestamp = Date.now();
     return {
         username: "user-" + timestamp,
@@ -28,13 +28,13 @@ gpii.express.user.login.test.caseHolder.generateUser = function () {
 };
 
 // An expander to generate a new password so that we can confirm that the password reset function actually works more than once.
-gpii.express.user.login.test.caseHolder.generatePassword = function () {
+gpii.tests.express.user.login.caseHolder.generatePassword = function () {
     var timestamp = Date.now();
     return "password-" + timestamp;
 };
 
-gpii.express.user.login.test.caseHolder.verifyResponse = function (response, body, statusCode, truthy, falsy, hasCurrentUser) {
-    gpii.express.user.test.verifyResponse(response, body, statusCode, truthy, falsy);
+gpii.tests.express.user.login.caseHolder.verifyResponse = function (response, body, statusCode, truthy, falsy, hasCurrentUser) {
+    gpii.test.express.user.verifyResponse(response, body, statusCode, truthy, falsy);
 
     var data = typeof body === "string" ? JSON.parse(body): body;
 
@@ -44,88 +44,51 @@ gpii.express.user.login.test.caseHolder.verifyResponse = function (response, bod
 };
 
 // Each test has a request instance of `kettle.test.request.http` or `kettle.test.request.httpCookie`, and a test module that wires the request to the listener that handles its results.
-fluid.defaults("gpii.express.user.login.test.caseHolder", {
+fluid.defaults("gpii.tests.express.user.login.caseHolder", {
     gradeNames: ["gpii.test.express.user.caseHolder"],
     components: {
         cookieJar: {
             type: "kettle.test.cookieJar"
         },
         loginRequest: {
-            type: "kettle.test.request.httpCookie",
+            type: "gpii.test.express.user.request",
             options: {
-                path: {
-                    expander: {
-                        funcName: "fluid.stringTemplate",
-                        args:     ["%baseUrl%endpoint", { baseUrl: "{testEnvironment}.options.baseUrl", endpoint: "login"}]
-                    }
-                },
-                port: "{testEnvironment}.options.apiPort",
+                endpoint: "api/user/login",
                 method: "POST"
             }
         },
         currentUserLoggedInRequest: {
-            type: "kettle.test.request.httpCookie",
+            type: "gpii.test.express.user.request",
             options: {
-                path: {
-                    expander: {
-                        funcName: "fluid.stringTemplate",
-                        args:     ["%baseUrl%endpoint", { baseUrl: "{testEnvironment}.options.baseUrl", endpoint: "current"}]
-                    }
-                },
-                port: "{testEnvironment}.options.apiPort",
+                endpoint: "api/user/current",
                 method: "GET"
             }
         },
         logoutRequest: {
-            type: "kettle.test.request.httpCookie",
+            type: "gpii.test.express.user.request",
             options: {
-                path: {
-                    expander: {
-                        funcName: "fluid.stringTemplate",
-                        args:     ["%baseUrl%endpoint", { baseUrl: "{testEnvironment}.options.baseUrl", endpoint: "logout"}]
-                    }
-                },
-                port: "{testEnvironment}.options.apiPort",
+                endpoint: "api/user/logout",
                 method: "GET"
             }
         },
         currentUserLoggedOutRequest: {
-            type: "kettle.test.request.httpCookie",
+            type: "gpii.test.express.user.request",
             options: {
-                path: {
-                    expander: {
-                        funcName: "fluid.stringTemplate",
-                        args:     ["%baseUrl%endpoint", { baseUrl: "{testEnvironment}.options.baseUrl", endpoint: "current"}]
-                    }
-                },
-                port: "{testEnvironment}.options.apiPort",
+                endpoint: "api/user/current",
                 method: "GET"
             }
         },
         bogusLoginRequest: {
-            type: "kettle.test.request.httpCookie",
+            type: "gpii.test.express.user.request",
             options: {
-                path: {
-                    expander: {
-                        funcName: "fluid.stringTemplate",
-                        args:     ["%baseUrl%endpoint", { baseUrl: "{testEnvironment}.options.baseUrl", endpoint: "login"}]
-                    }
-
-                },
-                port: "{testEnvironment}.options.apiPort",
+                endpoint: "api/user/login",
                 method: "POST"
             }
         },
         unverifiedLoginRequest: {
-            type: "kettle.test.request.httpCookie",
+            type: "gpii.test.express.user.request",
             options: {
-                path: {
-                    expander: {
-                        funcName: "fluid.stringTemplate",
-                        args:     ["%baseUrl%endpoint", { baseUrl: "{testEnvironment}.options.baseUrl", endpoint: "login"}]
-                    }
-                },
-                port:   "{testEnvironment}.options.apiPort",
+                endpoint: "api/user/login",
                 method: "POST"
             }
         }
@@ -143,7 +106,7 @@ fluid.defaults("gpii.express.user.login.test.caseHolder", {
                             args: [{ username: "existing", password: "password" }]
                         },
                         {
-                            listener: "gpii.express.user.login.test.caseHolder.verifyResponse",
+                            listener: "gpii.tests.express.user.login.caseHolder.verifyResponse",
                             event: "{loginRequest}.events.onComplete",
                             args: ["{loginRequest}.nativeResponse", "{arguments}.0", 200, ["ok", "user"], null, true]
                         },
@@ -151,7 +114,7 @@ fluid.defaults("gpii.express.user.login.test.caseHolder", {
                             func: "{currentUserLoggedInRequest}.send"
                         },
                         {
-                            listener: "gpii.express.user.login.test.caseHolder.verifyResponse",
+                            listener: "gpii.tests.express.user.login.caseHolder.verifyResponse",
                             event: "{currentUserLoggedInRequest}.events.onComplete",
                             args: ["{currentUserLoggedInRequest}.nativeResponse", "{arguments}.0", 200, ["ok", "user"], null, true]
                         },
@@ -159,7 +122,7 @@ fluid.defaults("gpii.express.user.login.test.caseHolder", {
                             func: "{logoutRequest}.send"
                         },
                         {
-                            listener: "gpii.express.user.login.test.caseHolder.verifyResponse",
+                            listener: "gpii.tests.express.user.login.caseHolder.verifyResponse",
                             event: "{logoutRequest}.events.onComplete",
                             args: ["{logoutRequest}.nativeResponse", "{arguments}.0", 200, ["ok"], ["user"]]
                         },
@@ -167,7 +130,7 @@ fluid.defaults("gpii.express.user.login.test.caseHolder", {
                             func: "{currentUserLoggedOutRequest}.send"
                         },
                         {
-                            listener: "gpii.express.user.login.test.caseHolder.verifyResponse",
+                            listener: "gpii.tests.express.user.login.caseHolder.verifyResponse",
                             event: "{currentUserLoggedOutRequest}.events.onComplete",
                             args: ["{currentUserLoggedOutRequest}.nativeResponse", "{arguments}.0",  401, null, ["ok", "user"]]
                         }
@@ -182,7 +145,7 @@ fluid.defaults("gpii.express.user.login.test.caseHolder", {
                             args: [{ username: "bogus", password: "bogus" }]
                         },
                         {
-                            listener: "gpii.express.user.login.test.caseHolder.verifyResponse",
+                            listener: "gpii.tests.express.user.login.caseHolder.verifyResponse",
                             event: "{bogusLoginRequest}.events.onComplete",
                             args: ["{bogusLoginRequest}.nativeResponse", "{arguments}.0", 401, null, ["ok", "user"]]
                         }
@@ -197,7 +160,7 @@ fluid.defaults("gpii.express.user.login.test.caseHolder", {
                             args: [{ username: "unverified", password: "unverified" }]
                         },
                         {
-                            listener: "gpii.express.user.login.test.caseHolder.verifyResponse",
+                            listener: "gpii.tests.express.user.login.caseHolder.verifyResponse",
                             event: "{unverifiedLoginRequest}.events.onComplete",
                             args: ["{unverifiedLoginRequest}.nativeResponse", "{arguments}.0", 401, null, ["ok", "user"]]
                         }
@@ -208,13 +171,16 @@ fluid.defaults("gpii.express.user.login.test.caseHolder", {
     ]
 });
 
-gpii.express.user.tests.environment({
+fluid.defaults("gpii.tests.express.user.login.environment", {
+    gradeNames: ["gpii.test.express.user.environment"],
     apiPort:   8778,
     pouchPort: 8764,
     mailPort:  8725,
     components: {
         caseHolder: {
-            type: "gpii.express.user.login.test.caseHolder"
+            type: "gpii.tests.express.user.login.caseHolder"
         }
     }
 });
+
+fluid.test.runTests("gpii.tests.express.user.login.environment");

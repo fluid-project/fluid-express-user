@@ -8,9 +8,9 @@ var gpii  = fluid.registerNamespace("gpii");
 var fs = require("fs");
 var MailParser = require("mailparser").MailParser;
 
-fluid.registerNamespace("gpii.express.user.test");
+fluid.registerNamespace("gpii.test.express.user");
 
-gpii.express.user.test.extractCode = function (testEnvironment, pattern) {
+gpii.test.express.user.extractCode = function (testEnvironment, pattern) {
     var content = fs.readFileSync(testEnvironment.harness.smtp.mailServer.currentMessageFile, "utf8");
 
     var promise = fluid.promise();

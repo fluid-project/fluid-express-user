@@ -6,7 +6,7 @@ var gpii = fluid.registerNamespace("gpii");
 
 require("./lib/test-harness");
 
-gpii.express.user.tests.harness({
+gpii.test.express.user.harness({
     pouchPort:  "9599",
     apiPort:    "3959",
     mailPort:   "9225"

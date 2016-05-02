@@ -3,7 +3,7 @@ var fluid = require("infusion");
 
 require("gpii-pouchdb");
 
-fluid.defaults("gpii.express.user.tests.pouch", {
+fluid.defaults("gpii.test.express.user.pouch", {
     gradeNames: ["gpii.express"],
     port: "3579",
     events: {
@@ -26,7 +26,7 @@ fluid.defaults("gpii.express.user.tests.pouch", {
                 },
                 listeners: {
                     "onStarted.notifyParent": {
-                        func: "{gpii.express.user.tests.pouch}.events.onPouchStarted.fire"
+                        func: "{gpii.test.express.user.pouch}.events.onPouchStarted.fire"
                     }
                 }
             }
