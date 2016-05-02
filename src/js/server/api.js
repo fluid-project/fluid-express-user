@@ -148,7 +148,7 @@ fluid.defaults("gpii.express.user.withRequiredMiddleware", {
             type: "gpii.express.hb",
             options: {
                 priority: "after:urlencoded",
-                templateDirs: "{gpii.express.user.api}.options.templateDirs",
+                templateDirs: "{gpii.express.user.withRequiredMiddleware}.options.templateDirs",
                 components: {
                     initBlock: {
                         options: {

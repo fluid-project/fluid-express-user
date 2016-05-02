@@ -82,6 +82,7 @@ fluid.defaults("gpii.test.express.user.harness", {
             options: {
                 gradeNames: ["gpii.express.user.withRequiredMiddleware"],
                 port:  "{harness}.options.apiPort",
+                templateDirs: "{gpii.test.express.user.harness}.options.templateDirs",
                 listeners: {
                     "onStarted.notifyParent": "{harness}.events.onApiStarted.fire",
                     "afterDestroy.notifyParent": "{harness}.events.onApiDone.fire"
@@ -142,7 +143,6 @@ fluid.defaults("gpii.test.express.user.harness", {
                             path:      "/api/user",
                             namespace: "api",
                             priority:  "after:inlineSchemas",
-                            templateDirs: "{gpii.test.express.user.harness}.options.templateDirs",
                             couch:  {
                                 port: "{harness}.options.pouchPort",
                                 userDbName: "users",
