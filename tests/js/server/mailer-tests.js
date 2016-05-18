@@ -146,14 +146,14 @@ fluid.defaults("gpii.mailer.tests.environment", {
     gradeNames: ["fluid.test.testEnvironment"],
     mailPort:   "9925",
     events: {
-        constructServer:   null,
-        onStarted:         null,
-        onMessageReceived: null
+        constructFixtures:     null,
+        onFixturesConstructed: null,
+        onMessageReceived:     null
     },
     components: {
         mailServer: {
             type:          "gpii.test.mail.smtp",
-            createOnEvent: "constructServer",
+            createOnEvent: "constructFixtures",
             options: {
                 port: "{testEnvironment}.options.mailPort",
                 components: {
@@ -161,7 +161,7 @@ fluid.defaults("gpii.mailer.tests.environment", {
                         options: {
                             listeners: {
                                 "onReady.notifyEnvironment": {
-                                    func: "{testEnvironment}.events.onStarted.fire"
+                                    func: "{testEnvironment}.events.onFixturesConstructed.fire"
                                 },
                                 "onMessageReceived.notifyEnvironment": {
                                     func: "{testEnvironment}.events.onMessageReceived.fire",

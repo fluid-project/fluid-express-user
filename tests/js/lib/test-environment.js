@@ -22,9 +22,9 @@ fluid.defaults("gpii.test.express.user.environment", {
     },
     events: {
         constructFixtures: null,
-        onHarnessDone: null,
-        onHarnessReady: null,
-        onReady: {
+        onHarnessDone:     null,
+        onHarnessReady:    null,
+        onFixturesConstructed: {
             events: {
                 onHarnessReady: "onHarnessReady"
             }
@@ -63,7 +63,7 @@ fluid.defaults("gpii.test.express.user.environment", {
 fluid.defaults("gpii.test.express.user.environment.withBrowser", {
     gradeNames: ["gpii.test.express.user.environment", "gpii.test.browser.environment"],
     events: {
-        onReady: {
+        onFixturesConstructed: {
             events: {
                 onBrowserReady: "onBrowserReady",
                 onHarnessReady: "onHarnessReady"

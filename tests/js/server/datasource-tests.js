@@ -230,17 +230,17 @@ fluid.defaults("gpii.express.user.datasource.tests", {
     gradeNames: ["fluid.test.testEnvironment"],
     pouchPort: "3579",
     events: {
-        constructServer: null,
-        onStarted: null
+        constructFixtures: null,
+        onFixturesConstructed: null
     },
     components: {
         pouch: {
             type:          "gpii.test.express.user.pouch",
-            createOnEvent: "constructServer",
+            createOnEvent: "constructFixtures",
             options: {
                 listeners: {
                     "onAllStarted.notifyParent": {
-                        func: "{testEnvironment}.events.onStarted.fire"
+                        func: "{testEnvironment}.events.onFixturesConstructed.fire"
                     }
                 }
             }

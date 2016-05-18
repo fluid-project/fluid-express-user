@@ -26,7 +26,7 @@
     "tests"
   ],
   "dependencies": {
-    "foundation": "~5.5.2",
+    "foundation": "5.5.2",
     "handlebars": "4.0.5",
     "pagedown":   "1.1.0"
   }
