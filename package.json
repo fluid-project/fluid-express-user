@@ -4,7 +4,7 @@
   "description": "A series of Fluid components to provide simple user management.",
   "main": "src/js/index.js",
   "scripts": {
-    "test": "node tests/all-tests.js",
+    "test": "node node_modules/istanbul/lib/cli.js cover tests/all-tests.js",
     "postinstall": "bower install"
   },
   "repository": {
@@ -38,6 +38,7 @@
     "grunt-contrib-jshint": "0.9.0",
     "grunt-jsonlint": "1.0.4",
     "grunt-shell": "0.6.4",
+    "istanbul": "0.4.3",
     "mailparser": "^0.5.2",
     "node-jqunit": "~1.1.3"
   }
