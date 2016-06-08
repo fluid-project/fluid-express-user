@@ -7,6 +7,7 @@
   via email.  The code can be resent by visiting `/api/user/verify/resend`.
 
  */
+/* eslint-env node */
 "use strict";
 var fluid  = require("infusion");
 var gpii   = fluid.registerNamespace("gpii");

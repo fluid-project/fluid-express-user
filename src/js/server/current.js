@@ -3,6 +3,7 @@
   An API endpoint that returns the current user's information if they are logged in, or an error message if they are not.
 
  */
+/* eslint-env node */
 "use strict";
 var fluid  = require("infusion");
 var gpii   = fluid.registerNamespace("gpii");

@@ -1,4 +1,5 @@
 // The common test harness we will use for all tests as well as manual verification.
+/* eslint-env node */
 "use strict";
 var fluid = require("infusion");
 

@@ -3,7 +3,7 @@
   Test the API documentation.
 
  */
-
+/* eslint-env node */
 "use strict";
 
 var fluid        = require("infusion");

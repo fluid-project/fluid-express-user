@@ -5,6 +5,7 @@
     https://github.com/GPII/gpii-express-user/blob/master/docs/forgotComponent.md
 
  */
+/* eslint-env node */
 "use strict";
 var fluid  = require("infusion");
 var gpii   = fluid.registerNamespace("gpii");

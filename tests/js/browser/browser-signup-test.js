@@ -3,6 +3,7 @@
 // There is some overlap between this and the server-tests.js, a test that fails in both is likely broken on the server
 // side, a test that only fails here is likely broken in the client-facing code.
 //
+/* eslint-env node */
 "use strict";
 var fluid         = require("infusion");
 var gpii          = fluid.registerNamespace("gpii");

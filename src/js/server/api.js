@@ -7,6 +7,7 @@
     https://github.com/GPII/gpii-express-user/blob/master/docs/apiComponent.md
 
  */
+/* eslint-env node */
 "use strict";
 var fluid = require("infusion");
 

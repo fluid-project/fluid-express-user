@@ -1,3 +1,4 @@
+/* eslint-env node */
 /*
 
   Provides the second half of the password reset API, and handles the last two steps.  Before using this, a user must

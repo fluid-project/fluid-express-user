@@ -1,3 +1,5 @@
+/* eslint-env node */
+"use strict";
 require("./datasource-tests.js");
 require("./docs-tests");
 require("./forgot-tests.js");

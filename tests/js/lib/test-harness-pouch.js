@@ -1,4 +1,6 @@
 // Just the PouchDB bits of the test harness (which we use independently in testing our datasource grades)
+/* eslint-env node */
+"use strict";
 var fluid = require("infusion");
 
 require("gpii-pouchdb");

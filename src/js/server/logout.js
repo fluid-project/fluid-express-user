@@ -1,3 +1,4 @@
+/* eslint-env node */
 "use strict";
 var fluid  = require("infusion");
 var gpii   = fluid.registerNamespace("gpii");
@@ -30,4 +31,3 @@ fluid.defaults("gpii.express.user.logout", {
     path:          "/logout",
     method:        "get"
 });
-

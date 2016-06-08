@@ -10,6 +10,7 @@
 
   // TODO:  Evaluate moving this to its own package, perhaps combining with gpii-mail-test.
  */
+/* eslint-env node */
 "use strict";
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");

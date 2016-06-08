@@ -7,6 +7,7 @@
     the {{gpii-express-user}} API.  Otherwise, it will not be able to correctly decipher the session contents.
 
  */
+/* eslint-env node */
 "use strict";
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");

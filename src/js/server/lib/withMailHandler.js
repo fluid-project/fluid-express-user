@@ -24,6 +24,7 @@ Note that the mail output is sent using the mailer, and that you must have a `te
 per that documentation.
 
  */
+/* eslint-env node */
 "use strict";
 var fluid  = require("infusion");
 var gpii   = fluid.registerNamespace("gpii");

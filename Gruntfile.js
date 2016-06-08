@@ -1,24 +1,19 @@
+/* eslint-env node */
 "use strict";
 
 module.exports = function (grunt) {
-
     // TODO:  Set up separate checks for the couchapp content, with a different .jshintrc
     grunt.initConfig({
-        jshint: {
-            src: ["./src/**/*.js", "./tests/**/*.js"],
-            buildScripts: ["Gruntfile.js"],
-            options: {
-                jshintrc: true
-            }
+        eslint: {
+            src: ["./src/**/*.js", "./tests/**/*.js", "./*.js"]
         },
         jsonlint: {
             src: ["config/**/*.json", "test/**/*.json", "unifier/**/*.json", "email/**/*.json", "front-end/**/*.json", "import/**/*.json", "test/**/*.json"]
         }
     });
 
-    grunt.loadNpmTasks("grunt-contrib-jshint");
+    grunt.loadNpmTasks("grunt-eslint");
     grunt.loadNpmTasks("grunt-jsonlint");
-    grunt.loadNpmTasks("grunt-shell");
 
-    grunt.registerTask("lint", "Apply jshint and jsonlint", ["jshint", "jsonlint"]);
+    grunt.registerTask("lint", "Apply jshint and jsonlint", ["eslint", "jsonlint"]);
 };

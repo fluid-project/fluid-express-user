@@ -3,6 +3,7 @@
   Tests for the CouchDB data source used in this package.
 
  */
+/* eslint-env node */
 "use strict";
 var fluid  = require("infusion");
 fluid.logObjectRenderChars = 4096;

@@ -4,8 +4,8 @@
 // transformation rules found in `options.rules.read`.  We cannot directly extend the existing couch grade in Kettle
 // because it has a non-namespaced listener for `onRead`, which we cannot replace. The `gradeNames` and `listener` block
 // are copied from that grade.
-// 
-// To work with the value returned from CouchDB, you most likely will simply want to add another `onRead` listener with 
+//
+// To work with the value returned from CouchDB, you most likely will simply want to add another `onRead` listener with
 // a lower priority, as in:
 //
 // listeners: {
@@ -18,6 +18,7 @@
 //
 // For more information on priorities, see: http://docs.fluidproject.org/infusion/development/Priorities.html
 //
+/* eslint-env node */
 "use strict";
 var fluid  = require("infusion");
 var gpii   = fluid.registerNamespace("gpii");
@@ -26,7 +27,7 @@ require("kettle");
 
 fluid.registerNamespace("gpii.express.user.couchdb.read");
 
-// Replacement for a similar function in the default implementation in dataSource.js.  Adds support for rule-based 
+// Replacement for a similar function in the default implementation in dataSource.js.  Adds support for rule-based
 // decoding of couch response, which can work with lists, individual records, shows, whatever.
 gpii.express.user.couchdb.read.transformCouchResults = function (that, resp) {
     // if undefined, pass that through as per dataSource (just for consistency in FS-backed tests)
@@ -66,13 +67,11 @@ fluid.defaults("gpii.express.user.couchdb.read", {
     }
 });
 
-
-
 // A rewritten version of `kettle.dataSource.CouchDB.write` that decouples the read and write URLS (so that you can
-// read from a _view and write to a native Couch API.  The "read" URL is found at `options.urls.read`, and the "write" 
-// URL is set using `options.url.write`.   As this class  extends `kettle.dataSource.URL.writable`, `options.url` is 
+// read from a _view and write to a native Couch API.  The "read" URL is found at `options.urls.read`, and the "write"
+// URL is set using `options.url.write`.   As this class  extends `kettle.dataSource.URL.writable`, `options.url` is
 // set to the value of `options.url.write` by default.
-// 
+//
 // Also allows rewriting of all payloads and responses using transformation rules.
 
 fluid.registerNamespace("gpii.express.user.couchdb.writable");

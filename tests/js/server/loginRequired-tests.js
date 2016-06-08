@@ -3,6 +3,7 @@
     Tests for the `loginRequired` middleware.
 
  */
+/* eslint-env node */
 "use strict";
 var fluid = require("infusion");
 

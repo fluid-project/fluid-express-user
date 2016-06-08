@@ -1,6 +1,7 @@
 // Utility to examine a mail message and extract a code based on a regexp.  Used with both the password reset and
 // account creation tests.
 //
+/* eslint-env node */
 "use strict";
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");

@@ -1,4 +1,5 @@
 // Function to generate a user when testing the signup functionality on both the server and client side.
+/* eslint-env node */
 "use strict";
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
@@ -23,4 +24,3 @@ gpii.test.express.user.generatePassword = function (timestamp) {
 
     return "Password-" + timestamp;
 };
-

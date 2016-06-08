@@ -1,3 +1,4 @@
+/* eslint-env node */
 /*
 
   A router endpoint to allow resending of verification codes per [CTR-104](https://issues.gpii.net/browse/CTR-104).

@@ -1,5 +1,7 @@
 // The common test harness wired up as a `fluid.test.testEnvironment` instance.  You are expected to extend this and
 // supply a specific test case holder component.
+/* eslint-env node */
+"use strict";
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 

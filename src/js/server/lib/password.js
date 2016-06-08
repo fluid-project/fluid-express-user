@@ -8,6 +8,7 @@
     default digest is `sha1`.  Using any other digest function is not likely to be backward compatible.
 
  */
+/* eslint-env node */
 "use strict";
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");

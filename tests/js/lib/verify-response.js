@@ -3,6 +3,7 @@
     Static function to perform basic sanity checks on an HTTP response.
 
  */
+/* eslint-env node */
 "use strict";
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
@@ -14,7 +15,7 @@ gpii.test.express.user.verifyResponse = function (response, body, statusCode, tr
     if (!statusCode) { statusCode = 200; }
     gpii.test.express.helpers.isSaneResponse(response, body, statusCode);
 
-    var data = typeof body === "string" ? JSON.parse(body): body;
+    var data = typeof body === "string" ? JSON.parse(body) : body;
 
     if (truthy) {
         truthy.forEach(function (key) {

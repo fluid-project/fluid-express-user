@@ -3,7 +3,7 @@
   Test the login, logout, and "current user" APIs.
 
  */
-
+/* eslint-env node */
 "use strict";
 
 var fluid        = require("infusion");
@@ -36,7 +36,7 @@ gpii.tests.express.user.login.caseHolder.generatePassword = function () {
 gpii.tests.express.user.login.caseHolder.verifyResponse = function (response, body, statusCode, truthy, falsy, hasCurrentUser) {
     gpii.test.express.user.verifyResponse(response, body, statusCode, truthy, falsy);
 
-    var data = typeof body === "string" ? JSON.parse(body): body;
+    var data = typeof body === "string" ? JSON.parse(body) : body;
 
     if (hasCurrentUser) {
         jqUnit.assertEquals("The current user should be returned.", "existing", data.user.username);
