@@ -4,8 +4,7 @@
   "description": "A series of Fluid components to provide simple user management.",
   "main": "src/js/index.js",
   "scripts": {
-    "test": "node node_modules/istanbul/lib/cli.js cover tests/all-tests.js",
-    "postinstall": "node node_modules/bower/bin/bower install"
+    "test": "node node_modules/istanbul/lib/cli.js cover tests/all-tests.js"
   },
   "repository": {
     "type": "git",
@@ -20,7 +19,7 @@
   "dependencies": {
     "gpii-binder": "git://github.com/the-t-in-rtf/gpii-binder#f1ade44e0be4990a2400e54061a5557e634a13a8",
     "gpii-express": "git://github.com/the-t-in-rtf/gpii-express#52b1701d46868eeb3943d6d85bba09eba47938ce",
-    "gpii-handlebars": "git://github.com/the-t-in-rtf/gpii-handlebars.git#fd8fb10b0da55f48b7372434872e0e81c2c54c61",
+    "gpii-handlebars": "git://github.com/the-t-in-rtf/gpii-handlebars.git#055bda94ba41ae32824dd92185d83eae65e46d8a",
     "gpii-json-schema": "git://github.com/the-t-in-rtf/gpii-json-schema.git#6bb8085e362e5323af01ed60d0a8acbb5d1d8065",
     "infusion": "2.0.0-dev.20160519T222603Z.754d2c6",
     "kettle": "git://github.com/amb26/kettle.git#d808f3d5e326265aab9aaa1014703d75fa8ef0d0",
@@ -32,14 +31,17 @@
   "devDependencies": {
     "bower": "1.7.2",
     "cookie": "^0.2.0",
+    "foundation": "4.2.1-1",
     "gpii-mail-test": "git://github.com/the-t-in-rtf/gpii-mail-test.git#85d8f3e42ef5938a360859a6550c1534dc9ce337",
     "gpii-pouchdb": "git://github.com/the-t-in-rtf/gpii-pouchdb.git#716aead4128c3d81b732b4e2e230db0bc407b8b8",
     "gpii-test-browser": "git://github.com/the-t-in-rtf/gpii-test-browser#bb64399e45417baa18aa943b8e98ef6e0f50b321",
     "grunt": "1.0.1",
     "grunt-eslint": "18.1.0",
     "grunt-jsonlint": "1.0.4",
+    "handlebars": "4.0.5",
     "istanbul": "0.4.3",
     "mailparser": "^0.5.2",
-    "node-jqunit": "~1.1.3"
+    "node-jqunit": "~1.1.3",
+    "pagedown": "1.1.0"
   }
 }

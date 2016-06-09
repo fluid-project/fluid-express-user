@@ -103,20 +103,11 @@ fluid.defaults("gpii.test.express.user.harness", {
                             content:   "%gpii-express-user/node_modules"
                         }
                     },
-                    bc: {
-                        type:  "gpii.express.router.static",
-                        options: {
-                            namespace: "bc",
-                            priority:  "after:modules",
-                            path:      "/bc",
-                            content:   "%gpii-express-user/bower_components"
-                        }
-                    },
                     inline: {
                         type: "gpii.handlebars.inlineTemplateBundlingMiddleware",
                         options: {
                             namespace:    "inline",
-                            priority:     "after:bc",
+                            priority:     "after:modules",
                             path:         "/hbs",
                             templateDirs: "{gpii.test.express.user.harness}.options.templateDirs"
                         }
