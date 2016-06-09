@@ -20,7 +20,7 @@
     "gpii-binder": "git://github.com/the-t-in-rtf/gpii-binder#f1ade44e0be4990a2400e54061a5557e634a13a8",
     "gpii-express": "git://github.com/the-t-in-rtf/gpii-express#52b1701d46868eeb3943d6d85bba09eba47938ce",
     "gpii-handlebars": "git://github.com/the-t-in-rtf/gpii-handlebars.git#c66207050ba764cbdbce401db725d2932c8fcbce",
-    "gpii-json-schema": "git://github.com/the-t-in-rtf/gpii-json-schema.git#5176e40387d4998e9e30873c570aa9d7310a34a8",
+    "gpii-json-schema": "git://github.com/the-t-in-rtf/gpii-json-schema.git#b4fb0746633683eb3c8fd6ea0719ee4c1bcd52f5",
     "infusion": "2.0.0-dev.20160519T222603Z.754d2c6",
     "kettle": "git://github.com/amb26/kettle.git#d808f3d5e326265aab9aaa1014703d75fa8ef0d0",
     "marked": "^0.3.5",
