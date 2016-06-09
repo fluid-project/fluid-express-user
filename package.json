@@ -5,7 +5,7 @@
   "main": "src/js/index.js",
   "scripts": {
     "test": "node node_modules/istanbul/lib/cli.js cover tests/all-tests.js",
-    "postinstall": "bower install"
+    "postinstall": "node_modules/bower/bin/bower install"
   },
   "repository": {
     "type": "git",
@@ -30,7 +30,8 @@
     "request": "^2.63.0"
   },
   "devDependencies": {
-    "cookie":     "^0.2.0",
+    "bower": "1.7.2",
+    "cookie": "^0.2.0",
     "gpii-mail-test": "git://github.com/the-t-in-rtf/gpii-mail-test.git#85d8f3e42ef5938a360859a6550c1534dc9ce337",
     "gpii-pouchdb": "git://github.com/the-t-in-rtf/gpii-pouchdb.git#716aead4128c3d81b732b4e2e230db0bc407b8b8",
     "gpii-test-browser": "git://github.com/the-t-in-rtf/gpii-test-browser#bb64399e45417baa18aa943b8e98ef6e0f50b321",
