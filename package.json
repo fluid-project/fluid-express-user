@@ -5,7 +5,7 @@
   "main": "src/js/index.js",
   "scripts": {
     "test": "node node_modules/istanbul/lib/cli.js cover tests/all-tests.js",
-    "postinstall": "bower install"
+    "postinstall": "node node_modules/bower/bin/bower install"
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,7 @@
   "dependencies": {
     "gpii-binder": "git://github.com/the-t-in-rtf/gpii-binder#f1ade44e0be4990a2400e54061a5557e634a13a8",
     "gpii-express": "git://github.com/the-t-in-rtf/gpii-express#52b1701d46868eeb3943d6d85bba09eba47938ce",
-    "gpii-handlebars": "git://github.com/the-t-in-rtf/gpii-handlebars.git#00cb7eae8607d11234dd34cd4c6e44e91d2be9ec",
+    "gpii-handlebars": "git://github.com/the-t-in-rtf/gpii-handlebars.git#fd8fb10b0da55f48b7372434872e0e81c2c54c61",
     "gpii-json-schema": "git://github.com/the-t-in-rtf/gpii-json-schema.git#6bb8085e362e5323af01ed60d0a8acbb5d1d8065",
     "infusion": "2.0.0-dev.20160519T222603Z.754d2c6",
     "kettle": "git://github.com/amb26/kettle.git#d808f3d5e326265aab9aaa1014703d75fa8ef0d0",
