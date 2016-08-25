@@ -12,7 +12,7 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.loadNpmTasks("grunt-eslint");
+    grunt.loadNpmTasks("fluid-grunt-eslint");
     grunt.loadNpmTasks("grunt-jsonlint");
 
     grunt.registerTask("lint", "Apply jshint and jsonlint", ["eslint", "jsonlint"]);
