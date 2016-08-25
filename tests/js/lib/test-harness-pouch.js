@@ -20,7 +20,7 @@ fluid.defaults("gpii.test.express.user.pouch", {
     },
     components: {
         pouch: {
-            type: "gpii.pouch",
+            type: "gpii.pouch.express",
             options: {
                 path: "/",
                 databases: {
