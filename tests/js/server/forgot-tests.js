@@ -39,7 +39,7 @@ gpii.tests.express.user.reset.caseHolder.extractResetCode = function (testEnviro
 
 // Each test has a request instance of `kettle.test.request.http` or `kettle.test.request.httpCookie`, and a test module that wires the request to the listener that handles its results.
 fluid.defaults("gpii.tests.express.user.reset.caseHolder", {
-    gradeNames: ["gpii.test.express.user.caseHolder"],
+    gradeNames: ["gpii.test.webdriver.caseHolder"],
     testUser: {
         username: "existing",
         email:    "existing@localhost",
@@ -121,7 +121,7 @@ fluid.defaults("gpii.tests.express.user.reset.caseHolder", {
                         //},
                         {
                             listener: "gpii.tests.express.user.reset.caseHolder.fullResetVerifyEmail",
-                            event:    "{testEnvironment}.harness.smtp.mailServer.events.onMessageReceived",
+                            event:    "{testEnvironment}.smtp.mailServer.events.onMessageReceived",
                             args:     ["{fullResetVerifyResetRequest}", "{testEnvironment}"]
                         },
                         {
@@ -171,7 +171,7 @@ gpii.tests.express.user.reset.caseHolder.verifyResponse = function (response, bo
 
 // Listen for the email with the verification code and launch the verification request
 gpii.tests.express.user.reset.caseHolder.fullResetVerifyEmail = function (resetRequest, testEnvironment) {
-    var content = fs.readFileSync(testEnvironment.harness.smtp.mailServer.currentMessageFile);
+    var content = fs.readFileSync(testEnvironment.smtp.mailServer.currentMessageFile);
 
     var MailParser = require("mailparser").MailParser,
         mailparser = new MailParser({ debug: false });
@@ -198,9 +198,9 @@ gpii.tests.express.user.reset.caseHolder.fullResetVerifyEmail = function (resetR
 
 fluid.defaults("gpii.tests.express.user.reset.environment", {
     gradeNames: ["gpii.test.express.user.environment"],
-    apiPort:   8779,
-    pouchPort: 8765,
-    mailPort:  8825,
+    port:       8779,
+    pouchPort:  8765,
+    mailPort:   8825,
     components: {
         caseHolder: {
             type: "gpii.tests.express.user.reset.caseHolder"

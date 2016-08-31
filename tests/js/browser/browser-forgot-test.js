@@ -7,11 +7,11 @@ var gpii       = fluid.registerNamespace("gpii");
 
 require("../lib/");
 
-require("gpii-test-browser");
-gpii.test.browser.loadTestingSupport();
+require("gpii-webdriver");
+gpii.webdriver.loadTestingSupport();
 
 fluid.defaults("gpii.tests.express.user.forgot.client.caseHolder", {
-    gradeNames: ["gpii.test.express.user.caseHolder.withBrowser"],
+    gradeNames: ["gpii.test.webdriver.caseHolder"],
     rawModules: [
         {
             name: "Testing password reset functions with a test browser...",
@@ -21,79 +21,54 @@ fluid.defaults("gpii.tests.express.user.forgot.client.caseHolder", {
                     type: "test",
                     sequence: [
                         {
-                            func: "{testEnvironment}.browser.goto",
+                            func: "{testEnvironment}.webdriver.get",
                             args: ["{testEnvironment}.options.forgotUrl"]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onLoaded",
-                            listener: "{testEnvironment}.browser.wait",
-                            args:     ["{testEnvironment}.options.waitAfterLoad"]
+                            event:    "{testEnvironment}.webdriver.events.onGetComplete",
+                            listener: "{testEnvironment}.webdriver.wait",
+                            args:     [gpii.webdriver.until.elementLocated({ css: ".forgot-form"})]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onWaitComplete",
-                            listener: "{testEnvironment}.browser.type",
-                            args:     ["[name='email']", "existing@localhost"]
+                            event:    "{testEnvironment}.webdriver.events.onWaitComplete",
+                            listener: "{testEnvironment}.webdriver.actionsHelper",
+                            args:     [[{fn: "sendKeys", args: [gpii.webdriver.Key.TAB, "existing@localhost", gpii.webdriver.Key.TAB, gpii.webdriver.Key.ENTER]}]]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onTypeComplete",
-                            listener: "{testEnvironment}.browser.click",
-                            args:     [".forgot-button"]
-                        },
-                        {
+                            event:    "{testEnvironment}.smtp.events.onMessageReceived",
                             listener: "gpii.test.express.user.client.continueFromEmail",
-                            event:    "{testEnvironment}.harness.smtp.events.onMessageReceived",
                             args:     ["{testEnvironment}", "{testEnvironment}.options.resetPattern"]
                         },
                         // The function above will cause the browser to `goto` our custom "reset" URL.
                         // We wait for this to load, and fill in the form.
                         {
-                            event:    "{testEnvironment}.browser.events.onLoaded",
-                            listener: "{testEnvironment}.browser.wait",
-                            args:     ["{testEnvironment}.options.waitAfterLoad"]
+                            event:    "{testEnvironment}.webdriver.events.onGetComplete",
+                            listener: "{testEnvironment}.webdriver.wait",
+                            args:     [gpii.webdriver.until.elementLocated({ css: ".reset-form"})]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onWaitComplete",
-                            listener: "{testEnvironment}.browser.type",
-                            args:     ["[name='password']", "NewPass12345!"]
+                            event:    "{testEnvironment}.webdriver.events.onWaitComplete",
+                            listener: "{testEnvironment}.webdriver.actionsHelper",
+                            args:     [[{fn: "sendKeys", args: [gpii.webdriver.Key.TAB, "NewPass12345!", gpii.webdriver.Key.TAB, "DifferentPass12345!", gpii.webdriver.Key.ENTER]}]]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onTypeComplete",
-                            listener: "{testEnvironment}.browser.type",
-                            args:     ["[name='confirm']", "NewPass54321!"]
+                            event:    "{testEnvironment}.webdriver.events.onActionsHelperComplete",
+                            listener: "{testEnvironment}.webdriver.findElement",
+                            args:     [{ css: ".fieldError"}]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onTypeComplete",
-                            listener: "{testEnvironment}.browser.wait",
-                            args:     ["{testEnvironment}.options.waitTimeout"]
+                            event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
+                            listener: "gpii.test.webdriver.inspectElement",
+                            args:     ["A reset failure message should now be displayed...", "{arguments}.0", "getText", "The 'confirm' field must match the 'password' field."] // message, element, elementFn, expectedValue, jqUnitFn
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onWaitComplete",
-                            listener: "{testEnvironment}.browser.click",
-                            args:     [".reset-button"]
+                            func: "{testEnvironment}.webdriver.findElement",
+                            args: [{ css: ".reset-success"}]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onClickComplete",
-                            listener: "{testEnvironment}.browser.wait",
-                            args:     ["{testEnvironment}.options.ajaxWait"]
-                        },
-                        {
-                            event:    "{testEnvironment}.browser.events.onWaitComplete",
-                            listener: "{testEnvironment}.browser.evaluate",
-                            args:     [gpii.test.browser.elementMatches, ".fieldError", "The 'confirm' field must match the 'password' field."]
-                        },
-                        {
-                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
-                            listener: "jqUnit.assertTrue",
-                            args:     ["A reset failure message should now be displayed...", "{arguments}.0"]
-                        },
-                        {
-                            func: "{testEnvironment}.browser.evaluate",
-                            args: [gpii.test.browser.lookupFunction, ".reset-success", "innerHTML"]
-                        },
-                        {
-                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
-                            listener: "jqUnit.assertNull",
-                            args:     ["A reset success message should not be displayed...", "{arguments}.0"]
+                            event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
+                            listener: "gpii.test.webdriver.inspectElement",
+                            args:     ["A reset success message should not be displayed...", "{arguments}.0", "getText", ""] // message, element, elementFn, expectedValue, jqUnitFn
                         }
                     ]
                 },
@@ -102,52 +77,43 @@ fluid.defaults("gpii.tests.express.user.forgot.client.caseHolder", {
                     type: "test",
                     sequence: [
                         {
-                            func: "{testEnvironment}.browser.goto",
+                            func: "{testEnvironment}.webdriver.get",
                             args: ["{testEnvironment}.options.forgotUrl"]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onLoaded",
-                            listener: "{testEnvironment}.browser.wait",
-                            args:     ["{testEnvironment}.options.waitAfterLoad"]
+                            event:    "{testEnvironment}.webdriver.events.onGetComplete",
+                            listener: "{testEnvironment}.webdriver.wait",
+                            args:     [gpii.webdriver.until.elementLocated({ css: ".forgot-form"})]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onWaitComplete",
-                            listener: "{testEnvironment}.browser.type",
-                            args:     ["[name='email']", "nowhere.man@localhost"]
+                            event:    "{testEnvironment}.webdriver.events.onWaitComplete",
+                            listener: "{testEnvironment}.webdriver.actionsHelper",
+                            args:     [[{fn: "sendKeys", args: [gpii.webdriver.Key.TAB, "nowhere.man@localhost", gpii.webdriver.Key.TAB, gpii.webdriver.Key.ENTER]}]]
+                        },
+                        // The error message is displayed just slowly enough that we will miss it if we try to find it immediately.
+                        {
+                            event:    "{testEnvironment}.webdriver.events.onActionsHelperComplete",
+                            listener: "{testEnvironment}.webdriver.wait",
+                            args:     [gpii.webdriver.until.elementLocated({ css: ".forgot-error .alert"})]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onTypeComplete",
-                            listener: "{testEnvironment}.browser.wait",
-                            args:     ["{testEnvironment}.options.waitTimeout"]
+                            event:    "{testEnvironment}.webdriver.events.onWaitComplete",
+                            listener: "{testEnvironment}.webdriver.findElement",
+                            args:     [{ css: ".forgot-error .alert"}]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onWaitComplete",
-                            listener: "{testEnvironment}.browser.click",
-                            args:     [".forgot-button"]
+                            event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
+                            listener: "gpii.test.webdriver.inspectElement",
+                            args:     ["A reset failure message should now be displayed...", "{arguments}.0", "getText", "No matching user found."] // message, element, elementFn, expectedValue, jqUnitFn
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onClickComplete",
-                            listener: "{testEnvironment}.browser.wait",
-                            args:     ["{testEnvironment}.options.ajaxWait"]
+                            func: "{testEnvironment}.webdriver.findElement",
+                            args: [{ css: ".forgot-success"}]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onWaitComplete",
-                            listener: "{testEnvironment}.browser.evaluate",
-                            args:     [gpii.test.browser.elementMatches, ".forgot-error .alert", "No matching user found."]
-                        },
-                        {
-                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
-                            listener: "jqUnit.assertTrue",
-                            args:     ["A failure message should now be displayed...", "{arguments}.0"]
-                        },
-                        {
-                            func: "{testEnvironment}.browser.evaluate",
-                            args: [gpii.test.browser.lookupFunction, ".forgot-success", "innerHTML"]
-                        },
-                        {
-                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
-                            listener: "jqUnit.assertNull",
-                            args:     ["A success message should not be displayed...", "{arguments}.0"]
+                            event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
+                            listener: "gpii.test.webdriver.inspectElement",
+                            args:     ["A success message should not be displayed...", "{arguments}.0", "getText", ""] // message, element, elementFn, expectedValue, jqUnitFn
                         }
                     ]
                 },
@@ -156,57 +122,41 @@ fluid.defaults("gpii.tests.express.user.forgot.client.caseHolder", {
                     type: "test",
                     sequence: [
                         {
-                            func: "{testEnvironment}.browser.goto",
+                            func: "{testEnvironment}.webdriver.get",
                             args: ["{testEnvironment}.options.bogusResetUrl"]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onLoaded",
-                            listener: "{testEnvironment}.browser.wait",
-                            args:     ["{testEnvironment}.options.waitAfterLoad"]
+                            event:    "{testEnvironment}.webdriver.events.onGetComplete",
+                            listener: "{testEnvironment}.webdriver.wait",
+                            args:     [gpii.webdriver.until.elementLocated({ css: ".reset-form"})]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onWaitComplete",
-                            listener: "{testEnvironment}.browser.type",
-                            args:     ["[name='password']", "Password1!"]
+                            event:    "{testEnvironment}.webdriver.events.onWaitComplete",
+                            listener: "{testEnvironment}.webdriver.actionsHelper",
+                            args:     [[{fn: "sendKeys", args: [gpii.webdriver.Key.TAB, "Password1!", gpii.webdriver.Key.TAB, "Password1!", gpii.webdriver.Key.ENTER]}]]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onTypeComplete",
-                            listener: "{testEnvironment}.browser.type",
-                            args:     ["[name='confirm']", "Password1!"]
+                            event:    "{testEnvironment}.webdriver.events.onActionsHelperComplete",
+                            listener: "{testEnvironment}.webdriver.wait",
+                            args:     [gpii.webdriver.until.elementLocated({ css: ".reset-error .alert"})]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onTypeComplete",
-                            listener: "{testEnvironment}.browser.wait",
-                            args:     ["{testEnvironment}.options.waitTimeout"]
+                            func: "{testEnvironment}.webdriver.findElement",
+                            args: [{ css: ".reset-error .alert"}]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onWaitComplete",
-                            listener: "{testEnvironment}.browser.click",
-                            args:     [".reset-button"]
+                            event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
+                            listener: "gpii.test.webdriver.inspectElement",
+                            args:     ["A failure message should be displayed...", "{arguments}.0", "getText", "You must provide a valid reset code to use this interface."] // message, element, elementFn, expectedValue, jqUnitFn
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onClickComplete",
-                            listener: "{testEnvironment}.browser.wait",
-                            args:     ["{testEnvironment}.options.ajaxWait"]
+                            func: "{testEnvironment}.webdriver.findElement",
+                            args: [{ css: ".reset-success"}]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onWaitComplete",
-                            listener: "{testEnvironment}.browser.evaluate",
-                            args:     [gpii.test.browser.elementMatches, ".reset-error .alert", "You must provide a valid reset code to use this interface."]
-                        },
-                        {
-                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
-                            listener: "jqUnit.assertTrue",
-                            args:     ["A failure message should now be displayed...", "{arguments}.0"]
-                        },
-                        {
-                            func: "{testEnvironment}.browser.evaluate",
-                            args: [gpii.test.browser.lookupFunction, ".reset-success", "innerHTML"]
-                        },
-                        {
-                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
-                            listener: "jqUnit.assertNull",
-                            args:     ["A success message should not be displayed...", "{arguments}.0"]
+                            event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
+                            listener: "gpii.test.webdriver.inspectElement",
+                            args:     ["A success message should not be displayed...", "{arguments}.0", "getText", ""] // message, element, elementFn, expectedValue, jqUnitFn
                         }
                     ]
                 },
@@ -215,133 +165,97 @@ fluid.defaults("gpii.tests.express.user.forgot.client.caseHolder", {
                     type: "test",
                     sequence: [
                         {
-                            func: "{testEnvironment}.browser.goto",
+                            func: "{testEnvironment}.webdriver.get",
                             args: ["{testEnvironment}.options.forgotUrl"]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onLoaded",
-                            listener: "{testEnvironment}.browser.wait",
-                            args:     ["{testEnvironment}.options.waitAfterLoad"]
+                            event:    "{testEnvironment}.webdriver.events.onGetComplete",
+                            listener: "{testEnvironment}.webdriver.wait",
+                            args:     [gpii.webdriver.until.elementLocated({ css: ".forgot-form"})]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onWaitComplete",
-                            listener: "{testEnvironment}.browser.type",
-                            args:     ["[name='email']", "existing@localhost"]
-                        },
-                        {
-                            event:    "{testEnvironment}.browser.events.onTypeComplete",
-                            listener: "{testEnvironment}.browser.click",
-                            args:     [".forgot-button"]
+                            event:    "{testEnvironment}.webdriver.events.onWaitComplete",
+                            listener: "{testEnvironment}.webdriver.actionsHelper",
+                            args:     [[{fn: "sendKeys", args: [gpii.webdriver.Key.TAB, "existing@localhost", gpii.webdriver.Key.ENTER]}]]
                         },
                         {
                             listener: "gpii.test.express.user.client.continueFromEmail",
-                            event:    "{testEnvironment}.harness.smtp.events.onMessageReceived",
+                            event:    "{testEnvironment}.smtp.events.onMessageReceived",
                             args:     ["{testEnvironment}", "{testEnvironment}.options.resetPattern"]
                         },
                         // The function above will cause the browser to `goto` our custom "reset" URL.
                         // We wait for this to load, and fill in the form.
                         {
-                            event:    "{testEnvironment}.browser.events.onLoaded",
-                            listener: "{testEnvironment}.browser.wait",
-                            args:     ["{testEnvironment}.options.waitAfterLoad"]
+                            event:    "{testEnvironment}.webdriver.events.onGetComplete",
+                            listener: "{testEnvironment}.webdriver.wait",
+                            args:     [gpii.webdriver.until.elementLocated({ css: ".reset-form"})]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onWaitComplete",
-                            listener: "{testEnvironment}.browser.type",
-                            args:     ["[name='password']", "NewPass12345!"]
+                            event:    "{testEnvironment}.webdriver.events.onWaitComplete",
+                            listener: "{testEnvironment}.webdriver.actionsHelper",
+                            args:     [[{fn: "sendKeys", args: [gpii.webdriver.Key.TAB, "NewPass12345!", gpii.webdriver.Key.TAB, "NewPass12345!", gpii.webdriver.Key.ENTER]}]]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onTypeComplete",
-                            listener: "{testEnvironment}.browser.type",
-                            args:     ["[name='confirm']", "NewPass12345!"]
+                            event:    "{testEnvironment}.webdriver.events.onActionsHelperComplete",
+                            listener: "{testEnvironment}.webdriver.wait",
+                            args:     [gpii.webdriver.until.elementLocated({ css: ".reset-success .success"})]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onTypeComplete",
-                            listener: "{testEnvironment}.browser.wait",
-                            args:     ["{testEnvironment}.options.waitTimeout"]
+                            event:    "{testEnvironment}.webdriver.events.onWaitComplete",
+                            listener: "{testEnvironment}.webdriver.findElement",
+                            args:     [{ css: ".reset-success .success"}]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onWaitComplete",
-                            listener: "{testEnvironment}.browser.click",
-                            args:     [".reset-button"]
+                            event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
+                            listener: "gpii.test.webdriver.inspectElement",
+                            args:     ["A reset success message should now be displayed...", "{arguments}.0", "getText", "Your password has been reset."] // message, element, elementFn, expectedValue, jqUnitFn
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onClickComplete",
-                            listener: "{testEnvironment}.browser.wait",
-                            args:     ["{testEnvironment}.options.ajaxWait"]
+                            func: "{testEnvironment}.webdriver.findElement",
+                            args: [{ css: ".reset-error"}]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onWaitComplete",
-                            listener: "{testEnvironment}.browser.evaluate",
-                            args:     [gpii.test.browser.elementMatches, ".reset-success", "Your password has been reset."]
-                        },
-                        {
-                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
-                            listener: "jqUnit.assertTrue",
-                            args:     ["A reset success message should now be displayed...", "{arguments}.0"]
-                        },
-                        {
-                            func: "{testEnvironment}.browser.evaluate",
-                            args: [gpii.test.browser.lookupFunction, ".reset-failure", "innerHTML"]
-                        },
-                        {
-                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
-                            listener: "jqUnit.assertNull",
-                            args:     ["A reset failure message should not be displayed...", "{arguments}.0"]
+                            event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
+                            listener: "gpii.test.webdriver.inspectElement",
+                            args:     ["A reset failure message should not be displayed...", "{arguments}.0", "getText", ""] // message, element, elementFn, expectedValue, jqUnitFn
                         },
                         // Now, confirm that our password has actually been reset by using it to log in.
                         {
-                            func: "{testEnvironment}.browser.goto",
+                            func: "{testEnvironment}.webdriver.get",
                             args: ["{testEnvironment}.options.loginUrl"]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onLoaded",
-                            listener: "{testEnvironment}.browser.wait",
-                            args:     ["{testEnvironment}.options.waitAfterLoad"]
+                            event:    "{testEnvironment}.webdriver.events.onGetComplete",
+                            listener: "{testEnvironment}.webdriver.wait",
+                            args:     [gpii.webdriver.until.elementLocated({ css: ".login-form"})]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onWaitComplete",
-                            listener: "{testEnvironment}.browser.type",
-                            args:     ["[name='username']", "existing@localhost"]
+                            event:    "{testEnvironment}.webdriver.events.onWaitComplete",
+                            listener: "{testEnvironment}.webdriver.actionsHelper",
+                            args:     [[{fn: "sendKeys", args: [gpii.webdriver.Key.TAB, "existing", gpii.webdriver.Key.TAB, "NewPass12345!", gpii.webdriver.Key.ENTER]}]]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onTypeComplete",
-                            listener: "{testEnvironment}.browser.type",
-                            args:     ["[name='password']", "NewPass12345!"]
+                            event:    "{testEnvironment}.webdriver.events.onActionsHelperComplete",
+                            listener: "{testEnvironment}.webdriver.wait",
+                            args:     [gpii.webdriver.until.elementLocated({ css: ".login-success .success"})]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onTypeComplete",
-                            listener: "{testEnvironment}.browser.wait",
-                            args:     ["{testEnvironment}.options.waitTimeout"]
+                            func: "{testEnvironment}.webdriver.findElement",
+                            args: [{ css: ".login-success .success"}]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onWaitComplete",
-                            listener: "{testEnvironment}.browser.click",
-                            args:     [".login-button"]
+                            event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
+                            listener: "gpii.test.webdriver.inspectElement",
+                            args:     ["A login success message should now be displayed...", "{arguments}.0", "getText", "You have successfully logged in."] // message, element, elementFn, expectedValue, jqUnitFn
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onClickComplete",
-                            listener: "{testEnvironment}.browser.wait",
-                            args:     ["{testEnvironment}.options.ajaxWait"]
+                            func: "{testEnvironment}.webdriver.findElement",
+                            args: [{ css: ".login-error"}]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onWaitComplete",
-                            listener: "{testEnvironment}.browser.evaluate",
-                            args:     [gpii.test.browser.elementMatches, ".login-success", "You have successfully logged in."]
-                        },
-                        {
-                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
-                            listener: "jqUnit.assertTrue",
-                            args:     ["A login success message should now be displayed...", "{arguments}.0"]
-                        },
-                        {
-                            func: "{testEnvironment}.browser.evaluate",
-                            args: [gpii.test.browser.lookupFunction, ".login-failure", "innerHTML"]
-                        },
-                        {
-                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
-                            listener: "jqUnit.assertNull",
-                            args:     ["A login failure message should not be displayed...", "{arguments}.0"]
+                            event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
+                            listener: "gpii.test.webdriver.inspectElement",
+                            args:     ["A login failure message should not be displayed...", "{arguments}.0", "getText", ""] // message, element, elementFn, expectedValue, jqUnitFn
                         }
                     ]
                 }
@@ -352,28 +266,26 @@ fluid.defaults("gpii.tests.express.user.forgot.client.caseHolder", {
 
 fluid.defaults("gpii.tests.express.user.forgot.client.environment", {
     gradeNames: ["gpii.test.express.user.environment.withBrowser"],
-    apiPort:   7533,
+    resetPattern: "(http.+reset/[a-z0-9-]+)",
+    port: 7533,
     pouchPort: 7534,
     mailPort:  4082,
-    ajaxWait:  1500, // The standard time we give our AJAX calls to complete
-    waitAfterLoad: 1500, // How long to wait for the page to render
-    resetPattern: "(http.+reset/[a-z0-9-]+)",
     forgotUrl: {
         expander: {
             funcName: "fluid.stringTemplate",
-            args: ["%baseUrl%path", { baseUrl: "{testEnvironment}.options.baseUrl", path: "forgot"}]
+            args: ["%baseUrl%path", { baseUrl: "{testEnvironment}.options.baseUrl", path: "api/user/forgot"}]
         }
     },
     loginUrl: {
         expander: {
             funcName: "fluid.stringTemplate",
-            args: ["%baseUrl%path", { baseUrl: "{testEnvironment}.options.baseUrl", path: "login"}]
+            args: ["%baseUrl%path", { baseUrl: "{testEnvironment}.options.baseUrl", path: "api/user/login"}]
         }
     },
     bogusResetUrl: {
         expander: {
             funcName: "fluid.stringTemplate",
-            args: ["%baseUrl%path", { baseUrl: "{testEnvironment}.options.baseUrl", path: "reset/foobar"}]
+            args: ["%baseUrl%path", { baseUrl: "{testEnvironment}.options.baseUrl", path: "api/user/reset/foobar"}]
         }
     },
     components: {
@@ -383,4 +295,4 @@ fluid.defaults("gpii.tests.express.user.forgot.client.environment", {
     }
 });
 
-fluid.test.runTests("gpii.tests.express.user.forgot.client.environment");
+gpii.test.webdriver.allBrowsers({ baseTestEnvironment: "gpii.tests.express.user.forgot.client.environment"});

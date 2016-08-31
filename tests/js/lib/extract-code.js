@@ -12,7 +12,7 @@ var MailParser = require("mailparser").MailParser;
 fluid.registerNamespace("gpii.test.express.user");
 
 gpii.test.express.user.extractCode = function (testEnvironment, pattern) {
-    var content = fs.readFileSync(testEnvironment.harness.smtp.mailServer.currentMessageFile, "utf8");
+    var content = fs.readFileSync(testEnvironment.smtp.mailServer.currentMessageFile, "utf8");
 
     var promise = fluid.promise();
 

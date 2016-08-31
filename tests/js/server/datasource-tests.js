@@ -11,12 +11,6 @@ fluid.logObjectRenderChars = 4096;
 var gpii   = fluid.registerNamespace("gpii");
 var jqUnit = require("node-jqunit");
 
-var express = require("gpii-express");
-express.loadTestingSupport();
-
-var kettle = require("kettle");
-kettle.loadTestingSupport();
-
 require("../lib/");
 
 require("../../../src/js/server/lib/datasource");
@@ -66,7 +60,7 @@ fluid.defaults("gpii.express.user.datasource.tests.writable", {
 });
 
 fluid.defaults("gpii.express.users.datasource.tests.caseHolder", {
-    gradeNames: ["gpii.test.express.caseHolder"],
+    gradeNames: ["gpii.test.webdriver.caseHolder"],
     expected: {
         sample: {
             "username": "sample",
@@ -228,24 +222,9 @@ fluid.defaults("gpii.express.users.datasource.tests.caseHolder", {
 });
 
 fluid.defaults("gpii.express.user.datasource.tests", {
-    gradeNames: ["fluid.test.testEnvironment"],
+    gradeNames: ["gpii.test.express.user.environment"],
     pouchPort: "3579",
-    events: {
-        constructFixtures: null,
-        onFixturesConstructed: null
-    },
     components: {
-        pouch: {
-            type:          "gpii.test.express.user.pouch",
-            createOnEvent: "constructFixtures",
-            options: {
-                listeners: {
-                    "onAllStarted.notifyParent": {
-                        func: "{testEnvironment}.events.onFixturesConstructed.fire"
-                    }
-                }
-            }
-        },
         testCaseHolder: {
             type: "gpii.express.users.datasource.tests.caseHolder"
         }

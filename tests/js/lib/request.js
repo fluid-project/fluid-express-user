@@ -9,5 +9,5 @@ fluid.defaults("gpii.test.express.user.request", {
     headers: {
         accept: "application/json"
     },
-    port: "{testEnvironment}.options.apiPort"
+    port: "{testEnvironment}.options.port"
 });

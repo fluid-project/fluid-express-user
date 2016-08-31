@@ -66,7 +66,7 @@ gpii.tests.express.user.signup.caseHolder.extractVerificationCode = function (te
 
 // Each test has a request instance of `kettle.test.request.http` or `kettle.test.request.httpCookie`, and a test module that wires the request to the listener that handles its results.
 fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
-    gradeNames: ["gpii.test.express.user.caseHolder"],
+    gradeNames: ["gpii.test.webdriver.caseHolder"],
     components: {
         cookieJar: {
             type: "kettle.test.cookieJar"
@@ -128,7 +128,7 @@ fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
         fullSignupVerifyVerificationRequest: {
             type: "kettle.test.request.httpCookie",
             options: {
-                port: "{testEnvironment}.options.apiPort",
+                port: "{testEnvironment}.options.port",
                 method: "GET"
             }
         },
@@ -199,7 +199,7 @@ fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
                         },
                         {
                             listener: "gpii.tests.express.user.signup.caseHolder.checkEnvironmentForVerificationCode",
-                            event:    "{testEnvironment}.harness.smtp.mailServer.events.onMessageReceived",
+                            event:    "{testEnvironment}.smtp.mailServer.events.onMessageReceived",
                             args:     ["{testEnvironment}"]
                         },
                         {
@@ -249,7 +249,7 @@ fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
                         },
                         {
                             listener: "gpii.tests.express.user.signup.caseHolder.fullSignupVerifyEmail",
-                            event:    "{testEnvironment}.harness.smtp.events.onMessageReceived",
+                            event:    "{testEnvironment}.smtp.events.onMessageReceived",
                             args:     ["{fullSignupInitialRequest}", "{fullSignupVerifyVerificationRequest}", "{testEnvironment}"]
                         },
                         {
@@ -281,12 +281,14 @@ fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
 
 fluid.defaults("gpii.tests.express.user.signup.environment", {
     gradeNames: ["gpii.test.express.user.environment"],
-    apiPort:   8778,
-    pouchPort: 8764,
-    mailPort:  8725,
+    port:       8778,
+    pouchPort:  8764,
+    mailPort:   8725,
     components: {
         caseHolder: {
             type: "gpii.tests.express.user.signup.caseHolder"
         }
     }
 });
+
+fluid.test.runTests("gpii.tests.express.user.signup.environment");

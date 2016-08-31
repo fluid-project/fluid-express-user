@@ -45,7 +45,7 @@ gpii.tests.express.user.login.caseHolder.verifyResponse = function (response, bo
 
 // Each test has a request instance of `kettle.test.request.http` or `kettle.test.request.httpCookie`, and a test module that wires the request to the listener that handles its results.
 fluid.defaults("gpii.tests.express.user.login.caseHolder", {
-    gradeNames: ["gpii.test.express.user.caseHolder"],
+    gradeNames: ["gpii.test.webdriver.caseHolder"],
     components: {
         cookieJar: {
             type: "kettle.test.cookieJar"
@@ -173,9 +173,9 @@ fluid.defaults("gpii.tests.express.user.login.caseHolder", {
 
 fluid.defaults("gpii.tests.express.user.login.environment", {
     gradeNames: ["gpii.test.express.user.environment"],
-    apiPort:   8778,
-    pouchPort: 8764,
-    mailPort:  8725,
+    port:       8778,
+    pouchPort:  8764,
+    mailPort:   8725,
     components: {
         caseHolder: {
             type: "gpii.tests.express.user.login.caseHolder"

@@ -30,7 +30,7 @@ gpii.test.express.user.client.continueFromEmail = function (environment, urlPatt
 
         if (matches) {
             var destinationUrl = matches[1];
-            environment.browser["goto"](destinationUrl);
+            environment.webdriver.get(destinationUrl);
         }
         else {
             fluid.fail("Could not extract URL from email...");
@@ -38,7 +38,7 @@ gpii.test.express.user.client.continueFromEmail = function (environment, urlPatt
     });
 
     // send the email source to the parser.
-    var mailFileContents = fs.readFileSync(environment.harness.smtp.mailServer.currentMessageFile, "utf8");
+    var mailFileContents = fs.readFileSync(environment.smtp.mailServer.currentMessageFile, "utf8");
     mailparser.write(mailFileContents);
     mailparser.end();
 };

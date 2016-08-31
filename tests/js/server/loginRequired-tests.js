@@ -16,7 +16,7 @@ fluid.defaults("gpii.express.user.loginRequired.request", {
 });
 
 fluid.defaults("gpii.tests.express.user.loginRequired.caseHolder", {
-    gradeNames: ["gpii.test.express.user.caseHolder"],
+    gradeNames: ["gpii.test.webdriver.caseHolder"],
     components: {
         cookieJar: {
             type: "kettle.test.cookieJar"
@@ -83,7 +83,7 @@ fluid.defaults("gpii.tests.express.user.loginRequired.caseHolder", {
 
 fluid.defaults("gpii.tests.express.user.loginRequired.environment", {
     gradeNames: ["gpii.test.express.user.environment"],
-    apiPort:   8788,
+    port:   8788,
     pouchPort: 8744,
     mailPort:  7925,
     components: {

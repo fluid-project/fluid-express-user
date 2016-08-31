@@ -81,7 +81,7 @@ fluid.defaults("gpii.express.user.withMailHandler", {
                     // The error handler is passed the error and a text response.  Log the response.
                     "onError.log": {
                         funcName: "fluid.log",
-                        args:     ["Error sending email:", "{arguments}.1"]
+                        args:     ["Error sending email:", "{arguments}.0", "{arguments}.1"]
                     }
                 }
             }
