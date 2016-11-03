@@ -82,4 +82,4 @@ fluid.defaults("gpii.express.user.password.tests", {
     }
 });
 
-fluid.test.runTests("gpii.express.user.password.tests");
+gpii.express.user.password.tests();

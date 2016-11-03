@@ -21,16 +21,14 @@
     };
 
     fluid.defaults("gpii.express.user.frontend.controls", {
-        gradeNames: ["gpii.handlebars.templateFormControl"],
+        gradeNames: ["gpii.handlebars.ajaxCapable", "gpii.handlebars.templateAware"],
         container:  ".controls-viewport",
         ajaxOptions: {
             type:     "GET",
             url:      "/api/user/logout"
         },
         templates: {
-            initial: "controls-viewport",
-            success: "common-success",
-            error:   "common-error"
+            initial: "controls-viewport"
         },
         rules: {
             modelToRequestPayload: {
@@ -46,8 +44,6 @@
         },
         selectors: {
             initial:  "",
-            success:  ".controls-message",
-            error:    ".controls-message",
             controls: ".user-controls",
             menu:     ".user-menu",
             logout:   ".user-menu-logout",
@@ -66,28 +62,32 @@
             toggleMenu: {
                 funcName: "gpii.express.user.frontend.controls.toggleMenu",
                 args:     [ "{that}"]
+            },
+            renderInitialMarkup: {
+                func: "{that}.renderMarkup",
+                args: ["initial", "{that}.options.templates.initial", "{that}.model", "html"]
             }
         },
         listeners: {
-            "onMarkupRendered.bindLogoutClick": {
+            "onDomChange.bindLogoutClick": {
                 "this":   "{that}.dom.logout",
                 "method": "click",
-                "args":   "{that}.submitForm"
+                "args":   "{that}.makeRequest"
             },
-            "onMarkupRendered.bindLogoutKeys": {
+            "onDomChange.bindLogoutKeys": {
                 "listener": "fluid.activatable",
-                "args":     ["{that}.dom.logout", "{that}.submitForm"]
+                "args":     ["{that}.dom.logout", "{that}.makeRequest"]
             },
-            "onMarkupRendered.bindToggleClick": {
+            "onDomChange.bindToggleClick": {
                 "this":   "{that}.dom.toggle",
                 "method": "click",
                 "args":   "{that}.toggleMenu"
             },
-            "onMarkupRendered.bindToggleKeys": {
+            "onDomChange.bindToggleKeys": {
                 "listener": "fluid.activatable",
                 "args":     ["{that}.dom.toggle", "{that}.toggleMenu"]
             },
-            "onMarkupRendered.makeMenuItemsSelectable": {
+            "onDomChange.makeMenuItemsSelectable": {
                 "listener": "fluid.selectable",
                 "args":     ["{that}.dom.menu", { onSelect: "{that}.tattle", onLeaveContainer: "{that}.toggleMenu"}]
             }

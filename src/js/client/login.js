@@ -32,13 +32,31 @@
             dataType: "json"
         },
         modelListeners: {
-            "user.refresh": [
-                {
-                    funcName:      "gpii.express.user.frontend.login.checkAndClearSuccess",
-                    args:          ["{that}"],
-                    excludeSource: "init"
+            "user.refresh": [{
+                funcName:      "gpii.express.user.frontend.login.checkAndClearSuccess",
+                args:          ["{that}"],
+                excludeSource: "init"
+            }]
+        },
+        components: {
+            success: {
+                options: {
+                    listeners: {
+                        "onCreate.renderMarkup": {
+                            func: "{that}.renderInitialMarkup"
+                        }
+                    }
                 }
-            ]
+            },
+            error: {
+                options: {
+                    listeners: {
+                        "onCreate.renderMarkup": {
+                            func: "{that}.renderInitialMarkup"
+                        }
+                    }
+                }
+            }
         },
         rules: {
             modelToRequestPayload: {
@@ -49,6 +67,9 @@
             },
             successResponseToModel: {
                 "": "notfound",
+                fieldErrors:  { literalValue: [] },
+                errorMessage: { literalValue: false },
+                successMessage: "responseJSON.message",
                 user: "responseJSON.user",
                 password: {
                     literalValue: ""
