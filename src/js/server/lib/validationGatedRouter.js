@@ -9,7 +9,7 @@
 var fluid = require("infusion");
 
 fluid.defaults("gpii.express.user.validationGatedRouter", {
-    gradeNames:       ["gpii.express.router"],
+    gradeNames: ["gpii.express.router"],
     events: {
         onSchemasDereferenced: null
     },

@@ -13,7 +13,6 @@ require("../lib/");
 fluid.defaults("gpii.tests.express.user.login.client.caseHolder", {
     gradeNames: ["gpii.test.webdriver.caseHolder"],
     rawModules: [
-        // TODO: Convert these to use gpii.webdriver
         {
             name: "Testing login functions with a test browser...",
             tests: [
