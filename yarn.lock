@@ -1041,9 +1041,9 @@ eslint-config-fluid@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/eslint-config-fluid/-/eslint-config-fluid-1.0.0.tgz#fd1fe8c14439c6afc009b31c0665be0d574d2892"
 
-eslint@3.10.2:
-  version "3.10.2"
-  resolved "https://registry.yarnpkg.com/eslint/-/eslint-3.10.2.tgz#c9a10e8bf6e9d65651204778c503341f1eac3ce7"
+eslint@3.12.2:
+  version "3.12.2"
+  resolved "https://registry.yarnpkg.com/eslint/-/eslint-3.12.2.tgz#6be5a9aa29658252abd7f91e9132bab1f26f3c34"
   dependencies:
     babel-code-frame "^6.16.0"
     chalk "^1.1.3"
@@ -1056,7 +1056,7 @@ eslint@3.10.2:
     esutils "^2.0.2"
     file-entry-cache "^2.0.0"
     glob "^7.0.3"
-    globals "^9.2.0"
+    globals "^9.14.0"
     ignore "^3.2.0"
     imurmurhash "^0.1.4"
     inquirer "^0.12.0"
@@ -1196,9 +1196,9 @@ express-handlebars@1.2.2:
     promise "^6.0.0"
     semver "^3.0.1"
 
-"express-pouchdb@https://github.com/the-t-in-rtf/express-pouchdb.git#fa2778d1fdb6ac7c9d8adf7894b12df2e9e134f0":
+"express-pouchdb@git+https://github.com/the-t-in-rtf/express-pouchdb.git#fa2778d1fdb6ac7c9d8adf7894b12df2e9e134f0":
   version "2.1.0"
-  resolved "https://github.com/the-t-in-rtf/express-pouchdb.git#fa2778d1fdb6ac7c9d8adf7894b12df2e9e134f0"
+  resolved "git+https://github.com/the-t-in-rtf/express-pouchdb.git#fa2778d1fdb6ac7c9d8adf7894b12df2e9e134f0"
   dependencies:
     basic-auth "1.0.4"
     bluebird "3.4.1"
@@ -1585,7 +1585,7 @@ glob@^5.0.0, glob@^5.0.15, glob@~5.0.0:
     once "^1.3.0"
     path-is-absolute "^1.0.0"
 
-globals@^9.2.0:
+globals@^9.14.0, globals@^9.2.0:
   version "9.14.0"
   resolved "https://registry.yarnpkg.com/globals/-/globals-9.14.0.tgz#8859936af0038741263053b39d0e76ca241e4034"
 
@@ -1600,15 +1600,15 @@ globby@^5.0.0:
     pify "^2.0.0"
     pinkie-promise "^2.0.0"
 
-gpii-binder@1.0.0-dev.20161123T123137Z.a776add:
-  version "1.0.0-dev.20161123T123137Z.a776add"
-  resolved "https://registry.yarnpkg.com/gpii-binder/-/gpii-binder-1.0.0-dev.20161123T123137Z.a776add.tgz#4d44015699fec6f6046e5859130254a118606442"
+gpii-binder@1.0.0-dev.20161219T173834Z.5ecfb7b:
+  version "1.0.0-dev.20161219T173834Z.5ecfb7b"
+  resolved "https://registry.yarnpkg.com/gpii-binder/-/gpii-binder-1.0.0-dev.20161219T173834Z.5ecfb7b.tgz#912dead98c27c10d34f52cdc0c75b75bb677f7e9"
   dependencies:
-    infusion "git://github.com/the-t-in-rtf/infusion.git#8202f87093d60bdf7c58d95a41ecdf27aca0eca9"
+    infusion "2.0.0-dev.20161219T170555Z.5778f7e"
 
-gpii-express@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/gpii-express/-/gpii-express-1.0.0.tgz#97acef3356395c45265869a32cceafce8e549013"
+gpii-express@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/gpii-express/-/gpii-express-1.0.1.tgz#ad2b3e110d56867e171c2323362caaa378163095"
   dependencies:
     body-parser "1.15.2"
     cookie-parser "1.4.3"
@@ -1617,49 +1617,60 @@ gpii-express@1.0.0:
     infusion "2.0.0-dev.20161027T155641Z.0bcd507"
     resolve "1.1.7"
 
-gpii-handlebars@1.0.0-dev.20161124T134321Z.9eb2804:
-  version "1.0.0-dev.20161124T134321Z.9eb2804"
-  resolved "https://registry.yarnpkg.com/gpii-handlebars/-/gpii-handlebars-1.0.0-dev.20161124T134321Z.9eb2804.tgz#ba50f2bbe8d5b26384db57c002b1afc826d892ec"
+gpii-express@1.0.1-dev.20161219T161942Z.50ed093:
+  version "1.0.1-dev.20161219T161942Z.50ed093"
+  resolved "https://registry.yarnpkg.com/gpii-express/-/gpii-express-1.0.1-dev.20161219T161942Z.50ed093.tgz#df3192fa22aaa2c9d3a94e313d2529260a3151a3"
+  dependencies:
+    body-parser "1.15.2"
+    cookie-parser "1.4.3"
+    express "4.14.0"
+    express-session "1.14.2"
+    infusion "2.0.0-dev.20161219T154515Z.0f2ccc8"
+    resolve "1.2.0"
+
+gpii-handlebars@1.0.0-dev.20161219T181822Z.0445c4c:
+  version "1.0.0-dev.20161219T181822Z.0445c4c"
+  resolved "https://registry.yarnpkg.com/gpii-handlebars/-/gpii-handlebars-1.0.0-dev.20161219T181822Z.0445c4c.tgz#aea1fa7e644211abe15d78ab1fc765a0b509a654"
   dependencies:
     express-handlebars "1.2.2"
-    gpii-binder "1.0.0-dev.20161123T123137Z.a776add"
-    gpii-express "1.0.0"
+    gpii-binder "1.0.0-dev.20161219T173834Z.5ecfb7b"
+    gpii-express "1.0.1"
     handlebars "4.0.6"
-    infusion "2.0.0-dev.20161027T155641Z.0bcd507"
+    infusion "2.0.0-dev.20161219T170555Z.5778f7e"
     marked "0.3.6"
     pagedown "1.1.0"
     underscore-node "0.1.2"
 
-gpii-json-schema@1.0.0-dev.20161124T134646Z.cd96ab8:
-  version "1.0.0-dev.20161124T134646Z.cd96ab8"
-  resolved "https://registry.yarnpkg.com/gpii-json-schema/-/gpii-json-schema-1.0.0-dev.20161124T134646Z.cd96ab8.tgz#7840db91dad05f8a58f68b3831c147a8e9f0c5b5"
+gpii-json-schema@1.0.0-dev.20161219T192320Z.03caf53:
+  version "1.0.0-dev.20161219T192320Z.03caf53"
+  resolved "https://registry.yarnpkg.com/gpii-json-schema/-/gpii-json-schema-1.0.0-dev.20161219T192320Z.03caf53.tgz#900c056e95cc953d9fdb89dc7a2628a6ffa97140"
   dependencies:
     ajv "4.9.0"
-    gpii-binder "1.0.0-dev.20161123T123137Z.a776add"
-    gpii-express "1.0.0"
-    gpii-handlebars "1.0.0-dev.20161124T134321Z.9eb2804"
-    infusion "2.0.0-dev.20161027T155641Z.0bcd507"
+    gpii-binder "1.0.0-dev.20161219T173834Z.5ecfb7b"
+    gpii-express "1.0.1"
+    gpii-handlebars "1.0.0-dev.20161219T181822Z.0445c4c"
+    infusion "2.0.0-dev.20161219T170555Z.5778f7e"
     json-schema-ref-parser "3.1.2"
     jsonpointer.js "0.4.0"
     quoted-printable "1.0.1"
 
-gpii-mail-test@1.0.0-dev.20161124T155954Z.93f93c7:
-  version "1.0.0-dev.20161124T155954Z.93f93c7"
-  resolved "https://registry.yarnpkg.com/gpii-mail-test/-/gpii-mail-test-1.0.0-dev.20161124T155954Z.93f93c7.tgz#3185366c861a3d8f8149ab4457eb21f71d47a937"
+gpii-mail-test@1.0.0-dev.20161205T152357Z.82f976e:
+  version "1.0.0-dev.20161205T152357Z.82f976e"
+  resolved "https://registry.yarnpkg.com/gpii-mail-test/-/gpii-mail-test-1.0.0-dev.20161205T152357Z.82f976e.tgz#a2cec6966c8e587353e704d4c8e2030fe7f05633"
   dependencies:
-    infusion "2.0.0-dev.20161027T155641Z.0bcd507"
+    infusion "^2.0.0-dev.20161124T191742Z.17a345b"
     nodemailer "2.6.4"
     nodemailer-smtp-transport "2.7.2"
     simplesmtp "0.3.35"
 
-gpii-pouchdb@1.0.0-dev.20161124T132616Z.f34a7ac:
-  version "1.0.0-dev.20161124T132616Z.f34a7ac"
-  resolved "https://registry.yarnpkg.com/gpii-pouchdb/-/gpii-pouchdb-1.0.0-dev.20161124T132616Z.f34a7ac.tgz#d13c05cf6cd828a845df6cde6e1782455ee421b0"
+gpii-pouchdb@1.0.1-dev.20161219T174439Z.2373866:
+  version "1.0.1-dev.20161219T174439Z.2373866"
+  resolved "https://registry.yarnpkg.com/gpii-pouchdb/-/gpii-pouchdb-1.0.1-dev.20161219T174439Z.2373866.tgz#e0a4f8c8848cf9e007444bd148d731f93468f1d4"
   dependencies:
     express "4.14.0"
     express-pouchdb "https://github.com/the-t-in-rtf/express-pouchdb.git#fa2778d1fdb6ac7c9d8adf7894b12df2e9e134f0"
-    gpii-express "1.0.0"
-    infusion "2.0.0-dev.20161027T155641Z.0bcd507"
+    gpii-express "1.0.1-dev.20161219T161942Z.50ed093"
+    infusion "2.0.0"
     istanbul "0.4.5"
     lie "3.1.0"
     memdown "1.2.4"
@@ -1669,13 +1680,13 @@ gpii-pouchdb@1.0.0-dev.20161124T132616Z.f34a7ac:
     testem "1.13.0"
     underscore-node "0.1.2"
 
-gpii-webdriver@1.0.0-dev.20161124T133029Z.b454037:
-  version "1.0.0-dev.20161124T133029Z.b454037"
-  resolved "https://registry.yarnpkg.com/gpii-webdriver/-/gpii-webdriver-1.0.0-dev.20161124T133029Z.b454037.tgz#6fcc5d2307820e4c3b232fd54994d7db7722ef3c"
+gpii-webdriver@1.0.0-dev.20161219T175107Z.5a2a1c1:
+  version "1.0.0-dev.20161219T175107Z.5a2a1c1"
+  resolved "https://registry.yarnpkg.com/gpii-webdriver/-/gpii-webdriver-1.0.0-dev.20161219T175107Z.5a2a1c1.tgz#d714d34564c69c18a8b30b0e71e8a58ba20a90ef"
   dependencies:
     accessibility-developer-tools "2.11.0"
     axe-core "2.0.7"
-    infusion "2.0.0-dev.20161027T155641Z.0bcd507"
+    infusion "2.0.0-dev.20161219T170555Z.5778f7e"
     selenium-webdriver "3.0.1"
 
 graceful-fs@^3.0.2:
@@ -1942,6 +1953,12 @@ inflight@^1.0.4:
     once "^1.3.0"
     wrappy "1"
 
+infusion@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/infusion/-/infusion-2.0.0.tgz#19e49594e893837daac20774c8d261b85bd0db4c"
+  dependencies:
+    fluid-resolve "1.2.0"
+
 infusion@2.0.0-dev.20151130T180545Z.18ee3f8:
   version "2.0.0-dev.20151130T180545Z.18ee3f8"
   resolved "https://registry.yarnpkg.com/infusion/-/infusion-2.0.0-dev.20151130T180545Z.18ee3f8.tgz#07ade23574f012178be2218a8f5141bab14bdaa2"
@@ -1960,9 +1977,15 @@ infusion@2.0.0-dev.20161027T155641Z.0bcd507:
   dependencies:
     fluid-resolve "1.2.0"
 
-"infusion@git://github.com/the-t-in-rtf/infusion.git#8202f87093d60bdf7c58d95a41ecdf27aca0eca9":
-  version "2.0.0"
-  resolved "git://github.com/the-t-in-rtf/infusion.git#8202f87093d60bdf7c58d95a41ecdf27aca0eca9"
+infusion@2.0.0-dev.20161219T154515Z.0f2ccc8:
+  version "2.0.0-dev.20161219T154515Z.0f2ccc8"
+  resolved "https://registry.yarnpkg.com/infusion/-/infusion-2.0.0-dev.20161219T154515Z.0f2ccc8.tgz#ea16541ce78698261e68627571046056f2f00f8a"
+  dependencies:
+    fluid-resolve "1.2.0"
+
+infusion@2.0.0-dev.20161219T170555Z.5778f7e, infusion@^2.0.0-dev.20161124T191742Z.17a345b:
+  version "2.0.0-dev.20161219T170555Z.5778f7e"
+  resolved "https://registry.yarnpkg.com/infusion/-/infusion-2.0.0-dev.20161219T170555Z.5778f7e.tgz#3568b448d1e6c0a491e8ad45d6c592de3b7fd4bf"
   dependencies:
     fluid-resolve "1.2.0"
 
@@ -3616,13 +3639,17 @@ resolve-from@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/resolve-from/-/resolve-from-1.0.1.tgz#26cbfe935d1aeeeabb29bc3fe5aeb01e93d44226"
 
-resolve@1.1.6:
+resolve@1.1.6, resolve@1.1.x:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.1.6.tgz#d3492ad054ca800f5befa612e61beac1eec98f8f"
 
-resolve@1.1.7, resolve@1.1.x, resolve@^1.1.6, resolve@~1.1.0:
+resolve@1.1.7, resolve@~1.1.0:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.1.7.tgz#203114d82ad2c5ed9e8e0411b3932875e889e97b"
+
+resolve@1.2.0, resolve@^1.1.6:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.2.0.tgz#9589c3f2f6149d1417a40becc1663db6ec6bc26c"
 
 restore-cursor@^1.0.1:
   version "1.0.1"
@@ -3637,13 +3664,13 @@ right-align@^0.1.1:
   dependencies:
     align-text "^0.1.1"
 
-rimraf@2, rimraf@2.5.4, rimraf@^2.2.8, rimraf@^2.4.4, rimraf@^2.5.4:
+rimraf@2, rimraf@2.5.4, rimraf@^2.4.4, rimraf@^2.5.4:
   version "2.5.4"
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.5.4.tgz#96800093cbf1a0c86bd95b4625467535c29dfa04"
   dependencies:
     glob "^7.0.5"
 
-rimraf@~2.2.8:
+rimraf@^2.2.8, rimraf@~2.2.8:
   version "2.2.8"
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.2.8.tgz#e439be2aaee327321952730f99a8929e4fc50582"
 
@@ -3678,13 +3705,13 @@ selenium-webdriver@3.0.1:
     tmp "0.0.30"
     xml2js "^0.4.17"
 
-"semver@2 || 3 || 4 || 5", "semver@2.x || 3.x || 4 || 5", semver@^5.1.0, semver@~5.1.0:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/semver/-/semver-5.1.1.tgz#a3292a373e6f3e0798da0b20641b9a9c5bc47e19"
-
-semver@^3.0.1:
+"semver@2 || 3 || 4 || 5", semver@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/semver/-/semver-3.0.1.tgz#720ac012515a252f91fb0dd2e99a56a70d6cf078"
+
+"semver@2.x || 3.x || 4 || 5", semver@^5.1.0, semver@~5.1.0:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-5.1.1.tgz#a3292a373e6f3e0798da0b20641b9a9c5bc47e19"
 
 send@0.14.1:
   version "0.14.1"
