@@ -12,10 +12,10 @@ fluid.registerNamespace("gpii.express.user.current.handler");
 
 gpii.express.user.current.handler.verifyUserSession = function (that) {
     if (that.options.request.session && that.options.request.session[that.options.sessionKey]) {
-        that.sendResponse(200, { ok: true, user: that.options.request.session[that.options.sessionKey]});
+        that.sendResponse(200, { user: that.options.request.session[that.options.sessionKey]});
     }
     else {
-        that.sendResponse(401, { ok: false, message: "You are not currently logged in."});
+        that.sendResponse(401, { isError: true, message: "You are not currently logged in."});
     }
 };
 

@@ -21,7 +21,7 @@ gpii.express.user.signup.post.handler.lookupExistingUser = function (that) {
 
 gpii.express.user.signup.post.handler.checkForExistingUser = function (that, response) {
     if (response && response.username) {
-        that.sendResponse(403, { ok: false, message: "A user with this email or username already exists."});
+        that.sendResponse(403, { isError: true, message: "A user with this email or username already exists."});
     }
     else {
         // Encode the user's password
@@ -52,10 +52,10 @@ gpii.express.user.signup.post.handler.checkForExistingUser = function (that, res
         };
         request(writeOptions, function (error, response, body) {
             if (error) {
-                that.sendResponse(500, {ok: false, message: error});
+                that.sendResponse(500, {isError: true, message: error});
             }
             else if ([200, 201].indexOf(response.statusCode) === -1) {
-                that.sendResponse(response.statusCode, { ok: false, message: body});
+                that.sendResponse(response.statusCode, { isError: true, message: body});
             }
             else {
                 that.sendMessage();

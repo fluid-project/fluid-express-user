@@ -101,7 +101,7 @@ fluid.defaults("gpii.tests.express.user.reset.caseHolder", {
                         {
                             listener: "gpii.tests.express.user.reset.caseHolder.verifyResponse",
                             event: "{bogusResetRequest}.events.onComplete",
-                            args: ["{bogusResetRequest}.nativeResponse", "{arguments}.0", 400, null, ["ok"]]
+                            args: ["{bogusResetRequest}.nativeResponse", "{arguments}.0", 400, ["isError"]] // response, body, statusCode, truthy, falsy, hasCurrentUser
                         }
                     ]
                 },
@@ -127,7 +127,7 @@ fluid.defaults("gpii.tests.express.user.reset.caseHolder", {
                         {
                             listener: "gpii.tests.express.user.reset.caseHolder.verifyResponse",
                             event: "{fullResetVerifyResetRequest}.events.onComplete",
-                            args: ["{fullResetVerifyResetRequest}.nativeResponse", "{arguments}.0", 200, ["ok"]]
+                            args: ["{fullResetVerifyResetRequest}.nativeResponse", "{arguments}.0", 200, ["message"]]
                         },
                         {
                             func: "{fullResetLoginRequest}.send",
@@ -136,7 +136,7 @@ fluid.defaults("gpii.tests.express.user.reset.caseHolder", {
                         {
                             listener: "gpii.tests.express.user.reset.caseHolder.verifyResponse",
                             event: "{fullResetLoginRequest}.events.onComplete",
-                            args: ["{fullResetLoginRequest}.nativeResponse", "{arguments}.0", 200, ["ok", "user"]]
+                            args: ["{fullResetLoginRequest}.nativeResponse", "{arguments}.0", 200, ["user"]]
                         }
                     ]
                 }

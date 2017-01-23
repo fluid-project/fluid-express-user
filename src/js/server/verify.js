@@ -22,7 +22,7 @@ require("./verify-resend");
 
 gpii.express.user.verify.handler.checkVerificationCode = function (that, dataSourceResponse) {
     if (!dataSourceResponse || !dataSourceResponse[that.options.codeKey] || (that.options.request.params.code !== dataSourceResponse[that.options.codeKey])) {
-        that.sendFinalResponse(401, { ok: false, message: "You must provide a valid verification code to use this interface."});
+        that.sendFinalResponse(401, { isError: true, message: "You must provide a valid verification code to use this interface."});
     }
     else {
         var updatedUserRecord = fluid.copy(dataSourceResponse);
@@ -39,13 +39,13 @@ gpii.express.user.verify.handler.checkVerificationCode = function (that, dataSou
         };
         request(writeOptions, function (error, response, body) {
             if (error) {
-                that.sendFinalResponse(500, { ok: false, message: error});
+                that.sendFinalResponse(500, { isError: true, message: error});
             }
             else if ([201, 200].indexOf(response.statusCode) === -1) {
-                that.sendFinalResponse(response.statusCode, { ok: false, message: body});
+                that.sendFinalResponse(response.statusCode, { isError: true, message: body});
             }
             else {
-                that.sendFinalResponse(200, { ok: true, message: "Your account has been verified.  You can now log in."});
+                that.sendFinalResponse(200, { message: "Your account has been verified.  You can now log in."});
             }
         });
     }
@@ -75,7 +75,7 @@ fluid.defaults("gpii.express.user.verify.handler", {
                     },
                     "onError.sendErrorResponse": {
                         func: "{gpii.express.user.verify.handler}.sendFinalResponse",
-                        args: [500, { ok: false, message: "{arguments}.0"}]
+                        args: [500, { isError: true, message: "{arguments}.0"}]
                     }
                 }
             }

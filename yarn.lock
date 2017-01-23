@@ -1606,17 +1606,6 @@ gpii-binder@1.0.0-dev.20161219T173834Z.5ecfb7b:
   dependencies:
     infusion "2.0.0-dev.20161219T170555Z.5778f7e"
 
-gpii-express@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/gpii-express/-/gpii-express-1.0.1.tgz#ad2b3e110d56867e171c2323362caaa378163095"
-  dependencies:
-    body-parser "1.15.2"
-    cookie-parser "1.4.3"
-    express "4.14.0"
-    express-session "1.14.2"
-    infusion "2.0.0-dev.20161027T155641Z.0bcd507"
-    resolve "1.1.7"
-
 gpii-express@1.0.1-dev.20161219T161942Z.50ed093:
   version "1.0.1-dev.20161219T161942Z.50ed093"
   resolved "https://registry.yarnpkg.com/gpii-express/-/gpii-express-1.0.1-dev.20161219T161942Z.50ed093.tgz#df3192fa22aaa2c9d3a94e313d2529260a3151a3"
@@ -1639,19 +1628,6 @@ gpii-express@1.0.1-dev.20170106T131203Z.a048e61:
     infusion "2.0.0-dev.20161219T170555Z.5778f7e"
     resolve "1.2.0"
 
-gpii-handlebars@1.0.0-dev.20161219T181822Z.0445c4c:
-  version "1.0.0-dev.20161219T181822Z.0445c4c"
-  resolved "https://registry.yarnpkg.com/gpii-handlebars/-/gpii-handlebars-1.0.0-dev.20161219T181822Z.0445c4c.tgz#aea1fa7e644211abe15d78ab1fc765a0b509a654"
-  dependencies:
-    express-handlebars "1.2.2"
-    gpii-binder "1.0.0-dev.20161219T173834Z.5ecfb7b"
-    gpii-express "1.0.1"
-    handlebars "4.0.6"
-    infusion "2.0.0-dev.20161219T170555Z.5778f7e"
-    marked "0.3.6"
-    pagedown "1.1.0"
-    underscore-node "0.1.2"
-
 gpii-handlebars@1.0.0-dev.20170106T133859Z.ea8de03:
   version "1.0.0-dev.20170106T133859Z.ea8de03"
   resolved "https://registry.yarnpkg.com/gpii-handlebars/-/gpii-handlebars-1.0.0-dev.20170106T133859Z.ea8de03.tgz#dda5b505f415da81cc45177b281002140d4c87b8"
@@ -1665,14 +1641,27 @@ gpii-handlebars@1.0.0-dev.20170106T133859Z.ea8de03:
     pagedown "1.1.0"
     underscore-node "0.1.2"
 
-gpii-json-schema@1.0.0-dev.20161219T192320Z.03caf53:
-  version "1.0.0-dev.20161219T192320Z.03caf53"
-  resolved "https://registry.yarnpkg.com/gpii-json-schema/-/gpii-json-schema-1.0.0-dev.20161219T192320Z.03caf53.tgz#900c056e95cc953d9fdb89dc7a2628a6ffa97140"
+gpii-handlebars@1.0.0-dev.20170119T114557Z.daf5cf9:
+  version "1.0.0-dev.20170119T114557Z.daf5cf9"
+  resolved "https://registry.yarnpkg.com/gpii-handlebars/-/gpii-handlebars-1.0.0-dev.20170119T114557Z.daf5cf9.tgz#f31065f4fa7674d65f8598f399a8896dd18aba0f"
+  dependencies:
+    express-handlebars "1.2.2"
+    gpii-binder "1.0.0-dev.20161219T173834Z.5ecfb7b"
+    gpii-express "1.0.1-dev.20170106T131203Z.a048e61"
+    handlebars "4.0.6"
+    infusion "2.0.0-dev.20161219T170555Z.5778f7e"
+    marked "0.3.6"
+    pagedown "1.1.0"
+    underscore-node "0.1.2"
+
+gpii-json-schema@1.0.0-dev.20170123T134724Z.95059c1:
+  version "1.0.0-dev.20170123T134724Z.95059c1"
+  resolved "https://registry.yarnpkg.com/gpii-json-schema/-/gpii-json-schema-1.0.0-dev.20170123T134724Z.95059c1.tgz#f6d97856ae5758cfcfbe618d06317722490134d4"
   dependencies:
     ajv "4.9.0"
     gpii-binder "1.0.0-dev.20161219T173834Z.5ecfb7b"
-    gpii-express "1.0.1"
-    gpii-handlebars "1.0.0-dev.20161219T181822Z.0445c4c"
+    gpii-express "1.0.1-dev.20170106T131203Z.a048e61"
+    gpii-handlebars "1.0.0-dev.20170106T133859Z.ea8de03"
     infusion "2.0.0-dev.20161219T170555Z.5778f7e"
     json-schema-ref-parser "3.1.2"
     jsonpointer.js "0.4.0"
@@ -3657,13 +3646,9 @@ resolve-from@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/resolve-from/-/resolve-from-1.0.1.tgz#26cbfe935d1aeeeabb29bc3fe5aeb01e93d44226"
 
-resolve@1.1.6, resolve@1.1.x:
+resolve@1.1.6, resolve@1.1.x, resolve@~1.1.0:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.1.6.tgz#d3492ad054ca800f5befa612e61beac1eec98f8f"
-
-resolve@1.1.7, resolve@~1.1.0:
-  version "1.1.7"
-  resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.1.7.tgz#203114d82ad2c5ed9e8e0411b3932875e889e97b"
 
 resolve@1.2.0, resolve@^1.1.6:
   version "1.2.0"

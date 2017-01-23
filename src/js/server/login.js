@@ -21,16 +21,16 @@ gpii.express.user.login.post.handler.verifyPassword = function (that, response) 
             // Transform the raw response to ensure that nothing sensitive is exposed to the user
             var user = fluid.model.transformWithRules(response, that.options.rules.user);
             that.options.request.session[that.options.sessionKey] = user;
-            that.sendResponse(200, { ok: true, message: that.options.messages.success, user: user});
+            that.sendResponse(200, { message: that.options.messages.success, user: user});
         }
         // The password didn't match.
         else {
-            that.sendResponse(401, { ok: false, message: that.options.messages.failure});
+            that.sendResponse(401, { isError: true, message: that.options.messages.failure});
         }
     }
     // The user doesn't exist, but we send the same failure message to avoid giving intruders a way to validate usernames.
     else {
-        that.sendResponse(401, { ok: false, message: that.options.messages.failure});
+        that.sendResponse(401, { isError: true, message: that.options.messages.failure});
     }
 };
 
@@ -75,7 +75,7 @@ fluid.defaults("gpii.express.user.login.post.handler", {
                     },
                     "onError.sendErrorResponse": {
                         func: "{gpii.express.user.login.post.handler}.sendResponse",
-                        args: [500, { ok: false, message: "Error checking username and password."}]
+                        args: [500, { isError: true, message: "Error checking username and password."}]
                     }
                 }
             }

@@ -155,7 +155,7 @@ fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
                         {
                             listener: "gpii.tests.express.user.signup.caseHolder.verifyResponse",
                             event:    "{incompleteUserCreateRequest}.events.onComplete",
-                            args:     ["{incompleteUserCreateRequest}.nativeResponse", "{arguments}.0", 400, null, ["ok", "user"]]
+                            args:     ["{incompleteUserCreateRequest}.nativeResponse", "{arguments}.0", 400, ["isError"], ["user"]]
                         }
                     ]
                 },
@@ -165,12 +165,12 @@ fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
                     sequence: [
                         {
                             func: "{duplicateUserCreateRequest}.send",
-                            args: [{ username: "new", password: "new", confirm: "new", email: "reset@localhost"}]
+                            args: [{ username: "new", password: "new", confirm: "new", email: "existing@localhost"}]
                         },
                         {
                             listener: "gpii.tests.express.user.signup.caseHolder.verifyResponse",
                             event:    "{duplicateUserCreateRequest}.events.onComplete",
-                            args:     ["{duplicateUserCreateRequest}.nativeResponse", "{arguments}.0", 400, null, ["ok", "user"]]
+                            args:     ["{duplicateUserCreateRequest}.nativeResponse", "{arguments}.0", 403, ["isError"], ["user"]] // response, body, statusCode, truthy, falsy, hasCurrentUser
                         }
                     ]
                 },
@@ -185,7 +185,7 @@ fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
                         {
                             listener: "gpii.tests.express.user.signup.caseHolder.verifyResponse",
                             event:    "{bogusVerificationRequest}.events.onComplete",
-                            args:     ["{bogusVerificationRequest}.nativeResponse", "{arguments}.0", 401, null, ["ok", "user"]]
+                            args:     ["{bogusVerificationRequest}.nativeResponse", "{arguments}.0", 401, ["isError"], ["user"]]
                         }
                     ]
                 },
@@ -260,7 +260,7 @@ fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
                         {
                             listener: "gpii.tests.express.user.signup.caseHolder.verifyResponse",
                             event:    "{fullSignupVerifyVerificationRequest}.events.onComplete",
-                            args:     ["{fullSignupVerifyVerificationRequest}.nativeResponse", "{arguments}.0", 200, ["ok"]]
+                            args:     ["{fullSignupVerifyVerificationRequest}.nativeResponse", "{arguments}.0", 200, ["message"]]
                         },
                         {
                             func: "{fullSignupLoginRequest}.send",

@@ -108,7 +108,7 @@ fluid.defaults("gpii.tests.express.user.login.caseHolder", {
                         {
                             listener: "gpii.tests.express.user.login.caseHolder.verifyResponse",
                             event: "{loginRequest}.events.onComplete",
-                            args: ["{loginRequest}.nativeResponse", "{arguments}.0", 200, ["ok", "user"], null, true]
+                            args: ["{loginRequest}.nativeResponse", "{arguments}.0", 200, ["user"], null, true] // response, body, statusCode, truthy, falsy, hasCurrentUser
                         },
                         {
                             func: "{currentUserLoggedInRequest}.send"
@@ -116,7 +116,7 @@ fluid.defaults("gpii.tests.express.user.login.caseHolder", {
                         {
                             listener: "gpii.tests.express.user.login.caseHolder.verifyResponse",
                             event: "{currentUserLoggedInRequest}.events.onComplete",
-                            args: ["{currentUserLoggedInRequest}.nativeResponse", "{arguments}.0", 200, ["ok", "user"], null, true]
+                            args: ["{currentUserLoggedInRequest}.nativeResponse", "{arguments}.0", 200, ["user"], null, true]
                         },
                         {
                             func: "{logoutRequest}.send"
@@ -124,7 +124,7 @@ fluid.defaults("gpii.tests.express.user.login.caseHolder", {
                         {
                             listener: "gpii.tests.express.user.login.caseHolder.verifyResponse",
                             event: "{logoutRequest}.events.onComplete",
-                            args: ["{logoutRequest}.nativeResponse", "{arguments}.0", 200, ["ok"], ["user"]]
+                            args: ["{logoutRequest}.nativeResponse", "{arguments}.0", 200, ["message"], ["user"]]
                         },
                         {
                             func: "{currentUserLoggedOutRequest}.send"
@@ -132,7 +132,7 @@ fluid.defaults("gpii.tests.express.user.login.caseHolder", {
                         {
                             listener: "gpii.tests.express.user.login.caseHolder.verifyResponse",
                             event: "{currentUserLoggedOutRequest}.events.onComplete",
-                            args: ["{currentUserLoggedOutRequest}.nativeResponse", "{arguments}.0",  401, null, ["ok", "user"]]
+                            args: ["{currentUserLoggedOutRequest}.nativeResponse", "{arguments}.0",  401, ["isError"], ["user"]]
                         }
                     ]
                 },
@@ -147,7 +147,7 @@ fluid.defaults("gpii.tests.express.user.login.caseHolder", {
                         {
                             listener: "gpii.tests.express.user.login.caseHolder.verifyResponse",
                             event: "{bogusLoginRequest}.events.onComplete",
-                            args: ["{bogusLoginRequest}.nativeResponse", "{arguments}.0", 401, null, ["ok", "user"]]
+                            args: ["{bogusLoginRequest}.nativeResponse", "{arguments}.0", 401, ["isError"], ["user"]]
                         }
                     ]
                 },
@@ -162,7 +162,7 @@ fluid.defaults("gpii.tests.express.user.login.caseHolder", {
                         {
                             listener: "gpii.tests.express.user.login.caseHolder.verifyResponse",
                             event: "{unverifiedLoginRequest}.events.onComplete",
-                            args: ["{unverifiedLoginRequest}.nativeResponse", "{arguments}.0", 401, null, ["ok", "user"]]
+                            args: ["{unverifiedLoginRequest}.nativeResponse", "{arguments}.0", 401, ["isError"], ["user"]]
                         }
                     ]
                 }

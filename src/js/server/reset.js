@@ -31,12 +31,12 @@ gpii.express.user.reset.handler.checkResetCode = function (that, dataSourceRespo
     var issueDate          = new Date(dataSourceResponse[that.options.codeIssuedKey]);
 
     if (!dataSourceResponse || !dataSourceResponse[that.options.codeKey] || (that.options.request.params.code !== dataSourceResponse[that.options.codeKey])) {
-        that.sendFinalResponse(400, { ok: false, message: "You must provide a valid reset code to use this interface."});
+        that.sendFinalResponse(400, { isError: true, message: "You must provide a valid reset code to use this interface."});
     }
     // We cannot perform the next two checks using JSON Schema, so we must do it here.
     // We should not accept a reset code issued earlier than the current time minus our expiration period (a day by default).
     else if (isNaN(issueDate) || issueDate < earliestAcceptable) {
-        that.sendFinalResponse(400, { ok: false, message: "Your reset code is too old.  Please request another one."});
+        that.sendFinalResponse(400, { isError: true, message: "Your reset code is too old.  Please request another one."});
     }
     else {
         var updatedUserRecord = fluid.copy(dataSourceResponse);
@@ -56,13 +56,13 @@ gpii.express.user.reset.handler.checkResetCode = function (that, dataSourceRespo
         };
         request(writeOptions, function (error, response, body) {
             if (error) {
-                that.sendFinalResponse(500, { ok: false, message: error});
+                that.sendFinalResponse(500, { isError: true, message: error});
             }
             else if ([201, 200].indexOf(response.statusCode) === -1) {
-                that.sendFinalResponse(response.statusCode, { ok: false, message: body});
+                that.sendFinalResponse(response.statusCode, { isError: true, message: body});
             }
             else {
-                that.sendFinalResponse(200, { ok: true, message: "Your password has been reset."});
+                that.sendFinalResponse(200, { message: "Your password has been reset."});
             }
         });
     }
@@ -90,7 +90,7 @@ fluid.defaults("gpii.express.user.reset.handler", {
                     },
                     "onError.sendErrorResponse": {
                         func: "{gpii.express.user.reset.handler}.sendFinalResponse",
-                        args: [500, { ok: false, message: "{arguments}.0"}]
+                        args: [500, { isError: true, message: "{arguments}.0"}]
                     }
                 }
             }

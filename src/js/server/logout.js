@@ -11,7 +11,7 @@ gpii.express.user.logout.handler.destroyUserSession = function (that) {
         delete that.options.request.session[that.options.sessionKey];
     }
 
-    that.sendResponse(200, { ok: true, message: "You are now logged out."});
+    that.sendResponse(200, { message: "You are now logged out."});
 };
 
 fluid.defaults("gpii.express.user.logout.handler", {

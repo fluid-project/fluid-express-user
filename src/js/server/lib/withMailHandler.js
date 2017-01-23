@@ -72,11 +72,11 @@ fluid.defaults("gpii.express.user.withMailHandler", {
                 listeners: {
                     "onSuccess.sendResponse": {
                         func: "{gpii.express.user.withMailHandler}.sendResponse",
-                        args: [200, { ok: true, message: "{that}.options.messages.success"}]
+                        args: [200, { message: "{that}.options.messages.success"}]
                     },
                     "onError.sendResponse": {
                         func: "{gpii.express.user.withMailHandler}.sendResponse",
-                        args: [500, { ok: false, message: "{that}.options.messages.error"}]
+                        args: [500, { isError: true, message: "{that}.options.messages.error"}]
                     },
                     // The error handler is passed the error and a text response.  Log the response.
                     "onError.log": {

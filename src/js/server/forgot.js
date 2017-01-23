@@ -25,7 +25,7 @@ fluid.registerNamespace("gpii.express.user.forgot.post.handler");
  */
 gpii.express.user.forgot.post.handler.checkUser = function (that, user) {
     if (!user || !user.username) {
-        that.sendResponse(404, { ok: false, message: "No matching user found."});
+        that.sendResponse(404, { isError: true, message: "No matching user found."});
     }
     else {
         // TODO:  Replace this with a writable dataSource
@@ -56,10 +56,10 @@ gpii.express.user.forgot.post.handler.checkUser = function (that, user) {
  */
 gpii.express.user.forgot.post.handler.handleRequestResponse = function (that, error, response, body) {
     if (error) {
-        that.sendResponse(500, { ok: false, message: error.message, stack: error.stack });
+        that.sendResponse(500, { isError: true, message: error.message, stack: error.stack });
     }
     else if (response && [200, 201].indexOf(response.statusCode) === -1) {
-        that.sendResponse(response.statusCode, { ok: false, message: body });
+        that.sendResponse(response.statusCode, { isError: true, message: body });
     }
     else {
         that.sendMessage();

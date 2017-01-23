@@ -22,13 +22,13 @@ fluid.registerNamespace("gpii.express.user.verify.resend.handler");
 
 gpii.express.user.verify.resend.handler.getVerificationCode = function (that, user) {
     if (!user || !user.username) {
-        that.sendFinalResponse(404, { ok: false, message: "I couldn't find an account that matches the email address you provided."});
+        that.sendFinalResponse(404, { isError: true, message: "I couldn't find an account that matches the email address you provided."});
     }
     else if (user.verified) {
-        that.sendFinalResponse(200, { ok: true, message: "Your account has already been verified."});
+        that.sendFinalResponse(200, { message: "Your account has already been verified."});
     }
     else if (!user.verification_code) {
-        that.sendFinalResponse(500, { ok: false, message: "Cannot retrieve verification code.  Contact an administrator."});
+        that.sendFinalResponse(500, { isError: true, message: "Cannot retrieve verification code.  Contact an administrator."});
     }
     else {
         that.user = user;
