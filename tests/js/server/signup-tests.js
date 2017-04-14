@@ -170,7 +170,7 @@ fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
                         {
                             listener: "gpii.tests.express.user.signup.caseHolder.verifyResponse",
                             event:    "{duplicateUserCreateRequest}.events.onComplete",
-                            args:     ["{duplicateUserCreateRequest}.nativeResponse", "{arguments}.0", 403, ["isError"], ["user"]] // response, body, statusCode, truthy, falsy, hasCurrentUser
+                            args:     ["{duplicateUserCreateRequest}.nativeResponse", "{arguments}.0", 400, ["isError"], ["user"]] // response, body, statusCode, truthy, falsy, hasCurrentUser
                         }
                     ]
                 },
