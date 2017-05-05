@@ -1603,9 +1603,9 @@ gpii-express@1.0.7:
     express-session "1.15.2"
     infusion "3.0.0-dev.20170322T234120Z.278de35"
 
-gpii-handlebars@1.0.1-dev.20170504T110727Z.33dc87b:
-  version "1.0.1-dev.20170504T110727Z.33dc87b"
-  resolved "https://registry.yarnpkg.com/gpii-handlebars/-/gpii-handlebars-1.0.1-dev.20170504T110727Z.33dc87b.tgz#2542c7d418005e923bc1db4f5facfb1756638c99"
+gpii-handlebars@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/gpii-handlebars/-/gpii-handlebars-1.0.1.tgz#937cc4c52bf0c50bdb2aed20db001c78026cd92d"
   dependencies:
     gpii-binder "1.0.2"
     gpii-express "1.0.7"
@@ -1615,9 +1615,9 @@ gpii-handlebars@1.0.1-dev.20170504T110727Z.33dc87b:
     pagedown "1.1.0"
     underscore-node "0.1.2"
 
-gpii-handlebars@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/gpii-handlebars/-/gpii-handlebars-1.0.1.tgz#937cc4c52bf0c50bdb2aed20db001c78026cd92d"
+gpii-handlebars@1.0.1-dev.20170504T110727Z.33dc87b:
+  version "1.0.1-dev.20170504T110727Z.33dc87b"
+  resolved "https://registry.yarnpkg.com/gpii-handlebars/-/gpii-handlebars-1.0.1-dev.20170504T110727Z.33dc87b.tgz#2542c7d418005e923bc1db4f5facfb1756638c99"
   dependencies:
     gpii-binder "1.0.2"
     gpii-express "1.0.7"
@@ -1649,7 +1649,7 @@ gpii-mail-test@1.0.2:
     nodemailer-smtp-transport "2.7.2"
     simplesmtp "0.3.35"
 
-gpii-pouchdb@^1.0.3-dev.20170504T114846Z.9f83c96:
+gpii-pouchdb@1.0.3-dev.20170504T114846Z.9f83c96:
   version "1.0.3-dev.20170504T114846Z.9f83c96"
   resolved "https://registry.yarnpkg.com/gpii-pouchdb/-/gpii-pouchdb-1.0.3-dev.20170504T114846Z.9f83c96.tgz#cc294b3292f3af30a99d7a8d09c4a167dcc03570"
   dependencies:
@@ -3467,9 +3467,18 @@ read-pkg@^1.0.0:
     normalize-package-data "^2.3.2"
     path-type "^1.0.0"
 
-readable-stream@1.0.33, "readable-stream@>=1.0.33-1 <1.1.0-0", readable-stream@^1.0.33:
+readable-stream@1.0.33, "readable-stream@>=1.0.33-1 <1.1.0-0":
   version "1.0.33"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-1.0.33.tgz#3a360dd66c1b1d7fd4705389860eda1d0f61126c"
+  dependencies:
+    core-util-is "~1.0.0"
+    inherits "~2.0.1"
+    isarray "0.0.1"
+    string_decoder "~0.10.x"
+
+readable-stream@^1.0.33, readable-stream@~1.1.8, readable-stream@~1.1.9:
+  version "1.1.14"
+  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-1.1.14.tgz#7cf4c54ef648e3813084c636dd2079e166c081d9"
   dependencies:
     core-util-is "~1.0.0"
     inherits "~2.0.1"
@@ -3490,15 +3499,6 @@ readable-stream@^2, readable-stream@^2.0.0, "readable-stream@^2.0.0 || ^1.1.13",
 readable-stream@~0.0.2:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-0.0.4.tgz#f32d76e3fb863344a548d79923007173665b3b8d"
-
-readable-stream@~1.1.8, readable-stream@~1.1.9:
-  version "1.1.14"
-  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-1.1.14.tgz#7cf4c54ef648e3813084c636dd2079e166c081d9"
-  dependencies:
-    core-util-is "~1.0.0"
-    inherits "~2.0.1"
-    isarray "0.0.1"
-    string_decoder "~0.10.x"
 
 readline2@^1.0.1:
   version "1.0.1"
