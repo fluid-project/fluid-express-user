@@ -17,11 +17,8 @@ stages:                # Stages to perform when 'ci test' command is invoked
 setup_job:
   stage: setup
   script:
-    - choco install nodejs.install --version 6.9.1 --forcex86 -y
+    - choco install nodejs-lts -y
     - choco install chromedriver -y
-    # - sudo yum -y install java-1.8.0-openjdk-devel.x86_64
-    # node-inspector is pre-installed as a courtesy to assist in debugging.
-    - do.ps1 -c "npm install -g node-inspector"
 
 test_job:
   stage: test          # name of the stage

@@ -133,18 +133,10 @@ fluid.defaults("gpii.express.user.login", {
                 }
             }
         },
-        headerLinkMiddleware: {
-            type: "gpii.schema.schemaLinkMiddleware",
-            options: {
-                priority:  "after:getRouter",
-                schemaKey: "message-core.json",
-                schemaUrl: "/schemas/message-core"
-            }
-        },
         postRouter: {
             type: "gpii.express.user.login.post",
             options: {
-                priority: "after:schemaLinkMiddleware",
+                priority: "after:getRouter",
                 listeners: {
                     "onSchemasDereferenced.notifyParent": {
                         func: "{gpii.express.user.login}.events.onSchemasDereferenced.fire"

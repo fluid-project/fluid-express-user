@@ -1,48 +1,48 @@
 {
-  "name": "gpii-express-user",
-  "version": "1.0.0",
-  "description": "A series of Fluid components to provide simple user management.",
-  "main": "src/js/index.js",
-  "scripts": {
-    "test": "node node_modules/istanbul/lib/cli.js cover tests/all-tests.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/GPII/gpii-express-user"
-  },
-  "author": "Tony Atkins <tony@raisingthefloor.org>",
-  "license": "BSD-3-Clause",
-  "bugs": {
-    "url": "https://github.com/GPII/gpii-express-user/issues"
-  },
-  "homepage": "https://github.com/GPII/gpii-express-user",
-  "dependencies": {
-    "foundation-sites": "6.3.1",
-    "gpii-binder": "1.0.2",
-    "gpii-express": "1.0.7",
-    "gpii-handlebars": "1.0.1",
-    "gpii-json-schema": "1.0.1-dev.20170504T114351Z.4cef9db",
-    "infusion": "3.0.0-dev.20170322T234120Z.278de35",
-    "kettle": "1.5.0",
-    "marked": "0.3.6",
-    "nodemailer": "4.0.1",
-    "nodemailer-smtp-transport": "2.7.4",
-    "request": "2.81.0"
-  },
-  "devDependencies": {
-    "cookie": "0.3.1",
-    "eslint": "3.19.0",
-    "eslint-config-fluid": "1.1.0",
-    "fluid-grunt-eslint": "18.1.2",
-    "gpii-mail-test": "1.0.2",
-    "gpii-pouchdb": "1.0.3-dev.20170504T114846Z.9f83c96",
-    "gpii-webdriver": "1.0.1",
-    "grunt": "1.0.1",
-    "grunt-jsonlint": "1.1.0",
-    "handlebars": "4.0.8",
-    "istanbul": "0.4.5",
-    "mailparser": "0.6.2",
-    "node-jqunit": "1.1.4",
-    "pagedown": "1.1.0"
-  }
+    "name": "gpii-express-user",
+    "version": "1.0.0",
+    "description": "A series of Fluid components to provide simple user management.",
+    "main": "src/js/index.js",
+    "scripts": {
+        "test": "node node_modules/istanbul/lib/cli.js cover tests/all-tests.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/GPII/gpii-express-user"
+    },
+    "author": "Tony Atkins <tony@raisingthefloor.org>",
+    "license": "BSD-3-Clause",
+    "bugs": {
+        "url": "https://github.com/GPII/gpii-express-user/issues"
+    },
+    "homepage": "https://github.com/GPII/gpii-express-user",
+    "dependencies": {
+        "foundation-sites": "6.3.1",
+        "gpii-binder": "1.0.3",
+        "gpii-express": "1.0.13",
+        "gpii-handlebars": "1.1.0",
+        "gpii-json-schema": "1.0.5",
+        "infusion": "3.0.0-dev.20180227T185528Z.08741e844",
+        "kettle": "1.7.1",
+        "markdown-it": "8.4.1",
+        "nodemailer": "4.6.2",
+        "nodemailer-smtp-transport": "2.7.4",
+        "request": "2.85.0"
+    },
+    "devDependencies": {
+        "cookie": "0.3.1",
+        "eslint": "4.18.2",
+        "eslint-config-fluid": "1.2.0",
+        "fluid-grunt-eslint": "18.1.2",
+        "gpii-mail-test": "1.0.3",
+        "gpii-pouchdb": "1.0.10",
+        "gpii-webdriver": "1.0.2",
+        "grunt": "1.0.2",
+        "grunt-jsonlint": "1.1.0",
+        "handlebars": "4.0.11",
+        "istanbul": "0.4.5",
+        "mailparser": "0.6.2",
+        "node-jqunit": "1.1.8",
+        "pagedown": "1.1.0"
+    }
 }

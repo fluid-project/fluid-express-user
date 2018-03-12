@@ -104,18 +104,10 @@ fluid.defaults("gpii.test.express.user.harness.express", {
                 content:   "%gpii-express-user/src"
             }
         },
-        errorHeaders: {
-            type: "gpii.schema.schemaLinkMiddleware",
-            options: {
-                priority:  "after:src",
-                schemaKey: "message.json",
-                schemaUrl: "http://ul.gpii.net/api/schemas/message.json"
-            }
-        },
         jsonErrors: {
             type: "gpii.express.middleware.error",
             options: {
-                priority: "after:schemaLinkMiddleware"
+                priority: "after:src"
             }
         }
     }

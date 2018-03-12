@@ -151,10 +151,16 @@ fluid.defaults("gpii.express.user.withRequiredMiddleware", {
                 priority: "after:urlencoded",
                 templateDirs: "{gpii.express.user.withRequiredMiddleware}.options.templateDirs",
                 components: {
-                    initBlock: {
+                    renderer: {
                         options: {
-                            contextToOptionsRules: {
-                                req: "req"
+                            components: {
+                                initBlock: {
+                                    options: {
+                                        contextToOptionsRules: {
+                                            req: "req"
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

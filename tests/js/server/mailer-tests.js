@@ -54,7 +54,7 @@ fluid.defaults("gpii.mailer.tests.caseHolder", {
             to:      [ { address: "other@localhost",  name: "" }],
             subject: "sample template message...",
             text:    "I am convincingly and customizably happy to be writing you.",
-            html:    "I am convincingly and customizably <p><em>happy</em></p> to be writing you."
+            html:    "I am convincingly and customizably <p><em>happy</em></p>\n to be writing you."
         }
     },
     messages: {

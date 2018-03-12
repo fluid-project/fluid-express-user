@@ -32,7 +32,7 @@
             dataType: "json"
         },
         modelListeners: {
-            "user.refresh": {
+            "user": {
                 funcName:      "gpii.express.user.frontend.login.checkAndClearSuccess",
                 args:          ["{that}"],
                 excludeSource: "init"

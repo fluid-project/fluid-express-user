@@ -4,14 +4,15 @@
 var fluid  = require("infusion");
 var gpii   = fluid.registerNamespace("gpii");
 
-var marked = require("marked");
+var MarkDownIt = require("markdown-it");
 var fs     = require("fs");
 
 fluid.registerNamespace("gpii.express.api.docs.router");
 
 gpii.express.api.docs.router.middleware = function (that, req, res) {
-    var markdown = fs.readFileSync(fluid.module.resolvePath(that.options.mdFile), {encoding: "utf8"});
-    res.render(that.options.template, { "title": that.options.title, "body": marked(markdown)});
+    var markdownSource = fs.readFileSync(fluid.module.resolvePath(that.options.mdFile), {encoding: "utf8"});
+    var mdRenderer = new MarkDownIt();
+    res.render(that.options.template, { "title": that.options.title, "body": mdRenderer.render(markdownSource)});
 };
 
 fluid.defaults("gpii.express.api.docs.router", {
