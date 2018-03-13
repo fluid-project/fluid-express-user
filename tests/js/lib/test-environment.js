@@ -1,56 +1,103 @@
 // The common test harness wired up as a `fluid.test.testEnvironment` instance.  You are expected to extend this and
 // supply a specific test case holder component.
+/* eslint-env node */
+"use strict";
 var fluid = require("infusion");
-var gpii  = fluid.registerNamespace("gpii");
 
 require("./test-harness");
 
-var kettle = require("kettle");
-kettle.loadTestingSupport();
+fluid.registerNamespace("gpii.test.express.user.environment");
 
-require("gpii-test-browser");
-gpii.tests.browser.loadTestingSupport();
-
-fluid.defaults("gpii.express.user.tests.environment", {
-    gradeNames: ["fluid.test.testEnvironment"],
-    apiPort:    "3959",
-    baseUrl: {
-        expander: {
-            funcName: "fluid.stringTemplate",
-            args:     ["http://localhost:%port/api/user/", { port: "{that}.options.apiPort"}]
-        }
+fluid.defaults("gpii.test.express.user.environment", {
+    gradeNames:   ["gpii.test.express.testEnvironment"],
+    port:         "3959",
+    pouchPort:    "9599",
+    mailPort:     "2525",
+    path:         "/",
+    templateDirs: ["%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
+    distributeOptions: {
+        source: "{that}.options.mailPort",
+        target: "{that gpii.express.user.mailer}.options.transportOptions.port"
     },
     events: {
-        constructFixtures: null,
-        onHarnessDone: null,
-        onHarnessReady: null,
-        onReady: {
+        onExpressDone: null,
+        onFixturesConstructed: {
             events: {
-                onHarnessReady: "onHarnessReady"
+                onExpressReady: "onExpressReady",
+                onMailReady:    "onMailReady",
+                onPouchReady:   "onPouchReady"
             }
         },
-        onAllDone: {
+        onFixturesStopped: {
             events: {
-                onHarnessDone: "onHarnessDone"
+                onExpressDone:   "onExpressDone",
+                onPouchStopped:  "onPouchStopped"
             }
-        }
+        },
+        onPouchReady:   null,
+        onPouchStopped: null,
+        onMailReady:    null,
+        stopFixtures:   null
     },
-    pouchPort:  "9599",
-    mailPort:   "2525",
     components: {
-        harness: {
-            type:          "gpii.express.user.tests.harness",
+        express: {
+            type: "gpii.test.express.user.harness.express",
             createOnEvent: "constructFixtures",
             options: {
-                apiPort:   "{testEnvironment}.options.apiPort",
-                mailPort:  "{testEnvironment}.options.mailPort",
-                pouchPort: "{testEnvironment}.options.pouchPort",
+                events: {
+                    stopFixtures: "{testEnvironment}.events.stopFixtures"
+                },
+                port:  "{testEnvironment}.options.port",
+                templateDirs: "{testEnvironment}.options.templateDirs",
                 listeners: {
-                    "onStarted.notifyParent": {
-                        func: "{testEnvironment}.events.onHarnessReady.fire"
+                    "stopFixtures.stopServer": { funcName: "gpii.express.stopServer", args:["{that}"] },
+                    "onStopped.notifyParent": { func: "{testEnvironment}.events.onExpressDone.fire"}
+                },
+                components: {
+                    inline: {
+                        options: {
+                            templateDirs: "{testEnvironment}.options.templateDirs"
+                        }
                     },
-                    "onDone.notifyParent": {
-                        func: "{testEnvironment}.events.onHarnessDone.fire"
+                    api: {
+                        options: {
+                            couch:  {
+                                port: "{testEnvironment}.options.pouchPort"
+                            },
+                            app: {
+                                url:  "{testEnvironment}.options.baseUrl"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        pouch: {
+            type: "gpii.test.express.user.pouch",
+            createOnEvent: "constructFixtures",
+            options: {
+                port: "{testEnvironment}.options.pouchPort",
+                events: {
+                    onCleanup: "{testEnvironment}.events.stopFixtures"
+                },
+                listeners: {
+                    "onPouchStarted.notifyParent": {
+                        func: "{testEnvironment}.events.onPouchReady.fire"
+                    },
+                    "onCleanupComplete.notifyParent": {
+                        func: "{testEnvironment}.events.onPouchStopped.fire"
+                    }
+                }
+            }
+        },
+        smtp: {
+            type: "gpii.test.mail.smtp",
+            createOnEvent: "constructFixtures",
+            options: {
+                port: "{testEnvironment}.options.mailPort",
+                listeners: {
+                    "onReady.notifyParent": {
+                        func: "{testEnvironment}.events.onMailReady.fire"
                     }
                 }
             }
@@ -59,28 +106,36 @@ fluid.defaults("gpii.express.user.tests.environment", {
 });
 
 
-
-fluid.defaults("gpii.express.user.tests.environment.withBrowser", {
-    gradeNames: ["gpii.express.user.tests.environment", "gpii.tests.browser.environment"],
+fluid.defaults("gpii.test.express.user.environment.withBrowser", {
+    gradeNames: ["gpii.test.express.user.environment", "gpii.test.webdriver.testEnvironment"],
     events: {
-        onReady: {
+        onFixturesConstructed: {
             events: {
-                onBrowserReady: "onBrowserReady",
-                onHarnessReady: "onHarnessReady"
+                onDriverReady:  "onDriverReady",
+                onExpressReady: "onExpressReady",
+                onMailReady:    "onMailReady",
+                onPouchReady:   "onPouchReady"
             }
         },
-        onAllDone: {
+        onFixturesStopped: {
             events: {
-                onBrowserDone: "onBrowserDone",
-                onHarnessDone: "onHarnessDone"
+                onDriverStopped: "onDriverStopped",
+                onExpressDone:   "onExpressDone",
+                onPouchStopped:  "onPouchStopped"
             }
         }
     },
     components: {
-        // Currently, the browser's `onLoaded` event will fail frequently if the browser is not visible.
-        browser: {
+        webdriver: {
             options: {
-                nightmareOptions: { show: true }
+                events: {
+                    onDriverReady: "{testEnvironment}.events.onDriverReady",
+                    stopFixtures: "{testEnvironment}.events.stopFixtures"
+                },
+                listeners: {
+                    onQuitComplete:      { func: "{testEnvironment}.events.onDriverStopped.fire" },
+                    "stopFixtures.quit": { func: "{that}.quit" }
+                }
             }
         }
     }

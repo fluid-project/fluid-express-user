@@ -1,8 +1,9 @@
+/* eslint-env node */
 "use strict";
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
-fluid.registerNamespace("gpii.express.user.tests.client");
+fluid.registerNamespace("gpii.test.express.user.client");
 
 var fs         = require("fs");
 var MailParser = require("mailparser").MailParser;
@@ -16,7 +17,7 @@ var MailParser = require("mailparser").MailParser;
 //
 // See the "forgot" and "signup" tests for concrete examples.
 //
-gpii.express.user.tests.client.continueFromEmail = function (environment, urlPatternString) {
+gpii.test.express.user.client.continueFromEmail = function (environment, urlPatternString) {
     // This is a MIME message, it will mangle the lines and special characters unless we decode it.
     var mailparser = new MailParser();
 
@@ -29,7 +30,7 @@ gpii.express.user.tests.client.continueFromEmail = function (environment, urlPat
 
         if (matches) {
             var destinationUrl = matches[1];
-            environment.browser["goto"](destinationUrl);
+            environment.webdriver.get(destinationUrl);
         }
         else {
             fluid.fail("Could not extract URL from email...");
@@ -37,7 +38,7 @@ gpii.express.user.tests.client.continueFromEmail = function (environment, urlPat
     });
 
     // send the email source to the parser.
-    var mailFileContents = fs.readFileSync(environment.harness.smtp.mailServer.currentMessageFile, "utf8");
+    var mailFileContents = fs.readFileSync(environment.smtp.mailServer.currentMessageFile, "utf8");
     mailparser.write(mailFileContents);
     mailparser.end();
 };

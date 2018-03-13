@@ -1,8 +1,13 @@
 /*
 
-  Mount all the feature-specific endpoints under a single umbrella class.  Returns the API documentation by default.
+    Mount all the feature-specific endpoints under a single umbrella class.  Returns the API documentation by default.
+
+    See the documentation for more details:
+
+    https://github.com/GPII/gpii-express-user/blob/master/docs/apiComponent.md
 
  */
+/* eslint-env node */
 "use strict";
 var fluid = require("infusion");
 
@@ -19,9 +24,9 @@ require("./verify.js");
 fluid.registerNamespace("gpii.express.user.api");
 
 fluid.defaults("gpii.express.user.api", {
-    gradeNames: ["gpii.express.router.passthrough"],
-    path:       "/user",
-    method:     "use",
+    gradeNames:   ["gpii.express.router"],
+    path:         "/user",
+    method:       "use",
     templateDirs: ["%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
     schemaDirs:    "%gpii-express-user/src/schemas",
     events: {
@@ -56,54 +61,21 @@ fluid.defaults("gpii.express.user.api", {
         },
         {
             source: "{that}.options.schemaDirs",
-            target: "{that gpii.express.router}.options.schemaDirs"
+            target: "{that gpii.schema.parser}.options.schemaDirs"
         }
     ],
     components: {
-        // Required middleware
-        json: {
-            type: "gpii.express.middleware.bodyparser.json",
-            priority: "before:session"
-        },
-        urlencoded: {
-            type: "gpii.express.middleware.bodyparser.urlencoded",
-            priority: "before:session"
-        },
-        cookieparser: {
-            type:     "gpii.express.middleware.cookieparser",
-            priority: "before:session"
-        },
-        docs: {
-            type:     "gpii.express.api.docs.router",
-            priority: "before:session"
-        },
-        session: {
-            type: "gpii.express.middleware.session",
-            options: {
-                // We use "session" as the last bit of middleware in the chain so that we can ensure all middleware is
-                // loaded before our routers.
-                namespace: "session",
-                config: {
-                    express: {
-                        session: {
-                            secret: "Printer, printer take a hint-ter."
-                        }
-                    }
-                }
-            }
-        },
-
         // API Endpoints (routers)
         current: {
-            type:     "gpii.express.user.api.current",
+            type:     "gpii.express.user.current",
             priority: "after:session"
         },
         forgot: {
-            type:     "gpii.express.user.api.forgot",
+            type:     "gpii.express.user.forgot",
             priority: "after:session"
         },
         login: {
-            type: "gpii.express.user.api.login",
+            type: "gpii.express.user.login",
             priority: "after:session",
             options: {
                 listeners: {
@@ -114,11 +86,11 @@ fluid.defaults("gpii.express.user.api", {
             }
         },
         logout: {
-            type:     "gpii.express.user.api.logout",
+            type:     "gpii.express.user.logout",
             priority: "after:session"
         },
         reset: {
-            type: "gpii.express.user.api.reset",
+            type: "gpii.express.user.reset",
             priority: "after:session",
             options: {
                 listeners: {
@@ -129,7 +101,7 @@ fluid.defaults("gpii.express.user.api", {
             }
         },
         signup: {
-            type:     "gpii.express.user.api.signup",
+            type:     "gpii.express.user.signup",
             priority: "after:session",
             options: {
                 listeners: {
@@ -140,27 +112,73 @@ fluid.defaults("gpii.express.user.api", {
             }
         },
         verify: {
-            type:     "gpii.express.user.api.verify",
+            type:     "gpii.express.user.verify",
             priority: "after:session"
+        },
+        docs: {
+            type:     "gpii.express.api.docs.router",
+            priority: "last"
         }
     }
 });
 
-// An instance of `gpii.express.user.api` that already has the required session middleware wired in
-//
-// Generally you will want to start with the base grade and provide your own.
-fluid.defaults("gpii.express.user.api.hasMiddleware", {
-    gradeNames: ["gpii.express.user.api"],
+/*
+
+    A mix-in grade that adds the required session middleware to an instance of `gpii.express` or `gpii.express.router`.
+
+    See the documentation for details:
+
+    https://github.com/GPII/gpii-express-user/blob/master/docs/apiComponent.md
+
+ */
+fluid.defaults("gpii.express.user.withRequiredMiddleware", {
     components: {
+        json: {
+            type: "gpii.express.middleware.bodyparser.json",
+            options: {
+                priority: "first"
+            }
+        },
+        urlencoded: {
+            type: "gpii.express.middleware.bodyparser.urlencoded",
+            options: {
+                priority: "after:json"
+            }
+        },
+        handlebars: {
+            type: "gpii.express.hb",
+            options: {
+                priority: "after:urlencoded",
+                templateDirs: "{gpii.express.user.withRequiredMiddleware}.options.templateDirs",
+                components: {
+                    renderer: {
+                        options: {
+                            components: {
+                                initBlock: {
+                                    options: {
+                                        contextToOptionsRules: {
+                                            req: "req"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        cookieparser: {
+            type:     "gpii.express.middleware.cookieparser",
+            options: {
+                priority: "first"
+            }
+        },
         session: {
             type: "gpii.express.middleware.session",
             options: {
-                config: {
-                    express: {
-                        session: {
-                            secret: "Printer, printer take a hint-ter."
-                        }
-                    }
+                priority: "after:cookieparser",
+                sessionOptions: {
+                    secret: "Printer, printer take a hint-ter."
                 }
             }
         }

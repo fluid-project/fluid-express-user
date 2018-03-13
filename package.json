@@ -1,45 +1,48 @@
 {
-  "name": "gpii-express-user",
-  "version": "1.0.0",
-  "description": "A series of Fluid components to provide simple user management.",
-  "main": "src/js/index.js",
-  "scripts": {
-    "test": "node tests/all-tests.js",
-    "postinstall": "bower install"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/GPII/gpii-express-user"
-  },
-  "author": "Tony Atkins <tony@raisingthefloor.org>",
-  "license": "BSD-3-Clause",
-  "bugs": {
-    "url": "https://github.com/GPII/gpii-express-user/issues"
-  },
-  "homepage": "https://github.com/GPII/gpii-express-user",
-  "dependencies": {
-    "gpii-binder": "git://github.com/the-t-in-rtf/gpii-binder#c83ff8cde8ba37c72f7e26bebf81c44d1a681c36",
-    "gpii-express": "git://github.com/the-t-in-rtf/gpii-express#59e852d74d5a198bb96190d47073b97fff224fd9",
-    "gpii-handlebars": "git://github.com/the-t-in-rtf/gpii-handlebars.git#29f6ba242ef97a43f92e3588ba310ae46d336974",
-    "gpii-json-schema": "git://github.com/the-t-in-rtf/gpii-json-schema.git#1f2e57f02113bb55c7cce7a06e805c4c84023970",
-    "handlebars": "4.0.0",
-    "infusion": "2.0.0-dev.20151211T025229Z.eabb4fc",
-    "kettle": "git://github.com/amb26/kettle.git#2517cc1d9d047d58aef70db48d1580da718ffc16",
-    "marked": "^0.3.5",
-    "nodemailer": "^1.4.0",
-    "nodemailer-smtp-transport": "^1.0.3",
-    "request": "^2.63.0"
-  },
-  "devDependencies": {
-    "cookie":     "^0.2.0",
-    "gpii-mail-test": "git://github.com/the-t-in-rtf/gpii-mail-test.git#18c2391b608fe2a9bf83c232e5fa35b51ec23f85",
-    "gpii-pouchdb": "git://github.com/the-t-in-rtf/gpii-pouchdb.git#0d2878d35b4100a1b90277e903467e6b9a18cffe",
-    "gpii-test-browser": "git://github.com/the-t-in-rtf/gpii-test-browser#dc66ced403922dd1e29d7359cd051a780ea22749",
-    "grunt": "0.4.4",
-    "grunt-contrib-jshint": "0.9.0",
-    "grunt-jsonlint": "1.0.4",
-    "grunt-shell": "0.6.4",
-    "mailparser": "^0.5.2",
-    "node-jqunit": "~1.1.3"
-  }
+    "name": "gpii-express-user",
+    "version": "1.0.0",
+    "description": "A series of Fluid components to provide simple user management.",
+    "main": "src/js/index.js",
+    "scripts": {
+        "test": "node node_modules/istanbul/lib/cli.js cover tests/all-tests.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/GPII/gpii-express-user"
+    },
+    "author": "Tony Atkins <tony@raisingthefloor.org>",
+    "license": "BSD-3-Clause",
+    "bugs": {
+        "url": "https://github.com/GPII/gpii-express-user/issues"
+    },
+    "homepage": "https://github.com/GPII/gpii-express-user",
+    "dependencies": {
+        "foundation-sites": "6.3.1",
+        "gpii-binder": "1.0.3",
+        "gpii-express": "1.0.13",
+        "gpii-handlebars": "1.1.0",
+        "gpii-json-schema": "1.0.5",
+        "infusion": "3.0.0-dev.20180227T185528Z.08741e844",
+        "kettle": "1.7.1",
+        "markdown-it": "8.4.1",
+        "nodemailer": "4.6.2",
+        "nodemailer-smtp-transport": "2.7.4",
+        "request": "2.85.0"
+    },
+    "devDependencies": {
+        "cookie": "0.3.1",
+        "eslint": "4.18.2",
+        "eslint-config-fluid": "1.2.0",
+        "fluid-grunt-eslint": "18.1.2",
+        "gpii-mail-test": "1.0.3",
+        "gpii-pouchdb": "1.0.10",
+        "gpii-webdriver": "1.0.2",
+        "grunt": "1.0.2",
+        "grunt-jsonlint": "1.1.0",
+        "handlebars": "4.0.11",
+        "istanbul": "0.4.5",
+        "mailparser": "0.6.2",
+        "node-jqunit": "1.1.8",
+        "pagedown": "1.1.0"
+    }
 }

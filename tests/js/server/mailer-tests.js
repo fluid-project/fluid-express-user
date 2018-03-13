@@ -1,5 +1,6 @@
 // Testing the mail handling, including support for handlebars templates
 //
+/* eslint-env node */
 "use strict";
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
@@ -40,7 +41,7 @@ gpii.mailer.tests.checkResponse = function (mailServerComponent, expected) {
 };
 
 fluid.defaults("gpii.mailer.tests.caseHolder", {
-    gradeNames: ["gpii.express.tests.caseHolder"],
+    gradeNames: ["gpii.test.express.caseHolder"],
     expected: {
         textMessage: {
             from:    [ { address: "sample@localhost", name: "" }],
@@ -53,7 +54,7 @@ fluid.defaults("gpii.mailer.tests.caseHolder", {
             to:      [ { address: "other@localhost",  name: "" }],
             subject: "sample template message...",
             text:    "I am convincingly and customizably happy to be writing you.",
-            html:    "I am convincingly and customizably <p><em>happy</em></p> to be writing you."
+            html:    "I am convincingly and customizably <p><em>happy</em></p>\n to be writing you."
         }
     },
     messages: {
@@ -74,6 +75,7 @@ fluid.defaults("gpii.mailer.tests.caseHolder", {
     },
     rawModules: [
         {
+            name: "Testing outgoing mail handling...",
             tests: [
                 {
                     name: "Test sending a simple message...",
@@ -145,14 +147,14 @@ fluid.defaults("gpii.mailer.tests.environment", {
     gradeNames: ["fluid.test.testEnvironment"],
     mailPort:   "9925",
     events: {
-        constructServer:   null,
-        onStarted:         null,
-        onMessageReceived: null
+        constructFixtures:     null,
+        onFixturesConstructed: null,
+        onMessageReceived:     null
     },
     components: {
         mailServer: {
             type:          "gpii.test.mail.smtp",
-            createOnEvent: "constructServer",
+            createOnEvent: "constructFixtures",
             options: {
                 port: "{testEnvironment}.options.mailPort",
                 components: {
@@ -160,7 +162,7 @@ fluid.defaults("gpii.mailer.tests.environment", {
                         options: {
                             listeners: {
                                 "onReady.notifyEnvironment": {
-                                    func: "{testEnvironment}.events.onStarted.fire"
+                                    func: "{testEnvironment}.events.onFixturesConstructed.fire"
                                 },
                                 "onMessageReceived.notifyEnvironment": {
                                     func: "{testEnvironment}.events.onMessageReceived.fire",
@@ -179,4 +181,4 @@ fluid.defaults("gpii.mailer.tests.environment", {
 
 });
 
-gpii.mailer.tests.environment();
+fluid.test.runTests("gpii.mailer.tests.environment");

@@ -3,6 +3,7 @@
     The password reset process has two steps.  These tests exercise both steps independently and together.
 
  */
+/* eslint-env node */
 "use strict";
 
 var fluid        = require("infusion");
@@ -13,43 +14,32 @@ require("../lib/");
 var jqUnit       = require("node-jqunit");
 var fs           = require("fs");
 
-fluid.registerNamespace("gpii.express.user.api.reset.test.caseHolder");
+fluid.registerNamespace("gpii.tests.express.user.reset.caseHolder");
 
 // Listen for the email with the reset code and launch the reset request
-gpii.express.user.api.reset.test.caseHolder.fullResetVerifyEmail = function (verificationRequest, testEnvironment) {
-    gpii.express.user.api.reset.test.caseHolder.extractResetCode(testEnvironment).then(gpii.express.user.api.signup.test.caseHolder.checkResetCode).then(function (code) {
+gpii.tests.express.user.reset.caseHolder.fullResetVerifyEmail = function (verificationRequest, testEnvironment) {
+    gpii.tests.express.user.reset.caseHolder.extractResetCode(testEnvironment).then(gpii.express.user.signup.test.caseHolder.checkResetCode).then(function (code) {
         verificationRequest.options.path = fluid.stringTemplate(verificationRequest.options.path, { code: code });
         verificationRequest.send({}, { headers: { "Accept": "application/json" }});
     });
 };
 
-gpii.express.user.api.reset.test.caseHolder.checkResetCode = function (code) {
+gpii.tests.express.user.reset.caseHolder.checkResetCode = function (code) {
     jqUnit.assertNotNull("There should be a verification code in the email sent to the user.", code);
     return code;
 };
 
-gpii.express.user.api.reset.test.caseHolder.checkEnvironmentForResetCode = function (testEnvironment) {
-    gpii.express.user.api.reset.test.caseHolder.extractResetCode(testEnvironment).then(gpii.express.user.api.reset.test.caseHolder.checkResetCode);
+gpii.tests.express.user.reset.caseHolder.checkEnvironmentForResetCode = function (testEnvironment) {
+    gpii.tests.express.user.reset.caseHolder.extractResetCode(testEnvironment).then(gpii.tests.express.user.reset.caseHolder.checkResetCode);
 };
 
-gpii.express.user.api.reset.test.caseHolder.extractResetCode = function (testEnvironment) {
-    return gpii.express.user.api.test.extractCode(testEnvironment, "https?://[^/]+/api/user/reset/([a-z0-9-]+)");
+gpii.tests.express.user.reset.caseHolder.extractResetCode = function (testEnvironment) {
+    return gpii.test.express.user.extractCode(testEnvironment, "https?://[^/]+/api/user/reset/([a-z0-9-]+)");
 };
-
-fluid.defaults("gpii.express.user.api.reset.test.request", {
-    gradeNames: ["kettle.test.request.httpCookie"],
-    path: {
-        expander: {
-            funcName: "fluid.stringTemplate",
-            args:     ["%baseUrl%endpoint", { baseUrl: "{testEnvironment}.options.baseUrl", endpoint: "{that}.options.endpoint"}]
-        }
-    },
-    port: "{testEnvironment}.options.apiPort"
-});
 
 // Each test has a request instance of `kettle.test.request.http` or `kettle.test.request.httpCookie`, and a test module that wires the request to the listener that handles its results.
-fluid.defaults("gpii.express.user.api.reset.test.caseHolder", {
-    gradeNames: ["gpii.express.user.tests.caseHolder"],
+fluid.defaults("gpii.tests.express.user.reset.caseHolder", {
+    gradeNames: ["gpii.test.webdriver.caseHolder"],
     testUser: {
         username: "existing",
         email:    "existing@localhost",
@@ -60,44 +50,45 @@ fluid.defaults("gpii.express.user.api.reset.test.caseHolder", {
             type: "kettle.test.cookieJar"
         },
         loginRequest: {
-            type: "gpii.express.user.api.reset.test.request",
+            type: "gpii.test.express.user.request",
             options: {
-                endpoint: "login",
+                endpoint: "api/user/login",
                 method:   "POST"
             }
         },
         bogusResetRequest: {
-            type: "gpii.express.user.api.reset.test.request",
+            type: "gpii.test.express.user.request",
             options: {
-                endpoint: "reset/NONSENSE",
+                endpoint: "api/user/reset/NONSENSE",
                 method:   "POST"
             }
         },
         fullResetForgotRequest: {
-            type: "gpii.express.user.api.reset.test.request",
+            type: "gpii.test.express.user.request",
             options: {
-                endpoint: "forgot",
+                endpoint: "api/user/forgot",
                 method:   "POST"
             }
         },
         fullResetVerifyResetRequest: {
-            type: "gpii.express.user.api.reset.test.request",
+            type: "gpii.test.express.user.request",
             options: {
                 user: "{caseHolder}.options.testUser",
-                endpoint: "reset/%code",
+                endpoint: "api/user/reset/%code",
                 method:   "POST"
             }
         },
         fullResetLoginRequest: {
-            type: "gpii.express.user.api.reset.test.request",
+            type: "gpii.test.express.user.request",
             options: {
-                endpoint: "login",
+                endpoint: "api/user/login",
                 method:   "POST"
             }
         }
     },
     rawModules: [
         {
+            name: "Testing 'forgot password' mechanism...",
             tests: [
                 {
                     name: "Testing resetting a user's password with a bogus reset code...",
@@ -105,12 +96,12 @@ fluid.defaults("gpii.express.user.api.reset.test.caseHolder", {
                     sequence: [
                         {
                             func: "{bogusResetRequest}.send",
-                            args: [{ code: "utter-nonsense-which-should-never-work", password: "something" }]
+                            args: [{ code: "utter-nonsense-which-should-never-work", password: "Something123" }]
                         },
                         {
-                            listener: "gpii.express.user.api.reset.test.caseHolder.verifyResponse",
+                            listener: "gpii.tests.express.user.reset.caseHolder.verifyResponse",
                             event: "{bogusResetRequest}.events.onComplete",
-                            args: ["{bogusResetRequest}.nativeResponse", "{arguments}.0", 400, null, ["ok"]]
+                            args: ["{bogusResetRequest}.nativeResponse", "{arguments}.0", 400, ["isError"]] // response, body, statusCode, truthy, falsy, hasCurrentUser
                         }
                     ]
                 },
@@ -124,28 +115,28 @@ fluid.defaults("gpii.express.user.api.reset.test.caseHolder", {
                         },
                         // If we catch this event, the timing won't work out to cache the initial response.  We can safely ignore it for now.
                         //{
-                        //    listener: "gpii.express.user.api.reset.test.caseHolder.verifyResponse",
+                        //    listener: "gpii.tests.express.user.reset.caseHolder.verifyResponse",
                         //    event: "{fullResetForgotRequest}.events.onComplete",
                         //    args: ["{fullResetForgotRequest}", "{fullResetForgotRequest}.nativeResponse", "{arguments}.0", 200]
                         //},
                         {
-                            listener: "gpii.express.user.api.reset.test.caseHolder.fullResetVerifyEmail",
-                            event:    "{testEnvironment}.harness.smtp.mailServer.events.onMessageReceived",
+                            listener: "gpii.tests.express.user.reset.caseHolder.fullResetVerifyEmail",
+                            event:    "{testEnvironment}.smtp.mailServer.events.onMessageReceived",
                             args:     ["{fullResetVerifyResetRequest}", "{testEnvironment}"]
                         },
                         {
-                            listener: "gpii.express.user.api.reset.test.caseHolder.verifyResponse",
+                            listener: "gpii.tests.express.user.reset.caseHolder.verifyResponse",
                             event: "{fullResetVerifyResetRequest}.events.onComplete",
-                            args: ["{fullResetVerifyResetRequest}.nativeResponse", "{arguments}.0", 200, ["ok"]]
+                            args: ["{fullResetVerifyResetRequest}.nativeResponse", "{arguments}.0", 200, ["message"]]
                         },
                         {
                             func: "{fullResetLoginRequest}.send",
                             args: [{ username: "{that}.options.testUser.username", password: "{that}.options.testUser.password"}]
                         },
                         {
-                            listener: "gpii.express.user.api.reset.test.caseHolder.verifyResponse",
+                            listener: "gpii.tests.express.user.reset.caseHolder.verifyResponse",
                             event: "{fullResetLoginRequest}.events.onComplete",
-                            args: ["{fullResetLoginRequest}.nativeResponse", "{arguments}.0", 200, ["ok", "user"]]
+                            args: ["{fullResetLoginRequest}.nativeResponse", "{arguments}.0", 200, ["user"]]
                         }
                     ]
                 }
@@ -155,11 +146,11 @@ fluid.defaults("gpii.express.user.api.reset.test.caseHolder", {
 });
 
 
-gpii.express.user.api.reset.test.caseHolder.verifyResponse = function (response, body, statusCode, truthy, falsy, hasCurrentUser) {
+gpii.tests.express.user.reset.caseHolder.verifyResponse = function (response, body, statusCode, truthy, falsy, hasCurrentUser) {
     if (!statusCode) { statusCode = 200; }
-    gpii.express.tests.helpers.isSaneResponse(response, body, statusCode);
+    gpii.test.express.helpers.isSaneResponse(response, body, statusCode);
 
-    var data = typeof body === "string" ? JSON.parse(body): body;
+    var data = typeof body === "string" ? JSON.parse(body) : body;
 
     if (truthy) {
         truthy.forEach(function (key) {
@@ -179,8 +170,8 @@ gpii.express.user.api.reset.test.caseHolder.verifyResponse = function (response,
 };
 
 // Listen for the email with the verification code and launch the verification request
-gpii.express.user.api.reset.test.caseHolder.fullResetVerifyEmail = function (resetRequest, testEnvironment) {
-    var content = fs.readFileSync(testEnvironment.harness.smtp.mailServer.currentMessageFile);
+gpii.tests.express.user.reset.caseHolder.fullResetVerifyEmail = function (resetRequest, testEnvironment) {
+    var content = fs.readFileSync(testEnvironment.smtp.mailServer.currentMessageFile);
 
     var MailParser = require("mailparser").MailParser,
         mailparser = new MailParser({ debug: false });
@@ -205,13 +196,16 @@ gpii.express.user.api.reset.test.caseHolder.fullResetVerifyEmail = function (res
     mailparser.end();
 };
 
-gpii.express.user.tests.environment({
-    apiPort:   8779,
-    pouchPort: 8765,
-    mailPort:  8825,
+fluid.defaults("gpii.tests.express.user.reset.environment", {
+    gradeNames: ["gpii.test.express.user.environment"],
+    port:       8779,
+    pouchPort:  8765,
+    mailPort:   8825,
     components: {
         caseHolder: {
-            type: "gpii.express.user.api.reset.test.caseHolder"
+            type: "gpii.tests.express.user.reset.caseHolder"
         }
     }
 });
+
+fluid.test.runTests("gpii.tests.express.user.reset.environment");

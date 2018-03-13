@@ -3,18 +3,13 @@
   Tests for the CouchDB data source used in this package.
 
  */
+/* eslint-env node */
 "use strict";
 var fluid  = require("infusion");
 fluid.logObjectRenderChars = 4096;
 
 var gpii   = fluid.registerNamespace("gpii");
 var jqUnit = require("node-jqunit");
-
-var express = require("gpii-express");
-express.loadTestingSupport();
-
-var kettle = require("kettle");
-kettle.loadTestingSupport();
 
 require("../lib/");
 
@@ -53,9 +48,7 @@ fluid.defaults("gpii.express.user.datasource.tests.writable", {
         write: { _id: "%_id"}
     },
     events: {
-        onResult: null,
-        onWrite:  null, // TODO:  Why is this not picked up from the parent grade?
-        onError:  null // TODO:  Why is this not picked up from the parent grade?
+        onResult: null
     },
     listeners: {
         "onError.fail": {
@@ -67,7 +60,7 @@ fluid.defaults("gpii.express.user.datasource.tests.writable", {
 });
 
 fluid.defaults("gpii.express.users.datasource.tests.caseHolder", {
-    gradeNames: ["gpii.express.tests.caseHolder"],
+    gradeNames: ["gpii.test.webdriver.caseHolder"],
     expected: {
         sample: {
             "username": "sample",
@@ -94,6 +87,7 @@ fluid.defaults("gpii.express.users.datasource.tests.caseHolder", {
     },
     rawModules: [
         {
+            name: "Testing our custom dataSource grade...",
             tests: [
                 {
                     name: "Retrieve a record by a its id...",
@@ -228,29 +222,13 @@ fluid.defaults("gpii.express.users.datasource.tests.caseHolder", {
 });
 
 fluid.defaults("gpii.express.user.datasource.tests", {
-    gradeNames: ["fluid.test.testEnvironment"],
+    gradeNames: ["gpii.test.express.user.environment"],
     pouchPort: "3579",
-    events: {
-        constructServer: null,
-        onStarted: null
-    },
     components: {
-        pouch: {
-            type:          "gpii.express.user.tests.pouch",
-            createOnEvent: "constructServer",
-            options: {
-                pouchPort: "{that}.options.pouchPort",
-                listeners: {
-                    "onAllStarted.notifyParent": {
-                        func: "{testEnvironment}.events.onStarted.fire"
-                    }
-                }
-            }
-        },
         testCaseHolder: {
             type: "gpii.express.users.datasource.tests.caseHolder"
         }
     }
 });
 
-gpii.express.user.datasource.tests();
+fluid.test.runTests("gpii.express.user.datasource.tests");

@@ -1,11 +1,8 @@
 /* example CSS file with handles for all classes used in the controls (only those used in the demos are uncommented). */
 .user-menu {
-    margin-top: 0px;
+    margin-top: -1em;
     border: 1px solid #cccccc;
-    position: absolute;
-    top: 2.7em;
-    z-index: 999;
-    width: 88%;
+    width: 100%;
     background: #ffffff;
 }
 
@@ -26,18 +23,22 @@
 }
 
 .user-controls-toggle::after {
-    border-color: #000000 transparent transparent transparent;
+    border-color: #ffffff transparent transparent transparent;
     border-style: solid;
     content: "";
     display: block;
     height: 0;
     position: absolute;
-    top: 30%;
-    right: 10%;
+    top: 5%;
+    right: 20%;
     border-width: .4em;
     width: 0;
 }
 
 .user-menu .user-controls-toggle::after {
     content: normal;
+}
+
+.user-menu p {
+    padding-left: .75em;
 }

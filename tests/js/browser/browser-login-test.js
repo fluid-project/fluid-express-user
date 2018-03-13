@@ -3,122 +3,105 @@
 // There is some overlap between this and the server-tests.js, a test that fails in both is likely broken on the server
 // side, a test that only fails here is likely broken in the client-facing code.
 //
+/* eslint-env node */
 "use strict";
 var fluid      = require("infusion");
 var gpii       = fluid.registerNamespace("gpii");
 
 require("../lib/");
 
-require("gpii-test-browser");
-gpii.tests.browser.loadTestingSupport();
-
-fluid.defaults("gpii.express.user.tests.login.client.caseHolder", {
-    gradeNames: ["gpii.express.user.tests.caseHolder.withBrowser"],
+fluid.defaults("gpii.tests.express.user.login.client.caseHolder", {
+    gradeNames: ["gpii.test.webdriver.caseHolder"],
     rawModules: [
         {
+            name: "Testing login functions with a test browser...",
             tests: [
                 {
                     name: "Login with a valid username and password and then log out...",
                     type: "test",
                     sequence: [
                         {
-                            func: "{testEnvironment}.browser.goto",
+                            func: "{testEnvironment}.webdriver.get",
                             args: ["{testEnvironment}.options.loginUrl"]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onLoaded",
-                            listener: "{testEnvironment}.browser.wait",
-                            args:     ["{testEnvironment}.options.waitAfterLoad"]
+                            event:    "{testEnvironment}.webdriver.events.onGetComplete",
+                            listener: "{testEnvironment}.webdriver.wait",
+                            args:     [gpii.webdriver.until.elementLocated({ css: ".login-form"})]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onWaitComplete",
-                            listener: "{testEnvironment}.browser.type",
-                            args:     ["[name='username']", "existing"]
+                            event:    "{testEnvironment}.webdriver.events.onWaitComplete",
+                            listener: "{testEnvironment}.webdriver.actionsHelper",
+                            args:     [[{fn: "sendKeys", args: [gpii.webdriver.Key.TAB, "existing", gpii.webdriver.Key.TAB, "password", gpii.webdriver.Key.ENTER]}]]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onTypeComplete",
-                            listener: "{testEnvironment}.browser.wait",
-                            args:     ["{testEnvironment}.options.waitTimeout"]
+                            event:    "{testEnvironment}.webdriver.events.onActionsHelperComplete",
+                            listener: "{testEnvironment}.webdriver.wait",
+                            args:     [gpii.webdriver.until.elementLocated({ css: ".login-success .success"})]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onWaitComplete",
-                            listener: "{testEnvironment}.browser.type",
-                            args:     ["[name='password']", "password"]
+                            func: "{testEnvironment}.webdriver.findElement",
+                            args: [{ css: ".login-success .success"}]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onTypeComplete",
-                            listener: "{testEnvironment}.browser.screenshot",
-                            args:     []
+                            event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
+                            listener: "gpii.test.webdriver.inspectElement",
+                            args:     ["A login success message should now be displayed...", "{arguments}.0", "getText", "You have successfully logged in."] // message, element, elementFn, expectedValue, jqUnitFn
                         },
                         {
-                            func: "{testEnvironment}.browser.click",
-                            args:     [".login-button"]
+                            func: "{testEnvironment}.webdriver.findElement",
+                            args: [{ css: ".login-error"}]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onClickComplete",
-                            listener: "{testEnvironment}.browser.wait",
-                            args:     ["{testEnvironment}.options.waitTimeout"]
+                            event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
+                            listener: "gpii.test.webdriver.inspectElement",
+                            args:     ["A login failure message should not be displayed...", "{arguments}.0", "getText", ""] // message, element, elementFn, expectedValue, jqUnitFn
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onWaitComplete",
-                            listener: "{testEnvironment}.browser.evaluate",
-                            args:     [gpii.tests.browser.tests.elementMatches, ".login-success", "You have successfully logged in."]
+                            func: "{testEnvironment}.webdriver.findElement",
+                            args: [{ css: ".login-form"}]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
-                            listener: "jqUnit.assertTrue",
-                            args:     ["A success message should now be displayed...", "{arguments}.0"]
+                            event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
+                            listener: "gpii.test.webdriver.inspectElement",
+                            args:     ["The login form should no longer be visible...", "{arguments}.0", "isDisplayed", false] // message, element, elementFn, expectedValue, jqUnitFn
                         },
                         {
-                            func: "{testEnvironment}.browser.evaluate",
-                            args: [gpii.tests.browser.tests.lookupFunction, ".login-error", "innerHTML"]
+                            func: "{testEnvironment}.webdriver.findElement",
+                            args: [{ css: ".user-controls-toggle"}]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
-                            listener: "jqUnit.assertNull",
-                            args:     ["A failure message should not be displayed...", "{arguments}.0"]
+                            event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
+                            listener: "gpii.test.webdriver.inspectElement",
+                            args:     ["The username should now be displayed.", "{arguments}.0", "getText", "existing"] // message, element, elementFn, expectedValue, jqUnitFn
                         },
                         {
-                            func: "{testEnvironment}.browser.visible",
-                            args: [".login-form"]
+                            func: "{testEnvironment}.webdriver.actionsHelper",
+                            args: [[{fn: "sendKeys", args: [gpii.webdriver.Key.TAB, gpii.webdriver.Key.ENTER, gpii.webdriver.Key.ENTER]}]]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onVisibleComplete",
-                            listener: "jqUnit.assertFalse",
-                            args:     ["The login form should no longer be visible...", "{arguments}.0"]
+                            event:    "{testEnvironment}.webdriver.events.onActionsHelperComplete",
+                            listener: "{testEnvironment}.webdriver.wait",
+                            args:     [gpii.webdriver.until.elementLocated({ css: ".login-form"})]
                         },
                         {
-                            func: "{testEnvironment}.browser.click",
-                            args: [".user-controls-toggle"]
+                            event:    "{testEnvironment}.webdriver.events.onWaitComplete",
+                            listener: "{testEnvironment}.webdriver.findElement",
+                            args:     [{ css: ".login-form"}]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onClickComplete",
-                            listener: "{testEnvironment}.browser.click",
-                            args:     [".user-menu-logout"]
+                            event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
+                            listener: "gpii.test.webdriver.inspectElement",
+                            args:     ["The login form should be visible again...", "{arguments}.0", "isDisplayed", true] // message, element, elementFn, expectedValue, jqUnitFn
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onClickComplete",
-                            listener: "{testEnvironment}.browser.wait",
-                            args:     ["{testEnvironment}.options.waitTimeout"]
+                            func: "{testEnvironment}.webdriver.findElement",
+                            args: [{ css: ".user-controls-toggle"}]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onWaitComplete",
-                            listener: "{testEnvironment}.browser.evaluate",
-                            args:     [gpii.tests.browser.tests.elementMatches, ".user-controls-toggle", "Not Logged In"]
-                        },
-                        {
-                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
-                            listener: "jqUnit.assertTrue",
-                            args:     ["A username should not be displayed in the user controls...", "{arguments}.0"]
-                        },
-                        {
-                            func: "{testEnvironment}.browser.visible",
-                            args: [".login-form"]
-                        },
-                        {
-                            event:    "{testEnvironment}.browser.events.onVisibleComplete",
-                            listener: "jqUnit.assertTrue",
-                            args:     ["The login form should be visible again...", "{arguments}.0"]
+                            event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
+                            listener: "gpii.test.webdriver.inspectElement",
+                            args:     ["The user controls should no longer indicate that the user is logged in.", "{arguments}.0", "getText", "Not Logged In"] // message, element, elementFn, expectedValue, jqUnitFn
                         }
                     ]
                 },
@@ -127,57 +110,50 @@ fluid.defaults("gpii.express.user.tests.login.client.caseHolder", {
                     type: "test",
                     sequence: [
                         {
-                            func: "{testEnvironment}.browser.goto",
+                            func: "{testEnvironment}.webdriver.get",
                             args: ["{testEnvironment}.options.loginUrl"]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onLoaded",
-                            listener: "{testEnvironment}.browser.wait",
-                            args:     ["{testEnvironment}.options.waitAfterLoad"]
+                            event:    "{testEnvironment}.webdriver.events.onGetComplete",
+                            listener: "{testEnvironment}.webdriver.wait",
+                            args:     [gpii.webdriver.until.elementLocated({ css: ".login-form"})]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onWaitComplete",
-                            listener: "{testEnvironment}.browser.type",
-                            args:     ["[name='username']", "bogus"]
+                            event:    "{testEnvironment}.webdriver.events.onWaitComplete",
+                            listener: "{testEnvironment}.webdriver.actionsHelper",
+                            args:     [[{fn: "sendKeys", args: [gpii.webdriver.Key.TAB, "bogusUsername", gpii.webdriver.Key.TAB, "bogusPassword", gpii.webdriver.Key.ENTER]}]]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onTypeComplete",
-                            listener: "{testEnvironment}.browser.type",
-                            args:     ["[name='password']", "bogus"]
+                            event:    "{testEnvironment}.webdriver.events.onActionsHelperComplete",
+                            listener: "{testEnvironment}.webdriver.wait",
+                            args:     [gpii.webdriver.until.elementLocated({ css: ".login-error .alert"})]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onTypeComplete",
-                            listener: "{testEnvironment}.browser.wait",
-                            args:     ["{testEnvironment}.options.waitTimeout"]
+                            func: "{testEnvironment}.webdriver.findElement",
+                            args: [{ css: ".login-error .alert"}]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onWaitComplete",
-                            listener: "{testEnvironment}.browser.click",
-                            args:     [".login-button"]
+                            event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
+                            listener: "gpii.test.webdriver.inspectElement",
+                            args:     ["A login failure message should be displayed...", "{arguments}.0", "getText", "Invalid username or password."] // message, element, elementFn, expectedValue, jqUnitFn
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onClickComplete",
-                            listener: "{testEnvironment}.browser.wait",
-                            args:     ["{testEnvironment}.options.waitTimeout"]
+                            func: "{testEnvironment}.webdriver.findElement",
+                            args: [{ css: ".login-success"}]
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onWaitComplete",
-                            listener: "{testEnvironment}.browser.evaluate",
-                            args: [gpii.tests.browser.tests.elementMatches, ".login-error .alert", "Invalid username or password."]
+                            event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
+                            listener: "gpii.test.webdriver.inspectElement",
+                            args:     ["A login success message should not be displayed...", "{arguments}.0", "getText", ""] // message, element, elementFn, expectedValue, jqUnitFn
                         },
                         {
-                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
-                            listener: "jqUnit.assertTrue",
-                            args:     ["A failure message should now be displayed...", "{arguments}.0"]
+                            func: "{testEnvironment}.webdriver.findElement",
+                            args: [{ css: ".login-form"}]
                         },
                         {
-                            func: "{testEnvironment}.browser.evaluate",
-                            args: [gpii.tests.browser.tests.lookupFunction, ".login-success", "innerHTML"]
-                        },
-                        {
-                            event:    "{testEnvironment}.browser.events.onEvaluateComplete",
-                            listener: "jqUnit.assertNull",
-                            args:     ["A success message should not be displayed...", "{arguments}.0"]
+                            event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
+                            listener: "gpii.test.webdriver.inspectElement",
+                            args:     ["The login form should still be visible...", "{arguments}.0", "isDisplayed", true] // message, element, elementFn, expectedValue, jqUnitFn
                         }
                     ]
                 }
@@ -186,22 +162,22 @@ fluid.defaults("gpii.express.user.tests.login.client.caseHolder", {
     ]
 });
 
-gpii.express.user.tests.environment.withBrowser({
-    apiPort:     7542,
-    pouchPort:   7524,
-    mailPort:    4099,
-    waitTimeout: 1500,
-    waitAfterLoad: 1500,
+fluid.defaults("gpii.tests.express.user.login.client.environment", {
+    gradeNames: ["gpii.test.express.user.environment.withBrowser"],
+    port:       7542,
+    pouchPort:  7524,
+    mailPort:   4099,
     loginUrl: {
         expander: {
             funcName: "fluid.stringTemplate",
-            args: ["%baseUrl%path", { baseUrl: "{testEnvironment}.options.baseUrl", path: "login"}]
+            args: ["%baseUrl%path", { baseUrl: "{testEnvironment}.options.baseUrl", path: "api/user/login"}]
         }
     },
     components: {
         testCaseHolder: {
-            type: "gpii.express.user.tests.login.client.caseHolder"
+            type: "gpii.tests.express.user.login.client.caseHolder"
         }
     }
 });
 
+gpii.test.webdriver.allBrowsers({ baseTestEnvironment: "gpii.tests.express.user.login.client.environment"});

@@ -1,9 +1,9 @@
 // The common test harness we will use for all tests as well as manual verification.
+/* eslint-env node */
 "use strict";
 var fluid = require("infusion");
 
-require("../../../index");
-
+require("../../../");
 
 require("gpii-express");
 require("gpii-handlebars");
@@ -12,31 +12,119 @@ require("gpii-mail-test");
 require("./test-harness-pouch");
 
 
-fluid.defaults("gpii.express.user.tests.harness.gated.handler", {
+fluid.defaults("gpii.test.express.user.harness.gated.handler", {
     gradeNames: ["gpii.express.handler"],
     invokers: {
         handleRequest: {
             funcName: "gpii.express.handler.sendResponse",
-            args: ["{that}", "{that}.response", 200, { ok: true, message: "You are in the club!"}]
+            args: ["{that}", "{that}.options.response", 200, { ok: true, message: "You are in the club!"}]
         }
     }
 });
 
-// TODO:  Update this to use the new version of gpii-mail-test once we have a Zombie version that works in 0.12 or higher.
-fluid.defaults("gpii.express.user.tests.harness", {
+fluid.defaults("gpii.test.express.user.harness.express", {
+    gradeNames: ["gpii.express", "gpii.express.user.withRequiredMiddleware"],
+    distributeOptions: {
+        record: 1000000,
+        target: "{that gpii.express.handlerDispatcher}.options.timeout"
+    },
+    components: {
+        // Front-end content used by some GET calls
+        modules: {
+            type:  "gpii.express.router.static",
+            options: {
+                namespace: "modules",
+                priority:  "after:session",
+                path:      "/modules",
+                content:   "%gpii-express-user/node_modules"
+            }
+        },
+        inline: {
+            type: "gpii.handlebars.inlineTemplateBundlingMiddleware",
+            options: {
+                namespace:    "inline",
+                priority:     "after:modules",
+                path:         "/hbs"
+            }
+        },
+        schemas: {
+            type: "gpii.express.router.static",
+            options: {
+                namespace: "schemas",
+                priority:  "after:inline",
+                path:      "/schemas",
+                content:   "%gpii-express-user/src/schemas"
+            }
+        },
+        inlineSchemas: {
+            type: "gpii.schema.inlineMiddleware",
+            options: {
+                namespace:  "inlineSchemas",
+                priority:   "after:schemas",
+                schemaDirs: "%gpii-express-user/src/schemas"
+            }
+        },
+        api: {
+            type: "gpii.express.user.api",
+            options: {
+                path:      "/api/user",
+                namespace: "api",
+                priority:  "after:inlineSchemas",
+                couch:  {
+                    userDbName: "users",
+                    userDbUrl: {
+                        expander: {
+                            funcName: "fluid.stringTemplate",
+                            args: ["http://localhost:%port/%userDbName", "{that}.options.couch"]
+                        }
+                    }
+                },
+                app: {
+                    name: "gpii-express.user test harness..."
+                }
+            }
+        },
+        // A "gated" endpoint that can only be accessed if the user is logged in
+        gated: {
+            type: "gpii.express.user.middleware.loginRequired.router",
+            options: {
+                namespace:     "gated",
+                path:          "/gated",
+                priority:      "after:api",
+                handlerGrades: ["gpii.test.express.user.harness.gated.handler"]
+            }
+        },
+        // Serve up the rest of our static content (JS source, etc.)
+        src: {
+            type:  "gpii.express.router.static",
+            options: {
+                namespace: "src",
+                path:      "/",
+                priority:  "after:gated",
+                content:   "%gpii-express-user/src"
+            }
+        },
+        jsonErrors: {
+            type: "gpii.express.middleware.error",
+            options: {
+                priority: "after:src"
+            }
+        }
+    }
+});
+
+fluid.defaults("gpii.test.express.user.harness", {
     gradeNames: ["fluid.component"],
+    port:       "5379",
     pouchPort:  "9735",
-    apiPort:    "5379",
     mailPort:   "5225",
+    templateDirs: ["%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
     baseUrl: {
         expander: {
             funcName: "fluid.stringTemplate",
-            args:     ["http://localhost:%port/", { port: "{that}.options.apiPort"}]
+            args:     ["http://localhost:%port/", { port: "{that}.options.port"}]
         }
     },
-    // As we may commonly be working with a debugger, we need a much longer timeout for all `requestAwareRouter` and `contentAware` grades.
-    timeout: 99999999,
-    templateDirs: ["%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
     distributeOptions: [
         {
             source: "{that}.options.timeout",
@@ -52,177 +140,41 @@ fluid.defaults("gpii.express.user.tests.harness", {
             target: "{that gpii.express.user.mailer}.options.transportOptions.port"
         }
     ],
-    events: {
-        onApiDone:             null,
-        onApiReady:            null,
-        onApiStarted:          null,
-        onMailDone:            null,
-        onMailReady:           null,
-        onPouchDone:           null,
-        onPouchStarted:        null,
-        onPouchExpressStarted: null, // TODO:  Remove?
-        onStarted: {
-            events: {
-                onPouchStarted: "onPouchStarted",
-                onApiStarted:   "onApiStarted",
-                onApiReady:     "onApiReady",
-                onMailReady:    "onMailReady"
-            }
-        },
-        onDone: {
-            events: {
-                onPouchDone: "onPouchDone",
-                onApiDone:   "onApiDone",
-                onMailDone:  "onMailDone"
-            }
-        }
-    },
     components: {
-        api: {
-            type: "gpii.express",
+        express: {
+            type: "gpii.test.express.user.harness.express",
             options: {
-                config: {
-                    express: {
-                        port:  "{harness}.options.apiPort",
-                        views: "%gpii-express-user/src/templates"
-                    },
-                    app: {
-                        name: "Express User Test Harness",
-                        url:  "{harness}.options.baseUrl"
-                    }
-                },
-                listeners: {
-                    "onStarted.notifyParent": "{harness}.events.onApiStarted.fire",
-                    "afterDestroy.notifyParent": "{harness}.events.onApiDone.fire"
-                },
+                port:  "{harness}.options.port",
+                templateDirs: "{harness}.options.templateDirs",
                 components: {
-                    session: {
-                        type: "gpii.express.middleware.session",
-                        options: {
-                            config: {
-                                express: {
-                                    session: {
-                                        secret: "Printer, printer take a hint-ter."
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    handlebars: {
-                        type: "gpii.express.hb",
-                        options: {
-                            templateDirs: "{gpii.express.user.tests.harness}.options.templateDirs",
-                            components: {
-                                initBlock: {
-                                    options: {
-                                        contextToOptionsRules: {
-                                            req: "req"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    // Front-end content used by some GET calls
-                    modules: {
-                        type:  "gpii.express.router.static",
-                        options: {
-                            path:    "/modules",
-                            content: "%gpii-express-user/node_modules"
-                        }
-                    },
-                    bc: {
-                        type:  "gpii.express.router.static",
-                        options: {
-                            path:    "/bc",
-                            content: "%gpii-express-user/bower_components"
-                        }
-                    },
                     inline: {
-                        type: "gpii.express.hb.inline",
                         options: {
-                            path: "/hbs",
-                            templateDirs: "{gpii.express.user.tests.harness}.options.templateDirs"
-                        }
-                    },
-                    schemas: {
-                        type: "gpii.express.router.static",
-                        options: {
-                            path:    "/schemas",
-                            content: "%gpii-express-user/src/schemas"
-                        }
-                    },
-                    inlineSchemas: {
-                        type: "gpii.schema.inline.router",
-                        options: {
-                            schemaDirs: "%gpii-express-user/src/schemas"
+                            templateDirs: "{harness}.options.templateDirs"
                         }
                     },
                     api: {
-                        type: "gpii.express.user.api",
                         options: {
-                            path:        "/api/user",
                             couch:  {
-                                port: "{harness}.options.pouchPort",
-                                userDbName: "users",
-                                userDbUrl: {
-                                    expander: {
-                                        funcName: "fluid.stringTemplate",
-                                        args:     ["http://localhost:%port/%userDbName", "{that}.options.couch"]
-                                    }
-                                }
+                                port: "{harness}.options.pouchPort"
                             },
-                            listeners: {
-                                "onReady.notifyHarness": {
-                                    func: "{harness}.events.onApiReady.fire"
-
-                                }
-                            },
-                            app: "{gpii.express}.options.config.app"
-                        }
-                    },
-                    // Serve up the rest of our static content (JS source, etc.)
-                    src: {
-                        type:  "gpii.express.router.static",
-                        options: {
-                            path:    "/",
-                            content: "%gpii-express-user/src"
-                        }
-                    },
-                    // A "gated" endpoint that can only be accessed if the user is logged in
-                    gated: {
-                        type: "gpii.express.user.middleware.loginRequired.router",
-                        options: {
-                            path: "/gated",
-                            handlerGrades: ["gpii.express.user.tests.harness.gated.handler"]
+                            app: {
+                                url:  "{harness}.options.baseUrl"
+                            }
                         }
                     }
                 }
             }
         },
         pouch: {
-            type: "gpii.express.user.tests.pouch",
+            type: "gpii.test.express.user.pouch",
             options: {
-                pouchPort: "{harness}.options.pouchPort",
-                listeners: {
-                    onAllStarted: "{harness}.events.onPouchStarted.fire",
-                    "afterDestroy.notifyParent": "{harness}.events.onPouchDone.fire"
-                }
+                port: "{harness}.options.pouchPort"
             }
         },
         smtp: {
             type: "gpii.test.mail.smtp",
             options: {
-                port: "{harness}.options.mailPort",
-                listeners: {
-                    "onReady": [
-                        { funcName: "fluid.log", args: ["mail server started and notifying parent..."]},
-                        {
-                            func: "{harness}.events.onMailReady.fire"
-                        }
-                    ],
-                    "afterDestroy.notifyParent": "{harness}.events.onMailDone.fire"
-                }
+                port: "{harness}.options.mailPort"
             }
         }
     }

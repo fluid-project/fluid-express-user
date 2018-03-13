@@ -1,6 +1,7 @@
 // Utility to examine a mail message and extract a code based on a regexp.  Used with both the password reset and
 // account creation tests.
 //
+/* eslint-env node */
 "use strict";
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
@@ -8,10 +9,10 @@ var gpii  = fluid.registerNamespace("gpii");
 var fs = require("fs");
 var MailParser = require("mailparser").MailParser;
 
-fluid.registerNamespace("gpii.express.user.api.test");
+fluid.registerNamespace("gpii.test.express.user");
 
-gpii.express.user.api.test.extractCode = function (testEnvironment, pattern) {
-    var content = fs.readFileSync(testEnvironment.harness.smtp.mailServer.currentMessageFile, "utf8");
+gpii.test.express.user.extractCode = function (testEnvironment, pattern) {
+    var content = fs.readFileSync(testEnvironment.smtp.mailServer.currentMessageFile, "utf8");
 
     var promise = fluid.promise();
 
