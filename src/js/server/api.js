@@ -68,16 +68,20 @@ fluid.defaults("gpii.express.user.api", {
         // API Endpoints (routers)
         current: {
             type:     "gpii.express.user.current",
-            priority: "after:session"
+            options: {
+                priority: "after:session"
+            }
         },
         forgot: {
             type:     "gpii.express.user.forgot",
-            priority: "after:session"
+            options: {
+                priority: "after:session"
+            }
         },
         login: {
             type: "gpii.express.user.login",
-            priority: "after:session",
             options: {
+                priority: "after:session",
                 listeners: {
                     "onSchemasDereferenced.notifyParent": {
                         func: "{gpii.express.user.api}.events.onLoginReady.fire"
@@ -87,12 +91,14 @@ fluid.defaults("gpii.express.user.api", {
         },
         logout: {
             type:     "gpii.express.user.logout",
-            priority: "after:session"
+            options: {
+                priority: "after:session"
+            }
         },
         reset: {
             type: "gpii.express.user.reset",
-            priority: "after:session",
             options: {
+                priority: "after:session",
                 listeners: {
                     "onSchemasDereferenced.notifyParent": {
                         func: "{gpii.express.user.api}.events.onResetReady.fire"
@@ -102,8 +108,8 @@ fluid.defaults("gpii.express.user.api", {
         },
         signup: {
             type:     "gpii.express.user.signup",
-            priority: "after:session",
             options: {
+                priority: "after:session",
                 listeners: {
                     "onSchemasDereferenced.notifyParent": {
                         func: "{gpii.express.user.api}.events.onSignupReady.fire"
@@ -113,11 +119,15 @@ fluid.defaults("gpii.express.user.api", {
         },
         verify: {
             type:     "gpii.express.user.verify",
-            priority: "after:session"
+            options: {
+                priority: "after:session"
+            }
         },
         docs: {
             type:     "gpii.express.api.docs.router",
-            priority: "last"
+            options: {
+                priority: "last"
+            }
         }
     }
 });
