@@ -3,7 +3,6 @@
 This is a `gpii.express.router` grade that mounts all parts of the user API under it.  In terms of the default path
 (`/user`), these endpoints include:
 
-
 * [`/user/current`](currentComponent.md)
 * [`/user/forgot`](forgotComponent.md)
 * [`/user/login`](loginComponent.md)
@@ -29,7 +28,7 @@ order in which middleware loads is controlled using [namespaces and priorities](
 If you want this to be taken care of automatically, mix the `gpii.express.user.api.withRequiredMiddleware` grade
 into your `gpii.express` instance, as in the following example:
 
-```
+```javascript
 gpii.express({
     gradeNames: ["gpii.express.user.api.withRequiredMiddleware"],
     port: "8080",
@@ -47,7 +46,7 @@ gpii.express({
 This would result in the API being available on `http://localhost:8080/user`.  The same mix-in grade can be used with
 a `gpii.express.router` instance, as in the following example:
 
-```
+```javascript
 gpii.express({
     gradeNames: ["gpii.express.user.api.withRequiredMiddleware"],
     port: "8080",
@@ -56,7 +55,7 @@ gpii.express({
             type: "gpii.express.router.passthrough",
             options: {
                 path: "/v1.0.0",
-                gradeNames: ["gpii.express.user.api.withRequiredMiddleware"]
+                gradeNames: ["gpii.express.user.api.withRequiredMiddleware"],
                 components: {
                     api: {
                         type: "gpii.express.user.api",
@@ -94,8 +93,7 @@ this component supports the following unique options:
 When resolving schemas and templates from `schemaDirs` and `templateDirs`, the first directory containing matching
 content is used.
 
-
 ## Component Invokers
 
 This component has no unique invokers.  For details on the `route` invoker it inherits from `gpii.express.router.passthrough`,
-see the [`gpii.express` router documentation](In https://github.com/GPII/gpii-express/blob/master/docs/router.md).
+see the [`gpii.express` router documentation](https://github.com/GPII/gpii-express/blob/master/docs/router.md).

@@ -12,13 +12,12 @@ This component supports only the common options available to any
 [`gpii.express.router`](https://github.com/GPII/gpii-express/blob/master/docs/router.md) or
 [`gpii.express.requestAware.router`](https://github.com/GPII/gpii-express/blob/master/docs/requestAwareRouter.md) instance.
 
-
-# `gpii.express.user.api.current.handler`
+## `gpii.express.user.api.current.handler`
 
 This component is an instance of [`gpii.express.handler`]((https://github.com/GPII/gpii-express/blob/master/docs/handler.md)),
 meant for use with the above `requestAwareRouter`.
 
-## Component options
+### Component options
 
 In addition to the options for any instance of [`gpii.express.router`](https://github.com/GPII/gpii-express/blob/master/docs/router.md),
 this component supports the following unique options:
@@ -27,10 +26,10 @@ this component supports the following unique options:
 | ------------ | ---------- | ----------- |
 | `sessionKey` | `{String}` | The session key to use when storing our session information in `req.session`.  Must match what is found in `loginRequired` and other grades used in this package. |
 
+### Component Invokers
 
-## Component Invokers
+#### `{that}.handleRequest()`
 
-### `{that}.handleRequest()`
 * Returns: Nothing.
 
 Fulfills the standard contract for an instance of [`gpii.express.handler`]((https://github.com/GPII/gpii-express/blob/master/docs/handler.md)).
