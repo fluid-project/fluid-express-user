@@ -13,25 +13,17 @@ require("./lib/password");
 
 fluid.registerNamespace("gpii.express.user.login");
 
-gpii.express.user.login.post.handler.verifyPassword = function (that, response) {
-    // The user exists, so we can check the supplied password against our records.
-    if (response.username) {
-        var encodedPassword = gpii.express.user.password.encode(that.options.request.body.password, response.salt, response.iterations, response.keyLength, response.digest);
-        if (encodedPassword === response.derived_key) {
-            // Transform the raw response to ensure that nothing sensitive is exposed to the user
-            var user = fluid.model.transformWithRules(response, that.options.rules.user);
+gpii.express.user.login.post.handler.verifyPassword = function (that, utils, request, response) {
+    utils.unlockUser(request.body.username, request.body.password).then(
+        function (data) {
+            var user = fluid.model.transformWithRules(data, that.options.rules.user);
             that.options.request.session[that.options.sessionKey] = user;
             that.sendResponse(200, { message: that.options.messages.success, user: user});
-        }
-        // The password didn't match.
-        else {
+        },
+        function (err, data) {
             that.sendResponse(401, { isError: true, message: that.options.messages.failure});
         }
-    }
-    // The user doesn't exist, but we send the same failure message to avoid giving intruders a way to validate usernames.
-    else {
-        that.sendResponse(401, { isError: true, message: that.options.messages.failure});
-    }
+    );
 };
 
 fluid.defaults("gpii.express.user.login.post.handler", {
@@ -50,8 +42,8 @@ fluid.defaults("gpii.express.user.login.post.handler", {
     method: "post",
     invokers: {
         handleRequest: {
-            func: "{reader}.get",
-            args: ["{that}.options.request.body"]
+            funcName: "gpii.express.user.login.post.handler.verifyPassword",
+            args: ["{that}", "{gpii.express.user.utils}", "{that}.options.request", "{that}.options.response"]
         }
     },
     components: {
