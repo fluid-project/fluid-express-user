@@ -13,14 +13,14 @@ require("./lib/password");
 
 fluid.registerNamespace("gpii.express.user.login");
 
-gpii.express.user.login.post.handler.verifyPassword = function (that, utils, request, response) {
+gpii.express.user.login.post.handler.verifyPassword = function (that, utils, request) {
     utils.unlockUser(request.body.username, request.body.password).then(
         function (data) {
             var user = fluid.model.transformWithRules(data, that.options.rules.user);
             that.options.request.session[that.options.sessionKey] = user;
             that.sendResponse(200, { message: that.options.messages.success, user: user});
         },
-        function (err, data) {
+        function () {
             that.sendResponse(401, { isError: true, message: that.options.messages.failure});
         }
     );
@@ -43,7 +43,7 @@ fluid.defaults("gpii.express.user.login.post.handler", {
     invokers: {
         handleRequest: {
             funcName: "gpii.express.user.login.post.handler.verifyPassword",
-            args: ["{that}", "{gpii.express.user.utils}", "{that}.options.request", "{that}.options.response"]
+            args: ["{that}", "{gpii.express.user.utils}", "{that}.options.request"]
         }
     },
     components: {

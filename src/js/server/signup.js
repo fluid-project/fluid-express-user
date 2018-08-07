@@ -1,9 +1,8 @@
 /* eslint-env node */
 "use strict";
+
 var fluid  = require("infusion");
 var gpii   = fluid.registerNamespace("gpii");
-
-var request = require("request"); // TODO:  Replace this with a writable data source.
 
 require("gpii-handlebars");
 
@@ -31,7 +30,7 @@ gpii.express.user.signup.post.handler.checkForExistingUser = function (that, uti
                 that.user = data;
                 that.sendMessage();
             },
-            function (error, data) {
+            function (error) {
                 that.sendResponse(500, {isError: true, message: error});
             }
         );

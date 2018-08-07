@@ -10,7 +10,6 @@
 /* eslint-env node */
 "use strict";
 var fluid = require("infusion");
-var request = require("request"); // TODO:  Replace this with a writable data source.
 
 require("gpii-express");
 require("./current.js");
@@ -23,7 +22,6 @@ require("./signup.js");
 require("./verify.js");
 require("./utils.js");
 
-var gpii = fluid.registerNamespace("gpii");
 fluid.registerNamespace("gpii.express.user.api");
 
 fluid.defaults("gpii.express.user.api", {

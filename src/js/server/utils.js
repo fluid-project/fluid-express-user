@@ -1,8 +1,8 @@
 /*
 
-    Utilities methods for performing user operations. These utilities should 
+    Utilities methods for performing user operations. These utilities should
     be usable from both http endpoints, and any other locations that can
-    consume promise based API's. 
+    consume promise based API's.
 
     Utilities are included for:
     - Creating new user accounts
@@ -109,7 +109,7 @@ gpii.express.user.utils.createNewUser = function (that, userData) {
 };
 
 gpii.express.user.utils.verifyPassword = function (userRecord, password) {
-    var encodedPassword = gpii.express.user.password.encode(password, 
+    var encodedPassword = gpii.express.user.password.encode(password,
         userRecord.salt, userRecord.iterations, userRecord.keyLength, userRecord.digest);
     return encodedPassword === userRecord.derived_key;
 };
@@ -122,7 +122,7 @@ gpii.express.user.utils.unlockUser = function (that, username, password) {
                 var user = body;
                 var encodedPassword = gpii.express.user.password.encode(password, user.salt, user.iterations, user.keyLength, user.digest);
                 if (encodedPassword === user.derived_key) {
-                    promiseTogo.resolve(user);     
+                    promiseTogo.resolve(user);
                 }
                 else {
                     promiseTogo.reject({isError: true, message: "Bad username/password"});
@@ -132,7 +132,7 @@ gpii.express.user.utils.unlockUser = function (that, username, password) {
                 promiseTogo.reject({isError: true, message: "Bad username/password"});
             }
         },
-        function (error, data) {
+        function () {
             promiseTogo.reject({isError: true, message: "Bad username/password"});
         }
     );
