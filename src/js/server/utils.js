@@ -17,6 +17,15 @@ var request = require("request"); // TODO:  Replace this with a writable data so
 var gpii = fluid.registerNamespace("gpii");
 fluid.registerNamespace("gpii.express.user.utils");
 
+/**
+ *  gpii.express.user.utils
+ *
+ *  Component that implements backend utilities as promise based
+ *  invokers that can be used from http handers or other infrastructure.
+ *
+ *  Expects to be distributed the same couch options as the other components
+ *  in gpii-express-user.
+ */
 fluid.defaults("gpii.express.user.utils", {
     gradeNames: ["fluid.component"],
     invokers: {
@@ -69,6 +78,21 @@ fluid.defaults("gpii.express.user.utils", {
     }
 });
 
+/**
+ * Creates a new gpii-express-user in the configured user database.
+ * `userData` is an object of values to create the new user with.
+ * At the very least this should consist of values for `username`,
+ * `email`, and `password`. The transformation acting on this data
+ * is located at `{gpii.express.user.utils}.rules.createUserWrite`.
+ *
+ * @param {gpii.express.user.utils} that - Utils Component
+ * @param {Object} userData - Object with values for the new user.
+ * @param {String} userData.username - New users username
+ * @param {String} userData.email - New users email
+ * @param {String} userData.password - Password for new account
+ * @return {Promise} Promise container either the new Couch Record for
+ * the account or an `error` property and message.
+ */
 gpii.express.user.utils.createNewUser = function (that, userData) {
     // Encode the user's password
     var salt        = gpii.express.user.password.generateSalt(that.options.saltLength);
@@ -108,12 +132,36 @@ gpii.express.user.utils.createNewUser = function (that, userData) {
     return promiseTogo;
 };
 
+/**
+ * gpii.express.user.utils.verifyPassword function
+ *
+ * Given an instance of our standard couch `userRecord`, and the clear text
+ * `password`, check to see if the password is valid for for the user.
+ *
+ * @param {Object} userRecord - Our standard internal user object stored in Couch.
+ * @param {String} password - Password to use to login/unlock user.
+ * @return {Boolean} - True if this is the correct password, otherwise false.
+ */
 gpii.express.user.utils.verifyPassword = function (userRecord, password) {
     var encodedPassword = gpii.express.user.password.encode(password,
         userRecord.salt, userRecord.iterations, userRecord.keyLength, userRecord.digest);
     return encodedPassword === userRecord.derived_key;
 };
 
+/**
+ * gpii.express.user.utils.unlockUser method
+ *
+ * Attempts to look up username using the current CouchDB view. (At the time
+ * of writing either username or email). And unlock their account using `password`.
+ * If the username and password match, the Couch userData record will be returned.
+ * Otherwise a standard error Object is returned.
+ *
+ * @param {gpii.express.user.utils} that - Utils component.
+ * @param {String} username - Username to use for record lookup.
+ * @param {String} password - Clear text password to validate record with.
+ * @return {Object} The userData record if the password is correct, otherwise
+ * an `isError` Object.
+ */
 gpii.express.user.utils.unlockUser = function (that, username, password) {
     var promiseTogo = fluid.promise();
     that.byUsernameOrEmailReader.get({username: username}).then(
