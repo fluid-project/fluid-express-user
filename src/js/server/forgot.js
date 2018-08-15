@@ -20,8 +20,8 @@ fluid.registerNamespace("gpii.express.user.forgot.post.handler");
 
 /**
  *
- * @param that {Object} - The handler component itself.
- * @param user {Object} - The user object we are working with
+ * @param {Object} that - The handler component itself.
+ * @param {Object} user - The user object we are working with
  */
 gpii.express.user.forgot.post.handler.checkUser = function (that, user) {
     if (!user || !user.username) {
@@ -46,10 +46,10 @@ gpii.express.user.forgot.post.handler.checkUser = function (that, user) {
 
 /**
  *
- * @param that {Object} The handler component instance itself.
- * @param error {Object} The error message (if any) received in response to our CouchDB lookup.
- * @param response {Object} The Express response object.
- * @param body {Object} The response body.
+ * @param  {Object} that The handler component instance itself.
+ * @param  {Object} error The error message (if any) received in response to our CouchDB lookup.
+ * @param  {Object} response The Express response object.
+ * @param  {Object} body The response body.
  *
  * Process a response from CouchDB and send the results and/or error message via the `response` object.
  *

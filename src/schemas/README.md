@@ -21,4 +21,3 @@ As there are different fields required when creating or viewing a user, the sche
 1. `message-core.json`: Defines the format used when responding to all requests.
 2. `user-message.json`: Extends the core message format and defines the format used when responding to requests to /api/user.
 3. `group-message.json`: Extends the core message format and defines the format used when responding to requests to /api/group.
-

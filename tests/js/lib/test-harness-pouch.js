@@ -36,4 +36,3 @@ fluid.defaults("gpii.test.express.user.pouch", {
         }
     }
 });
-

@@ -1,10 +1,12 @@
 {
-    "type":        "object",
-    "id":          "group-message.json",
-    "title":       "gpii-express-user group message schema",
+    "type": "object",
+    "id": "group-message.json",
+    "title": "gpii-express-user group message schema",
     "description": "This schema defines the message format used in providing feedback on a request to /api/group.",
     "allOf": [
-        { "$ref": "message-core.json#" },
+        {
+            "$ref": "message-core.json#"
+        },
         {
             "type": "object",
             "properties": {
@@ -15,7 +17,15 @@
         }
     ],
     "oneOf": [
-        { "required": ["group"] },
-        { "required": ["message"] }
+        {
+            "required": [
+                "group"
+            ]
+        },
+        {
+            "required": [
+                "message"
+            ]
+        }
     ]
 }

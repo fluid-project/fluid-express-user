@@ -27,3 +27,6 @@ build/Release
 node_modules
 reports
 .vagrant
+
+# npm package lock
+package-lock.json

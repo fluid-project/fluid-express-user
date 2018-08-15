@@ -1,10 +1,13 @@
+# gpii-express-user
+
 This package provides a series of server and client-side Fluid components to provide simple user management, including:
 
 1. Login, logout, and "current user" mechanisms.
-2. A "signup" mechanism to allow users to create accounts themselves.  Accounts must be associated with a valid email to be complete the setup.
+2. A "signup" mechanism to allow users to create accounts themselves.  Accounts must be associated with a valid email to
+   be complete the setup.
 3. A "forgot password" mechanism that sends the user a custom link via email that can be used to reset their password.
 
-# Server Side Components
+## Server Side Components
 
 The server side components are intended to be used with a `gpii.express` instance, and provide the REST API endpoints
 documented in `src/docs/api.md`. Before you can use the server side components, you must set up your database with the
@@ -19,7 +22,7 @@ When writing your own server-side components that depend on the current user's i
 always be available as part of the `request.session` object.  The user key may change depending on your configuration,
 by default the user is found at `request.session._gpii_user`.
 
-# Client Side Components
+## Client Side Components
 
 The client-side components provided here are intended to be used with the server-side API running on the same hostname
 and port that hosts the client-side content.  No CORS, proxy, or other mechanism is provided to handle remote lookups.
