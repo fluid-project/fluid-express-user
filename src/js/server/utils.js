@@ -90,7 +90,7 @@ fluid.defaults("gpii.express.user.utils", {
  * @param {String} userData.username - New users username
  * @param {String} userData.email - New users email
  * @param {String} userData.password - Password for new account
- * @return {Promise} Promise container either the new Couch Record for
+ * @return {Promise} Promise containing either the new CouchDB record for
  * the account or an `error` property and message.
  */
 gpii.express.user.utils.createNewUser = function (that, userData) {
@@ -138,7 +138,7 @@ gpii.express.user.utils.createNewUser = function (that, userData) {
  * Given an instance of our standard couch `userRecord`, and the clear text
  * `password`, check to see if the password is valid for for the user.
  *
- * @param {Object} userRecord - Our standard internal user object stored in Couch.
+ * @param {Object} userRecord - Our standard internal user object stored in CouchDB.
  * @param {String} password - Password to use to login/unlock user.
  * @return {Boolean} - True if this is the correct password, otherwise false.
  */
@@ -153,13 +153,13 @@ gpii.express.user.utils.verifyPassword = function (userRecord, password) {
  *
  * Attempts to look up username using the current CouchDB view. (At the time
  * of writing either username or email). And unlock their account using `password`.
- * If the username and password match, the Couch userData record will be returned.
+ * If the username and password match, the CouchDB `userData` record will be returned.
  * Otherwise a standard error Object is returned.
  *
  * @param {gpii.express.user.utils} that - Utils component.
  * @param {String} username - Username to use for record lookup.
  * @param {String} password - Clear text password to validate record with.
- * @return {Object} The userData record if the password is correct, otherwise
+ * @return {Object} The `userData` record if the password is correct, otherwise
  * an `isError` Object.
  */
 gpii.express.user.utils.unlockUser = function (that, username, password) {
@@ -180,8 +180,8 @@ gpii.express.user.utils.unlockUser = function (that, username, password) {
                 promiseTogo.reject({isError: true, message: "Bad username/password"});
             }
         },
-        function () {
-            promiseTogo.reject({isError: true, message: "Bad username/password"});
+        function (err) {
+            promiseTogo.reject({isError: true, message: "Bad username/password" + JSON.stringify(err)});
         }
     );
     return promiseTogo;
