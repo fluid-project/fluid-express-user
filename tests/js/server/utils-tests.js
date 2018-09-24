@@ -15,51 +15,46 @@ var jqUnit = require("node-jqunit");
 require("../lib/");
 require("../../../src/js/server/lib/datasource");
 
-require("gpii-pouchdb");
-gpii.pouch.loadTestingSupport();
-
 fluid.registerNamespace("gpii.express.user.utils.tests");
 
 fluid.defaults("gpii.express.user.utils.tests.caseHolder", {
-    gradeNames: ["fluid.test.testCaseHolder"],
-    modules: [ {
-        name: "Utils component tests",
-        tests: [{
-            expect: 2,
-            name: "Unlock username/password",
-            sequence: [{
-                funcName: "gpii.express.user.utils.tests.unlockUsernamePassword",
-                args: ["{gpii.express.user.utils}"]
-            }]
-        }]
-    }]
+    gradeNames: ["gpii.test.webdriver.caseHolder"],
+    rawModules: [
+        {
+            name: "Utils component tests",
+            tests: [
+                {
+                    name: "Unlock username/password",
+                    type: "test",
+                    expect: 2,
+                    sequence: [
+                        {
+                            funcName: "gpii.express.user.utils.tests.unlockUsernamePassword",
+                            args: ["{gpii.express.user.utils}"]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 });
 
 gpii.express.user.utils.tests.unlockUsernamePassword = function (utils) {
     jqUnit.assert("Ok");
-    // jqUnit.fail("Ok 2");
+    jqUnit.stop();
     var prom = utils.unlockUser("existing", "password");
     prom.then(function (data) {
-        jqUnit.assertEquals("Check verified username", "username", data.username);
+        jqUnit.start();
+        jqUnit.assertEquals("Check verified username", "existing", data.username);
     }, function (err) {
+        jqUnit.start();
         jqUnit.fail("Error unlocking user: " + JSON.stringify(err));
     });
 };
 
-fluid.defaults("gpii.express.user.utils.tests.pouchMixin", {
-    gradeNames: ["fluid.component"],
-    databases: {
-        myEmptyDb: {},
-        myFullDb: {
-            data: "%gpii-express-user/tests/data/users.json"
-        }
-    }
-});
-
 fluid.defaults("gpii.express.user.utils.tests", {
-    gradeNames: ["gpii.test.pouch.environment"],
-    port: 5001,
-    harnessGrades: ["gpii.express.user.utils.tests.pouchMixin"],
+    gradeNames: ["gpii.test.express.user.environment"],
+    pouchPort: 8764,
     components: {
         testCaseHolder: {
             type: "gpii.express.user.utils.tests.caseHolder"
@@ -68,10 +63,7 @@ fluid.defaults("gpii.express.user.utils.tests", {
             type: "gpii.express.user.utils",
             options: {
                 couch:  {
-                    // port: "{testEnvironment}.options.pouchPort",
-                    port: "5001",
-                    userDbName: "users",
-                    userDbUrl: "http://127.0.0.1:5001/users"
+                    userDbUrl: "http://127.0.0.1:8764/users"
                 }
             }
         }
