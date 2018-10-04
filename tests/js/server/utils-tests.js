@@ -1,36 +1,67 @@
 /*
 
-    Tests for the gpii.express.user.utils component.
+  Tests for the gpii.express.user.utils component.
 
  */
 /* eslint-env node */
 "use strict";
 
-var fluid  = require("infusion");
-fluid.logObjectRenderChars = 4096;
+var fluid        = require("infusion");
+var gpii         = fluid.registerNamespace("gpii");
 
-var gpii   = fluid.registerNamespace("gpii");
-var jqUnit = require("node-jqunit");
-
+require("../../../");
 require("../lib/");
-require("../../../src/js/server/lib/datasource");
 
-fluid.registerNamespace("gpii.express.user.utils.tests");
+var jqUnit       = require("node-jqunit");
 
-fluid.defaults("gpii.express.user.utils.tests.caseHolder", {
+fluid.registerNamespace("gpii.tests.express.user.utils.caseHolder");
+
+gpii.tests.express.user.utils.unlockUsernamePassword = function (utils, sequenceDelay) {
+    var prom = utils.unlockUser("existing", "password");
+    prom.then(function (data) {
+        jqUnit.assertEquals("Check verified username", "existing", data.username);
+        sequenceDelay.events.onComplete.fire();
+    }, function (err) {
+        jqUnit.fail("Error unlocking user: " + JSON.stringify(err));
+        sequenceDelay.events.onComplete.fire();
+    });
+};
+
+/**
+ * Simple component with an onComplete event to use as a delay in the tests sequences
+ * when executing promises or other logic in a custom test method.
+ */
+fluid.defaults("gpii.tests.express.user.sequenceDelay", {
+    gradeNames: ["fluid.component"],
+    events: {
+        onComplete: null
+    }
+});
+
+// Each test has a request instance of `kettle.test.request.http` or `kettle.test.request.httpCookie`, and a test module that wires the request to the listener that handles its results.
+fluid.defaults("gpii.tests.express.user.utils.caseHolder", {
     gradeNames: ["gpii.test.webdriver.caseHolder"],
+    components: {
+        sequenceDelay: {
+            type: "gpii.tests.express.user.sequenceDelay"
+        }
+    },
     rawModules: [
         {
-            name: "Utils component tests",
+            name: "Testing login functions...",
             tests: [
                 {
-                    name: "Unlock username/password",
+                    name: "Testing logging in with an unverified account...",
                     type: "test",
-                    expect: 2,
                     sequence: [
                         {
-                            funcName: "gpii.express.user.utils.tests.unlockUsernamePassword",
-                            args: ["{gpii.express.user.utils}"]
+                            funcName: "gpii.tests.express.user.utils.unlockUsernamePassword",
+                            args: ["{gpii.express.user.utils}", "{sequenceDelay}"]
+                        },
+                        {
+                            listener: "fluid.log",
+                            event: "{sequenceDelay}.events.onComplete",
+                            args: ["Finished unlockUsernamePassword test"]
                         }
                     ]
                 }
@@ -39,25 +70,14 @@ fluid.defaults("gpii.express.user.utils.tests.caseHolder", {
     ]
 });
 
-gpii.express.user.utils.tests.unlockUsernamePassword = function (utils) {
-    jqUnit.assert("Ok");
-    jqUnit.stop();
-    var prom = utils.unlockUser("existing", "password");
-    prom.then(function (data) {
-        jqUnit.start();
-        jqUnit.assertEquals("Check verified username", "existing", data.username);
-    }, function (err) {
-        jqUnit.start();
-        jqUnit.fail("Error unlocking user: " + JSON.stringify(err));
-    });
-};
-
-fluid.defaults("gpii.express.user.utils.tests", {
+fluid.defaults("gpii.tests.express.user.utils.environment", {
     gradeNames: ["gpii.test.express.user.environment"],
-    pouchPort: 8764,
+    port:       8778,
+    pouchPort:  8764,
+    mailPort:   8725,
     components: {
-        testCaseHolder: {
-            type: "gpii.express.user.utils.tests.caseHolder"
+        caseHolder: {
+            type: "gpii.tests.express.user.utils.caseHolder"
         },
         utils: {
             type: "gpii.express.user.utils",
@@ -70,4 +90,4 @@ fluid.defaults("gpii.express.user.utils.tests", {
     }
 });
 
-fluid.test.runTests("gpii.express.user.utils.tests");
+fluid.test.runTests("gpii.tests.express.user.utils.environment");
