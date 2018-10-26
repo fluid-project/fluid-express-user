@@ -23,9 +23,9 @@ This component requires the same CouchDB options as other components in this mod
 
 ### `{that}.createNewUser(userData)`
 
-* Take an object with `username`, `email`, and `password` entries.
-* Returns a promise containing either the new CouchDB record for the account or
-  an `error` property and message.
+* `userData` - Take an object with `username`, `email`, and `password` entries.
+* Returns:  A promise resolving with the new CouchDB user record on success, or
+  a promise rejecting with an `error` property and message on failure.
 
 Creates a new user in the system with a username, email, and password.
 
@@ -35,9 +35,12 @@ utils.createNewUser({username: "alice", email: "alice@gpii.org", password: "#1 C
 
 ### `{that}.verifyPassword(userRecord, password)`
 
-* Takes a full user record object as stored in CouchDB and checks to see if the
-  supplied password matches.
-* Returns true or false if the password matches.
+* `userRecord` - Takes a full user record object as stored in CouchDB and checks to see if the
+  supplied password matches. In general this should be a record retrieved from CouchDB and not
+  something you generate yourself. For reference, the `userRecord` structure can be seen in
+  this [test fixture](https://github.com/GPII/gpii-express-user/blob/a83beacdffb4096a379fe91a8f6e23979839fdd8/tests/data/users.json).
+* `password` - Password to verify against the userRecord.
+* Returns: `true` if the password matches, otherwise `false`.
 
 ```javascript
 var userRecord = couchDBStore.getUserRecordFromCouchForUsernameOrEmail("alice");
@@ -48,8 +51,10 @@ Returns a promise that will contain the user recored on a successful resolve.
 
 ### `{that}.unlockUser(username, password)`
 
-* Takes a username and password as strings.
-* Returns the `userData` record if the password is correct, otherwise an `isError` Object.
+* `username` - Username string to unlock.
+* `password` - Password string to use for unlocking `username`.
+* Returns a promise resolving with the `userData` record if the password is correct,
+  otherwise rejecting with an `isError` Object.
 
 ```javascript
 var userRecord = utils.unlockUser("alice", "#1 Cloudsafe!");

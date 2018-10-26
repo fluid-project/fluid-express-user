@@ -33,24 +33,12 @@ gpii.tests.express.user.utils.createUser = function (utils) {
     return prom;
 };
 
-gpii.tests.express.user.utils.unlockUsernamePassword = function (utils) {
-    var prom = utils.unlockUser("existing", "password");
-    prom.then(function (data) {
-        jqUnit.assertEquals("Check verified username", "existing", data.username);
-    }, function (err) {
-        jqUnit.fail("Error unlocking user: " + JSON.stringify(err));
-    });
-    return prom;
-};
-
-gpii.tests.express.user.utils.incorrectUsernamePassword = function (utils) {
-    var prom = utils.unlockUser("not-existing", "password");
-    prom.then(function () {
-        jqUnit.fail("This user shouldn't have unlocked with the supplied credentials.");
-    }, function () {
-        jqUnit.assert("Succeeded in not unlocking with incorrect credentials");
-    });
-    return prom;
+// TODO Can the Infusion IoC tasks resolve references? ie. instead of this function
+// use {
+//    task: ["{gpii.express.user.utils}.unlockUser"],
+//    args: ["existing", "password"],
+gpii.tests.express.user.utils.unlockPromise = function (utils, username, password) {
+    return utils.unlockUser(username, password);
 };
 
 // Each test has a request instance of `kettle.test.request.http` or `kettle.test.request.httpCookie`,
@@ -78,10 +66,10 @@ fluid.defaults("gpii.tests.express.user.utils.caseHolder", {
                     type: "test",
                     sequence: [
                         {
-                            task: "gpii.tests.express.user.utils.unlockUsernamePassword",
-                            args: ["{gpii.express.user.utils}"],
-                            resolve: "jqUnit.assert",
-                            resolveArgs: ["Successfully unlocked User"]
+                            task: "gpii.tests.express.user.utils.unlockPromise",
+                            args: ["{gpii.express.user.utils}", "existing", "password"],
+                            resolve: "jqUnit.assertEquals",
+                            resolveArgs: ["Check verified username", "existing", "{arguments}.0.username"]
                         }
                     ]
                 },
@@ -90,10 +78,10 @@ fluid.defaults("gpii.tests.express.user.utils.caseHolder", {
                     type: "test",
                     sequence: [
                         {
-                            task: "gpii.tests.express.user.utils.incorrectUsernamePassword",
-                            args: ["{gpii.express.user.utils}"],
+                            task: "gpii.tests.express.user.utils.unlockPromise",
+                            args: ["{gpii.express.user.utils}", "not-existing", "password"],
                             reject: "jqUnit.assert",
-                            rejectArgs: ["Failed to open with bad credentials"]
+                            rejectArgs: ["Succeeded in not unlocking with incorrect credentials."]
                         }
                     ]
                 }
@@ -116,7 +104,12 @@ fluid.defaults("gpii.tests.express.user.utils.environment", {
             type: "gpii.express.user.utils",
             options: {
                 couch:  {
-                    userDbUrl: "http://127.0.0.1:8764/users"
+                    userDbUrl: {
+                        expander: {
+                            funcName: "fluid.stringTemplate",
+                            args: ["http://127.0.0.1:%port/users", { port: "{environment}.options.pouchPort"}]
+                        }
+                    }
                 }
             }
         }
