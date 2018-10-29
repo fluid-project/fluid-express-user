@@ -90,8 +90,8 @@ fluid.defaults("gpii.express.user.utils", {
  * @param {String} userData.username - New users username
  * @param {String} userData.email - New users email
  * @param {String} userData.password - Password for new account
- * @return {Promise} Promise containing either the new CouchDB record for
- * the account or an `error` property and message.
+ * @return {fluid.promise} - Promise resolving with the new CouchDB record for
+ * the account or rejecting with an `error` property and message.
  */
 gpii.express.user.utils.createNewUser = function (that, userData) {
     // Encode the user's password
@@ -159,8 +159,8 @@ gpii.express.user.utils.verifyPassword = function (userRecord, password) {
  * @param {gpii.express.user.utils} that - Utils component.
  * @param {String} username - Username to use for record lookup.
  * @param {String} password - Clear text password to validate record with.
- * @return {Object} The `userData` record if the password is correct, otherwise
- * an `isError` Object.
+ * @return {fluid.promise} - Promise resolving with a `userData` record if the password is correct, otherwise
+ * rejecting with an `isError` Object.
  */
 gpii.express.user.utils.unlockUser = function (that, username, password) {
     var promiseTogo = fluid.promise();
