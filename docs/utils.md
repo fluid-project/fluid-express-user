@@ -53,7 +53,7 @@ Returns a promise that will contain the user recored on a successful resolve.
 
 * `username` - Username string to unlock.
 * `password` - Password string to use for unlocking `username`.
-* Returns a promise resolving with the `userData` record if the password is correct,
+* Returns: A `fluid.promise` resolving with the `userData` record if the password is correct,
   otherwise rejecting with an `isError` Object.
 
 ```javascript
