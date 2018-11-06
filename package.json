@@ -1,6 +1,6 @@
 {
     "name": "gpii-express-user",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "A series of Fluid components to provide simple user management.",
     "main": "src/js/index.js",
     "scripts": {
