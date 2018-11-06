@@ -20,6 +20,7 @@ require("./logout.js");
 require("./reset.js");
 require("./signup.js");
 require("./verify.js");
+require("./utils.js");
 
 fluid.registerNamespace("gpii.express.user.api");
 
@@ -56,6 +57,10 @@ fluid.defaults("gpii.express.user.api", {
             "target": "{that gpii.express.router}.options.couch"
         },
         {
+            "source": "{that}.options.couch",
+            "target": "{that gpii.express.user.utils}.options.couch"
+        },
+        {
             source: "{that}.options.app",
             target: "{that gpii.express.router}.options.app"
         },
@@ -65,6 +70,9 @@ fluid.defaults("gpii.express.user.api", {
         }
     ],
     components: {
+        utils: {
+            type:     "gpii.express.user.utils"
+        },
         // API Endpoints (routers)
         current: {
             type:     "gpii.express.user.current",
@@ -131,6 +139,7 @@ fluid.defaults("gpii.express.user.api", {
         }
     }
 });
+
 
 /*
 

@@ -8,3 +8,4 @@ require("./loginRequired-tests");
 require("./mailer-tests.js");
 require("./password-function-tests.js");
 require("./signup-tests.js");
+require("./utils-tests.js");
