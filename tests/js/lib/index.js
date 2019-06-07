@@ -18,5 +18,5 @@ require("./generate-user");
 require("./request");
 require("./test-environment");
 require("./test-harness");
-require("./test-harness-pouch");
+require("./test-harness-couch");
 require("./verify-response");

@@ -16,7 +16,6 @@ Returns details about the current user if they are logged in, as in:
 
 ```json
   {
-    "ok": true,
     "user": {
       "username": "sample",
       "email": "sample@acme.com"
@@ -28,12 +27,10 @@ Returns an error message if the user is not currently logged in, as in:
 
 ```json
 {
-    "ok": false,
+    "isError": true,
     "message": "You are not currently logged in."
   }
 ```
-
-[Response schema](../schemas/user-message.json)
 
 ### `POST /api/user/login`
 
@@ -46,18 +43,13 @@ Log a user in. Requires both a `username` and `password`, as in:
   }
 ```
 
-[Request schema](../schemas/user-login.json)
-
 Returns a confirmation message indicating whether the login was successful, as in:
 
 ```json
   {
-    "ok": true,
     "message": "You are now logged in."
   }
 ```
-
-[Response schema](../schemas/user-message.json)
 
 Note that only users with verified email addresses are allowed to log in.  For details, see `GET /api/user/verify/:code`
 below.
@@ -68,12 +60,9 @@ Immediately logs the current user out and returns a confirmation message, as in:
 
 ```json
   {
-    "ok": true,
     "message": "You are now logged out."
   }
 ```
-
-[Response schema](../schemas/user-message.json)
 
 ### `POST /api/user`
 
@@ -92,18 +81,14 @@ Requires a `username`, valid `password`, and a `confirm` field with the same pas
   }
 ```
 
-[Request schema](../schemas/user-signup.json)
-
 Returns a confirmation message indicating whether the response was successful, as in:
 
 ```json
   {
-    "ok": false,
+    "isError": true,
     "message": "A user with this email address already exists."
   }
 ```
-
-[Response schema](../schemas/user-message.json)
 
 ### `GET /api/user/verify/:code`
 
@@ -115,12 +100,9 @@ account.  A successful response should look something like:
 
 ```json
   {
-    "ok": true,
     "message": "Your email address has been verified and you can now use your account to log in."
   }
 ```
-
-[Response schema](../schemas/user-message.json)
 
 ### `POST /api/user/verify/resend/:email`
 
@@ -135,19 +117,13 @@ they used when signing up, as in:
 
 Returns a confirmation message indicating whether the response was successful.
 
-[Response schema](../schemas/user-message.json)
-
 ### `GET /api/user/forgot/:email`
 
 Users can request a link that can be used to reset their password.  This is a three step process.  The first step
 (handled by this endpoint) sends a message to the supplied `email` address.  For the second step, see `GET
 /api/user/reset/:code` below.
 
-[Request schema](../schemas/user-forgot.json)
-
 Returns a confirmation message indicating whether the response was successful.
-
-[Response schema](../schemas/user-message.json)
 
 ### `GET /api/user/reset/:code`
 
@@ -156,8 +132,6 @@ they will receive an email message that contains a link to this endpoint.
 
 By visiting this link, they are presented with a form that will allow them update their password using the `POST
 /api/user/reset/:code` endpoint (see below)
-
-[Response schema](../schemas/user-message.json)
 
 ### `POST /api/user/reset/:code`
 
@@ -171,11 +145,7 @@ is required to enter a valid `password` and to enter the same password in a `con
   }
 ```
 
-[Request schema](../schemas/user-reset.json)
-
 Returns a confirmation of whether the response was successful.
-
-[Response schema](../schemas/user-message.json)
 
 ## /api/group
 
@@ -184,8 +154,6 @@ The following endpoints are used to manage groups.  All parts of the group API r
 ### `GET /api/group/:group`
 
 Displays the group metadata as well as the `username` of all members of `:group`.
-
-[Response schema](../schemas/group-message.json)
 
 ### `POST /api/group/:group`
 
@@ -199,17 +167,11 @@ list of `members`, each of which is expected to be valid `username`, as in:
   }
 ```
 
-[Request schema](../schemas/group-core.json)
-
 Returns a confirmation of whether the response was successful.
-
-[Response schema](../schemas/group-message.json)
 
 ### `DELETE /api/group/:group`
 
 Delete the group named `:group`. Returns a confirmation of whether the response was successful.
-
-[Response schema](../schemas/group-message.json)
 
 ## /api/memberships
 
@@ -221,17 +183,11 @@ view their own memberships, using `GET /api/memberships/:username` (see below).
 Displays a list of group memberships for the given `:username`.  If `:username` is omitted, the memberships for the
 current user are displayed.  For a list of users in a single group, see `GET /api/group/:group` above.
 
-[Response schema](../schemas/memberships-message.json)
-
 ### `POST /api/memberships/:username/:group`
 
 Add `:username` to `:group`.  Does not expect and will ignore any JSON data you send.  Returns a confirmation of whether
 the response was successful.
 
-[Response schema](../schemas/message-core.json)
-
 ### `DELETE /api/memberships/:username/:group`
 
 Remove `:username` from `:group`.  Returns a confirmation of whether the response was successful.
-
-[Response schema](../schemas/message-core.json)

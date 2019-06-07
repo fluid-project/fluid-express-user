@@ -6,9 +6,8 @@
     fluid.registerNamespace("gpii.express.user.frontend.resend");
 
     fluid.defaults("gpii.express.user.frontend.resend", {
-        gradeNames: ["gpii.schemas.client.errorAwareForm"],
-        schemaKey: "user-resend.json",
-        templates: {
+        gradeNames: ["gpii.express.user.frontend.errorAwareForm"],
+        templateKeys: {
             initial: "resend-viewport",
             error:   "common-error",
             success: "common-success"
@@ -38,6 +37,11 @@
             success:  ".resend-success",
             error:    ".resend-error",
             email:    "input[name='email']"
+        },
+        components: {
+            schemaHolder: {
+                type: "gpii.express.user.schemaHolder.resend"
+            }
         }
     });
 })(jQuery);

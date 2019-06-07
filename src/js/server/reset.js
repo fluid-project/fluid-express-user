@@ -20,6 +20,8 @@ require("gpii-handlebars");
 require("./lib/password");
 require("./lib/datasource");
 
+// TODO: We have to confirm that the passwords match on our own in some function reused in both signup and reset.
+
 // TODO:  Replace this with a writable `dataSource`
 var request = require("request");
 
@@ -30,13 +32,19 @@ gpii.express.user.reset.handler.checkResetCode = function (that, dataSourceRespo
     var earliestAcceptable = new Date(Date.now() - that.options.codeExpiration);
     var issueDate          = new Date(dataSourceResponse[that.options.codeIssuedKey]);
 
+    // TODO: Use a message key "gpii.express.user.reset.code.invalid": "The reset code you provided is invalid."
     if (!dataSourceResponse || !dataSourceResponse[that.options.codeKey] || (that.options.request.params.code !== dataSourceResponse[that.options.codeKey])) {
         that.sendFinalResponse(400, { isError: true, message: "You must provide a valid reset code to use this interface."});
     }
     // We cannot perform the next two checks using JSON Schema, so we must do it here.
     // We should not accept a reset code issued earlier than the current time minus our expiration period (a day by default).
+    // TODO: Use  the message   "gpii.express.user.reset.code.expired": "Your reset code is too old.  Please request another one."
     else if (isNaN(issueDate) || issueDate < earliestAcceptable) {
         that.sendFinalResponse(400, { isError: true, message: "Your reset code is too old.  Please request another one."});
+    }
+    // Post Draft v5, JSON Schemas can no longer validate based on the data in the payload, so we have to check this here.
+    else if (that.options.request.body.password !== that.options.request.body.confirm) {
+        that.sendFinalResponse(400, { isError: true, message: "Your password and confirmation password do not match."});
     }
     else {
         var updatedUserRecord = fluid.copy(dataSourceResponse);
@@ -62,6 +70,7 @@ gpii.express.user.reset.handler.checkResetCode = function (that, dataSourceRespo
                 that.sendFinalResponse(response.statusCode, { isError: true, message: body});
             }
             else {
+                // TODO: Use message key     "gpii.express.user.reset.success": "Your password has been reset."
                 that.sendFinalResponse(200, { message: "Your password has been reset."});
             }
         });
@@ -116,10 +125,21 @@ fluid.defaults("gpii.express.user.reset.post", {
     routerOptions: {
         mergeParams: true
     },
-    schemaKey: "user-reset.json",
     handlerGrades: ["gpii.express.user.reset.handler"],
-    events: {
-        onSchemasDereferenced: null
+    components: {
+        schemaHolder: {
+            type: "gpii.express.user.schemaHolder.reset"
+        },
+        validationMiddleware: {
+            options: {
+                rules: {
+                    requestContentToValidate: {
+                        "": "body",
+                        "code": "params.code"
+                    }
+                }
+            }
+        }
     }
 });
 
@@ -136,9 +156,6 @@ fluid.defaults("gpii.express.user.reset", {
     gradeNames:    ["gpii.express.router"],
     method:        "use",
     path:          "/reset",
-    events: {
-        onSchemasDereferenced: null
-    },
     // The next two variables must match the value in gpii.express.user.forgot
     codeKey:       "reset_code",
     codeIssuedKey: "reset_code_issued",
@@ -186,15 +203,7 @@ fluid.defaults("gpii.express.user.reset", {
             type: "gpii.express.user.reset.formRouter"
         },
         post: {
-            type: "gpii.express.user.reset.post",
-            options: {
-                listeners: {
-                    "onSchemasDereferenced.notifyParent": {
-                        func: "{gpii.express.user.reset}.events.onSchemasDereferenced.fire"
-                    }
-
-                }
-            }
+            type: "gpii.express.user.reset.post"
         }
     }
 });

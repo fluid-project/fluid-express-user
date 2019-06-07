@@ -7,7 +7,7 @@ module.exports = function (grunt) {
             sources: {
                 md: [ "./*.md","./docs/*.md"],
                 js: ["./src/**/*.js", "./tests/**/*.js", "./*.js"],
-                json: ["./*.json", "tests/**/*.json", "src/**/*.json"],
+                json: ["./*.json", "tests/**/*.json", "src/**/*.json", "./.nycrc"],
                 json5: [],
                 other: ["./.*"]
             }

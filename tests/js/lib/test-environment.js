@@ -11,7 +11,7 @@ fluid.registerNamespace("gpii.test.express.user.environment");
 fluid.defaults("gpii.test.express.user.environment", {
     gradeNames:   ["gpii.test.express.testEnvironment"],
     port:         "3959",
-    pouchPort:    "9599",
+    couchPort:    "25984",
     mailPort:     "2525",
     path:         "/",
     templateDirs: ["%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
@@ -25,17 +25,15 @@ fluid.defaults("gpii.test.express.user.environment", {
             events: {
                 onExpressReady: "onExpressReady",
                 onMailReady:    "onMailReady",
-                onPouchReady:   "onPouchReady"
+                onCouchReady:   "onCouchReady"
             }
         },
         onFixturesStopped: {
             events: {
-                onExpressDone:   "onExpressDone",
-                onPouchStopped:  "onPouchStopped"
+                onExpressDone:   "onExpressDone"
             }
         },
-        onPouchReady:   null,
-        onPouchStopped: null,
+        onCouchReady:   null,
         onMailReady:    null,
         stopFixtures:   null
     },
@@ -62,7 +60,7 @@ fluid.defaults("gpii.test.express.user.environment", {
                     api: {
                         options: {
                             couch:  {
-                                port: "{testEnvironment}.options.pouchPort"
+                                port: "{testEnvironment}.options.couchPort"
                             },
                             app: {
                                 url:  "{testEnvironment}.options.baseUrl"
@@ -72,20 +70,14 @@ fluid.defaults("gpii.test.express.user.environment", {
                 }
             }
         },
-        pouch: {
-            type: "gpii.test.express.user.pouch",
+        couch: {
+            type: "gpii.test.express.user.couch",
             createOnEvent: "constructFixtures",
             options: {
-                port: "{testEnvironment}.options.pouchPort",
-                events: {
-                    onCleanup: "{testEnvironment}.events.stopFixtures"
-                },
+                port: "{testEnvironment}.options.couchPort",
                 listeners: {
-                    "onPouchStarted.notifyParent": {
-                        func: "{testEnvironment}.events.onPouchReady.fire"
-                    },
-                    "onCleanupComplete.notifyParent": {
-                        func: "{testEnvironment}.events.onPouchStopped.fire"
+                    "onStartupComplete.notifyParent": {
+                        func: "{testEnvironment}.events.onCouchReady.fire"
                     }
                 }
             }
@@ -114,14 +106,14 @@ fluid.defaults("gpii.test.express.user.environment.withBrowser", {
                 onDriverReady:  "onDriverReady",
                 onExpressReady: "onExpressReady",
                 onMailReady:    "onMailReady",
-                onPouchReady:   "onPouchReady"
+                onCouchReady:   "onCouchReady"
             }
         },
         onFixturesStopped: {
             events: {
                 onDriverStopped: "onDriverStopped",
                 onExpressDone:   "onExpressDone",
-                onPouchStopped:  "onPouchStopped"
+                onCouchStopped:  "onCouchStopped"
             }
         }
     },

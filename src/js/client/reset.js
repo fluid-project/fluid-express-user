@@ -8,8 +8,7 @@
     fluid.registerNamespace("gpii.express.user.frontend.reset");
 
     fluid.defaults("gpii.express.user.frontend.reset", {
-        gradeNames: ["gpii.schemas.client.errorAwareForm"],
-        schemaKey:  "user-reset.json",
+        gradeNames: ["gpii.express.user.frontend.errorAwareForm"],
         ajaxOptions: {
             type:    "POST",
             url:     {
@@ -32,7 +31,7 @@
                 }
             }
         },
-        templates: {
+        templateKeys: {
             success: "common-success",
             initial: "reset-viewport"
         },
@@ -47,6 +46,11 @@
         bindings: {
             "password": "password",
             "confirm":  "confirm"
+        },
+        components: {
+            schemaHolder: {
+                type: "gpii.express.user.schemaHolder.reset"
+            }
         }
     });
 })(jQuery);

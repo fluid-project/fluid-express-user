@@ -78,6 +78,13 @@ fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
                 method:   "POST"
             }
         },
+        mismatchedPasswordCreateRequest: {
+            type: "gpii.test.express.user.request",
+            options: {
+                endpoint: "api/user/signup",
+                method:   "POST"
+            }
+        },
         incompleteUserCreateRequest: {
             type: "gpii.test.express.user.request",
             options: {
@@ -155,7 +162,8 @@ fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
                         {
                             listener: "gpii.tests.express.user.signup.caseHolder.verifyResponse",
                             event:    "{incompleteUserCreateRequest}.events.onComplete",
-                            args:     ["{incompleteUserCreateRequest}.nativeResponse", "{arguments}.0", 400, ["isError"], ["user"]]
+                            args:     ["{incompleteUserCreateRequest}.nativeResponse", "{arguments}.0", 400, [], ["isValid", "user"]]
+                            // TODO: Add a transforming error handler to ensure that validation errors also have `isError` set.
                         }
                     ]
                 },
@@ -165,12 +173,27 @@ fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
                     sequence: [
                         {
                             func: "{duplicateUserCreateRequest}.send",
-                            args: [{ username: "new", password: "new", confirm: "new", email: "existing@localhost"}]
+                            args: [{ username: "new", password: "NewPassw0rd", confirm: "NewPassw0rd", email: "existing@localhost"}]
                         },
                         {
                             listener: "gpii.tests.express.user.signup.caseHolder.verifyResponse",
                             event:    "{duplicateUserCreateRequest}.events.onComplete",
-                            args:     ["{duplicateUserCreateRequest}.nativeResponse", "{arguments}.0", 400, ["isError"], ["user"]] // response, body, statusCode, truthy, falsy, hasCurrentUser
+                            args:     ["{duplicateUserCreateRequest}.nativeResponse", "{arguments}.0", 403, ["isError"], ["user"]] // response, body, statusCode, truthy, falsy, hasCurrentUser
+                        }
+                    ]
+                },
+                {
+                    name: "Attempt to create an account with a mismatched password and confirmation password.",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{mismatchedPasswordCreateRequest}.send",
+                            args: [{ username: "new", password: "NewPassw0rd", confirm: "NewerPassw0rd", email: "newboot@localhost"}]
+                        },
+                        {
+                            listener: "gpii.tests.express.user.signup.caseHolder.verifyResponse",
+                            event:    "{mismatchedPasswordCreateRequest}.events.onComplete",
+                            args:     ["{mismatchedPasswordCreateRequest}.nativeResponse", "{arguments}.0", 400, ["isError"], ["user"]] // response, body, statusCode, truthy, falsy, hasCurrentUser
                         }
                     ]
                 },
@@ -282,7 +305,6 @@ fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
 fluid.defaults("gpii.tests.express.user.signup.environment", {
     gradeNames: ["gpii.test.express.user.environment"],
     port:       8778,
-    pouchPort:  8764,
     mailPort:   8725,
     components: {
         caseHolder: {

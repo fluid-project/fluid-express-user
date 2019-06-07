@@ -3,7 +3,6 @@
 var fluid  = require("infusion");
 var gpii   = fluid.registerNamespace("gpii");
 
-
 fluid.registerNamespace("gpii.express.user.logout.handler");
 
 gpii.express.user.logout.handler.destroyUserSession = function (that) {

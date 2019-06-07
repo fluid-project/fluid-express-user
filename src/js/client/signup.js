@@ -4,8 +4,7 @@
     "use strict";
 
     fluid.defaults("gpii.express.user.frontend.signup", {
-        gradeNames: ["gpii.schemas.client.errorAwareForm"],
-        schemaKey: "user-signup.json",
+        gradeNames: ["gpii.express.user.frontend.errorAwareForm"],
         ajaxOptions: {
             type:   "POST",
             url:    "/api/user/signup",
@@ -30,7 +29,7 @@
                 }
             }
         },
-        templates: {
+        templateKeys: {
             initial: "signup-viewport",
             success: "common-success"
         },
@@ -49,6 +48,11 @@
             "email":    "email",
             "password": "password",
             "confirm":  "confirm"
+        },
+        components: {
+            schemaHolder: {
+                type: "gpii.express.user.schemaHolder.signup"
+            }
         }
     });
 

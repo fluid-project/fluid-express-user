@@ -37,7 +37,7 @@ fluid.defaults("gpii.express.user.datasource.tests.read", {
 
 fluid.defaults("gpii.express.user.datasource.tests.read.byId", {
     gradeNames: ["gpii.express.user.datasource.tests.read"],
-    url:         "http://localhost:3579/users/%_id",
+    url:         "http://localhost:25984/users/%_id",
     termMap:    { _id: "%_id"}
 });
 
@@ -190,7 +190,7 @@ fluid.defaults("gpii.express.users.datasource.tests.caseHolder", {
                         "": "rows.0.doc"
                     }
                 },
-                url:      "http://localhost:3579/users/_all_docs?include_docs=true&key=\"%key\"",
+                url:      "http://localhost:25984/users/_all_docs?include_docs=true&key=\"%key\"",
                 termMap: { key: "%key"}
             }
         },
@@ -198,8 +198,8 @@ fluid.defaults("gpii.express.users.datasource.tests.caseHolder", {
             type: "gpii.express.user.datasource.tests.writable",
             options: {
                 urls: {
-                    read:  "http://localhost:3579/users/%_id",
-                    write: "http://localhost:3579/users/%_id"
+                    read:  "http://localhost:25984/users/%_id",
+                    write: "http://localhost:25984/users/%_id"
                 }
             }
         },
@@ -210,8 +210,8 @@ fluid.defaults("gpii.express.users.datasource.tests.caseHolder", {
             type: "gpii.express.user.datasource.tests.writable",
             options: {
                 urls: {
-                    read:  "http://localhost:3579/users/%_id",
-                    write: "http://localhost:3579/users/%_id"
+                    read:  "http://localhost:25984/users/%_id",
+                    write: "http://localhost:25984/users/%_id"
                 }
             }
         },
@@ -223,7 +223,6 @@ fluid.defaults("gpii.express.users.datasource.tests.caseHolder", {
 
 fluid.defaults("gpii.express.user.datasource.tests", {
     gradeNames: ["gpii.test.express.user.environment"],
-    pouchPort: "3579",
     components: {
         testCaseHolder: {
             type: "gpii.express.users.datasource.tests.caseHolder"

@@ -9,7 +9,7 @@ require("gpii-express");
 require("gpii-handlebars");
 require("gpii-mail-test");
 
-require("./test-harness-pouch");
+require("./test-harness-couch");
 
 
 fluid.defaults("gpii.test.express.user.harness.gated.handler", {
@@ -47,37 +47,14 @@ fluid.defaults("gpii.test.express.user.harness.express", {
                 path:         "/hbs"
             }
         },
-        schemas: {
-            type: "gpii.express.router.static",
-            options: {
-                namespace: "schemas",
-                priority:  "after:inline",
-                path:      "/schemas",
-                content:   "%gpii-express-user/src/schemas"
-            }
-        },
-        inlineSchemas: {
-            type: "gpii.schema.inlineMiddleware",
-            options: {
-                namespace:  "inlineSchemas",
-                priority:   "after:schemas",
-                schemaDirs: "%gpii-express-user/src/schemas"
-            }
-        },
         api: {
             type: "gpii.express.user.api",
             options: {
                 path:      "/api/user",
                 namespace: "api",
-                priority:  "after:inlineSchemas",
+                priority:  "after:inline",
                 couch:  {
-                    userDbName: "users",
-                    userDbUrl: {
-                        expander: {
-                            funcName: "fluid.stringTemplate",
-                            args: ["http://localhost:%port/%userDbName", "{that}.options.couch"]
-                        }
-                    }
+                    port: 25984
                 },
                 app: {
                     name: "gpii-express.user test harness..."
@@ -107,6 +84,7 @@ fluid.defaults("gpii.test.express.user.harness.express", {
         jsonErrors: {
             type: "gpii.express.middleware.error",
             options: {
+                defaultStatusCode: 400, // TODO: discuss handling this in gpii-json-schema
                 priority: "after:src"
             }
         }
@@ -116,7 +94,7 @@ fluid.defaults("gpii.test.express.user.harness.express", {
 fluid.defaults("gpii.test.express.user.harness", {
     gradeNames: ["fluid.component"],
     port:       "5379",
-    pouchPort:  "9735",
+    couchPort:  "25984",
     mailPort:   "5225",
     templateDirs: ["%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
     baseUrl: {
@@ -155,7 +133,7 @@ fluid.defaults("gpii.test.express.user.harness", {
                     api: {
                         options: {
                             couch:  {
-                                port: "{harness}.options.pouchPort"
+                                port: "{harness}.options.couchPort"
                             },
                             app: {
                                 url:  "{harness}.options.baseUrl"
@@ -165,10 +143,12 @@ fluid.defaults("gpii.test.express.user.harness", {
                 }
             }
         },
-        pouch: {
-            type: "gpii.test.express.user.pouch",
+        couch: {
+            type: "gpii.test.express.user.couch",
             options: {
-                port: "{harness}.options.pouchPort"
+                couch: {
+                    port: "{harness}.options.couchPort"
+                }
             }
         },
         smtp: {

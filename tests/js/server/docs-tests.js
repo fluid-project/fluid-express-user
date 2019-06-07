@@ -56,7 +56,6 @@ fluid.defaults("gpii.tests.express.user.docs.caseHolder", {
 fluid.defaults("gpii.tests.express.user.docs.environment", {
     gradeNames: ["gpii.test.express.user.environment"],
     port:    8778,
-    pouchPort:  8764,
     mailPort:   8725,
     components: {
         caseHolder: {

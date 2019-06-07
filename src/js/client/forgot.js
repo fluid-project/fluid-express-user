@@ -3,11 +3,10 @@
 (function () {
     "use strict";
     fluid.defaults("gpii.express.user.frontend.forgot", {
-        gradeNames: ["gpii.schemas.client.errorAwareForm"],
-        schemaKey:   "user-forgot.json",
+        gradeNames: ["gpii.express.user.frontend.errorAwareForm"],
         ajaxOptions: {
-            type:        "POST",
-            url:         "/api/user/forgot"
+            type: "POST",
+            url:  "/api/user/forgot"
         },
         model: {
             email: ""
@@ -22,9 +21,14 @@
         bindings: {
             "email": "email"
         },
-        templates: {
+        templateKeys: {
             "initial": "forgot-viewport",
             "success": "success"
+        },
+        components: {
+            schemaHolder: {
+                type: "gpii.express.user.schemaHolder.forgot"
+            }
         }
     });
 

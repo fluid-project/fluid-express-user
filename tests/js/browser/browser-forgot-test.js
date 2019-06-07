@@ -268,7 +268,6 @@ fluid.defaults("gpii.tests.express.user.forgot.client.environment", {
     gradeNames: ["gpii.test.express.user.environment.withBrowser"],
     resetPattern: "(http.+reset/[a-z0-9-]+)",
     port: 7533,
-    pouchPort: 7534,
     mailPort:  4082,
     forgotUrl: {
         expander: {

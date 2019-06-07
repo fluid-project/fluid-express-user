@@ -259,7 +259,6 @@ fluid.defaults("gpii.tests.express.user.signup.client.caseHolder", {
 fluid.defaults("gpii.tests.express.user.signup.client.environment", {
     gradeNames: ["gpii.test.express.user.environment.withBrowser"],
     port:       7532,
-    pouchPort:  7542,
     mailPort:   4089,
     verifyPattern: "(http.+verify/[a-z0-9-]+)",
     bogusVerifyUrl: {
