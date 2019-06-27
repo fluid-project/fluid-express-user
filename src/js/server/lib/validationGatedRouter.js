@@ -37,7 +37,7 @@ fluid.defaults("gpii.express.user.validationGatedRouter", {
                 invokers: {
                     middleware: {
                         funcName: "gpii.schema.validationMiddleware.rejectOrForward",
-                        args:     ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"] // schema, request, response, next
+                        args:     ["{gpii.schema.validator}", "{that}", "{that}.options.inputSchema", "{arguments}.0", "{arguments}.1", "{arguments}.2"] // validatorComponent, schemaMiddlewareComponent, schema, req, res, next
                     }
                 },
                 model: {

@@ -2,7 +2,6 @@
 // of the password reset process, and can only be used with a code generated using the "forgot password" form (see
 // `/api/user/forgot`).
 //
-/* global fluid, jQuery */
 (function () {
     "use strict";
     fluid.registerNamespace("gpii.express.user.frontend.reset");

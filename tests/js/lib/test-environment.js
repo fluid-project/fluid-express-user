@@ -112,8 +112,7 @@ fluid.defaults("gpii.test.express.user.environment.withBrowser", {
         onFixturesStopped: {
             events: {
                 onDriverStopped: "onDriverStopped",
-                onExpressDone:   "onExpressDone",
-                onCouchStopped:  "onCouchStopped"
+                onExpressDone:   "onExpressDone"
             }
         }
     },

@@ -1,5 +1,4 @@
 // Provide a front-end to allow users to request that their password be reset...
-/* global fluid, jQuery */
 (function () {
     "use strict";
     fluid.defaults("gpii.express.user.frontend.forgot", {
