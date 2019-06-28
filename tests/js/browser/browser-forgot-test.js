@@ -51,8 +51,15 @@ fluid.defaults("gpii.tests.express.user.forgot.client.caseHolder", {
                             listener: "{testEnvironment}.webdriver.actionsHelper",
                             args:     [[{fn: "sendKeys", args: [gpii.webdriver.Key.TAB, "NewPass12345!", gpii.webdriver.Key.TAB, "DifferentPass12345!", gpii.webdriver.Key.ENTER]}]]
                         },
+                        // Now that the schema validated model component's initial pass occurs later, we need to wait
+                        // before we check for a validation error.
                         {
                             event:    "{testEnvironment}.webdriver.events.onActionsHelperComplete",
+                            listener: "{testEnvironment}.webdriver.sleep",
+                            args:     [250]
+                        },
+                        {
+                            event:    "{testEnvironment}.webdriver.events.onSleepComplete",
                             listener: "{testEnvironment}.webdriver.findElement",
                             args:     [{ css: ".reset-error"}]
                         },

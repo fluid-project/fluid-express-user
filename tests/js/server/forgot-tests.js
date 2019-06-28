@@ -153,10 +153,6 @@ fluid.defaults("gpii.tests.express.user.reset.caseHolder", {
                         }
                     ]
                 },
-                /*
-                        mismatchedPasswordsForgotRequest: {
-        mismatchedPasswordsResetRequest: {
-                 */
                 {
                     name: "Attempt to reset a password with a mismatched confirmation password.",
                     type: "test",
