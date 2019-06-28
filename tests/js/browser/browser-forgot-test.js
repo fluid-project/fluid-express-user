@@ -54,12 +54,12 @@ fluid.defaults("gpii.tests.express.user.forgot.client.caseHolder", {
                         {
                             event:    "{testEnvironment}.webdriver.events.onActionsHelperComplete",
                             listener: "{testEnvironment}.webdriver.findElement",
-                            args:     [{ css: ".fieldError"}]
+                            args:     [{ css: ".reset-error"}]
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
                             listener: "gpii.test.webdriver.inspectElement",
-                            args:     ["A reset failure message should now be displayed...", "{arguments}.0", "getText", "The 'confirm' field must match the 'password' field."] // message, element, elementFn, expectedValue, jqUnitFn
+                            args:     ["A reset failure message should now be displayed...", "{arguments}.0", "getText", "Your password and confirmation password do not match."] // message, element, elementFn, expectedValue, jqUnitFn
                         },
                         {
                             func: "{testEnvironment}.webdriver.findElement",

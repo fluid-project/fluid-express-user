@@ -25,7 +25,7 @@
         "gpii-binder": "1.0.5",
         "gpii-express": "1.0.15",
         "gpii-handlebars": "1.1.4",
-        "gpii-json-schema": "2.1.0",
+        "gpii-json-schema": "2.1.1-dev.20190628T071735Z.beab13f.GPII-3921",
         "infusion": "3.0.0-dev.20190328T144119Z.ec44dbfab",
         "kettle": "1.10.1",
         "markdown-it": "8.4.2",

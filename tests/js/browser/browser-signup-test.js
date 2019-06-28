@@ -145,12 +145,12 @@ fluid.defaults("gpii.tests.express.user.signup.client.caseHolder", {
                         },
                         {
                             func: "{testEnvironment}.webdriver.findElement",
-                            args: [{ css: ".signup-error .alert ul li"}]
+                            args: [{ css: ".signup-error"}]
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
                             listener: "gpii.test.webdriver.inspectElement",
-                            args:     ["A signup failure message should be displayed...", "{arguments}.0", "getText", "The 'confirm' field must match the 'password' field."] // message, element, elementFn, expectedValue, jqUnitFn
+                            args:     ["A signup failure message should be displayed...", "{arguments}.0", "getText", "Your password and confirmation password do not match."] // message, element, elementFn, expectedValue, jqUnitFn
                         },
                         {
                             func: "{testEnvironment}.webdriver.findElement",
