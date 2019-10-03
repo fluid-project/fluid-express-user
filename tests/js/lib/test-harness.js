@@ -28,6 +28,10 @@ fluid.defaults("gpii.test.express.user.harness.express", {
         record: 1000000,
         target: "{that gpii.express.handlerDispatcher}.options.timeout"
     },
+    messageDirs: {
+        validation: "%gpii-json-schema/src/messages",
+        user: "%gpii-express-user/src/messages"
+    },
     components: {
         // Front-end content used by some GET calls
         modules: {
@@ -44,7 +48,22 @@ fluid.defaults("gpii.test.express.user.harness.express", {
             options: {
                 namespace:    "inline",
                 priority:     "after:modules",
-                path:         "/hbs"
+                path:         "/templates"
+            }
+        },
+        messageLoader: {
+            type: "gpii.handlebars.i18n.messageLoader",
+            options: {
+                messageDirs: "{gpii.test.express.user.harness.express}.options.messageDirs"
+            }
+        },
+        messages: {
+            type: "gpii.handlebars.inlineMessageBundlingMiddleware",
+            options: {
+                messageDirs: "{gpii.test.express.user.harness.express}.options.messageDirs",
+                model: {
+                    messageBundles: "{messageLoader}.model.messageBundles"
+                }
             }
         },
         api: {
