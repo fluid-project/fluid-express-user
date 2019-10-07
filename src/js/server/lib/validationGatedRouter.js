@@ -16,17 +16,19 @@ fluid.defaults("gpii.express.user.validationMiddleware", {
     gradeNames: ["gpii.schema.validationMiddleware", "fluid.resourceLoader"],
     resources: {
         schema: {
-            promiseFunc: "{gpii.express.user.schemaHolder}.getSchema"
+            promiseFunc: "{gpii.express.user.schemaHolder}.generateSchema"
         }
     },
-    inputSchema: "{that}.resources.schema.parsed",
+    model: {
+        inputSchema: "{that}.resources.schema.parsed"
+    },
     messageDirs: {
         user: "%gpii-express-user/src/messages"
     },
     invokers: {
         middleware: {
             funcName: "gpii.schema.validationMiddleware.rejectOrForward",
-            args:     ["{gpii.schema.validator}", "{that}", "{that}.inputSchema", "{arguments}.0", "{arguments}.1", "{arguments}.2"] // globalValidator, validationMiddleware, schema, request, response, next
+            args:     ["{gpii.schema.validator}", "{that}", "{that}.model.inputSchema", "{arguments}.0", "{arguments}.1", "{arguments}.2"] // globalValidator, validationMiddleware, schema, request, response, next
         }
     }
 });
