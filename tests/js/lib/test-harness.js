@@ -51,8 +51,8 @@ fluid.defaults("gpii.test.express.user.harness.express", {
                 path:         "/templates"
             }
         },
-        messageLoader: {
-            type: "gpii.handlebars.i18n.messageLoader",
+        messageBundleLoader: {
+            type: "gpii.handlebars.i18n.messageBundleLoader",
             options: {
                 messageDirs: "{gpii.test.express.user.harness.express}.options.messageDirs"
             }
@@ -62,7 +62,7 @@ fluid.defaults("gpii.test.express.user.harness.express", {
             options: {
                 messageDirs: "{gpii.test.express.user.harness.express}.options.messageDirs",
                 model: {
-                    messageBundles: "{messageLoader}.model.messageBundles"
+                    messageBundles: "{messageBundleLoader}.model.messageBundles"
                 }
             }
         },
