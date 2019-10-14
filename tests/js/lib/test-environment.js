@@ -14,7 +14,11 @@ fluid.defaults("gpii.test.express.user.environment", {
     couchPort:    "25984",
     mailPort:     "2525",
     path:         "/",
-    templateDirs: ["%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
+    templateDirs: {
+        user: "%gpii-express-user/src/templates",
+        validation: "%gpii-json-schema/src/templates",
+        testUser: "%gpii-express-user/tests/templates"
+    },
     distributeOptions: {
         source: "{that}.options.mailPort",
         target: "{that gpii.express.user.mailer}.options.transportOptions.port"

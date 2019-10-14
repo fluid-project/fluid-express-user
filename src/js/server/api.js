@@ -28,8 +28,10 @@ fluid.defaults("gpii.express.user.api", {
     gradeNames:   ["gpii.express.router"],
     path:         "/user",
     method:       "use",
-    templateDirs: ["%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
-    schemaDirs:    "%gpii-express-user/src/schemas",
+    templateDirs: {
+        user: "%gpii-express-user/src/templates",
+        validation: "%gpii-json-schema/src/templates"
+    },
     events: {
         onLoginReady:  "null",
         onResetReady:  "null",

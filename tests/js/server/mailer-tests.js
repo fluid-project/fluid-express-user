@@ -151,7 +151,11 @@ fluid.defaults("gpii.mailer.tests.caseHolder", {
                 transportOptions: {
                     port: "{testEnvironment}.options.mailPort"
                 },
-                templateDirs: ["%gpii-express-user/tests/templates", "%gpii-express-user/src/templates"],
+                templateDirs: {
+                    user: "%gpii-express-user/src/templates",
+                    validation: "%gpii-json-schema/src/templates",
+                    testUser: "%gpii-express-user/tests/templates"
+                },
                 textTemplateKey: "mail-text",
                 htmlTemplateKey: "mail-html"
             }
