@@ -22,31 +22,31 @@
     "homepage": "https://github.com/GPII/gpii-express-user",
     "dependencies": {
         "foundation-sites": "6.3.1",
-        "gpii-binder": "1.0.5",
+        "gpii-binder": "1.1.0",
         "gpii-express": "1.0.15",
-        "gpii-handlebars": "2.1.0-dev.20191014T141924Z.45a74ef.GPII-4100",
-        "gpii-json-schema": "2.1.2-dev.20191014T143306Z.8a372f7.GPII-4022",
+        "gpii-handlebars": "2.1.0",
+        "gpii-json-schema": "2.1.2",
         "infusion": "3.0.0-dev.20191009T141140Z.32c9263b4.FLUID-6148",
-        "kettle": "1.11.0",
+        "kettle": "1.12.0",
         "markdown-it": "10.0.0",
-        "nodemailer": "6.3.0",
+        "nodemailer": "6.4.6",
         "nodemailer-smtp-transport": "2.7.4",
-        "request": "2.88.0"
+        "request": "2.88.2"
     },
     "devDependencies": {
-        "cookie": "0.4.0",
-        "eslint-config-fluid": "1.3.0",
-        "eslint": "6.5.0",
-        "gpii-couchdb-test-harness": "1.0.0-dev.20190627T080736Z.0e3a1fd.GPII-3531",
+        "cookie": "0.4.1",
+        "eslint-config-fluid": "1.4.0",
+        "eslint": "6.8.0",
+        "gpii-couchdb-test-harness": "1.0.1",
         "gpii-grunt-lint-all": "1.0.5",
         "gpii-mail-test": "1.0.5",
         "gpii-webdriver": "1.1.0",
-        "grunt": "1.0.4",
-        "handlebars": "4.4.0",
-        "mailparser": "2.7.1",
+        "grunt": "1.1.0",
+        "handlebars": "4.7.6",
+        "mailparser": "2.7.7",
         "node-jqunit": "1.1.8",
-        "nyc": "14.1.1",
+        "nyc": "15.0.1",
         "pagedown": "1.1.0",
-        "rimraf": "3.0.0"
+        "rimraf": "3.0.2"
     }
 }
