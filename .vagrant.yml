@@ -18,9 +18,10 @@ setup_job:
   stage: setup
   script:
     - choco install nodejs-lts -y
+    - choco upgrade googlechrome -y
     - choco install chromedriver -y
 
 test_job:
   stage: test          # name of the stage
   script:              # One line per command to execute
-    - "do.ps1 -c 'v: && npm install && npm test'"
+    - "do.ps1 -c 'set HEADLESS=true && v: && npm install && npm test'"
