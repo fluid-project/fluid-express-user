@@ -20,8 +20,12 @@ setup_job:
     - choco install nodejs-lts -y
     - choco upgrade googlechrome -y
     - choco install chromedriver -y
+    - choco install wget -y
+    - "do.ps1 -c 'cd /users/vagrant/downloads && wget http://dl.bintray.com/apache/couchdb/win/2.3.0/couchdb-2.3.0.msi'"
+    - "do.ps1 -c 'cd /users/vagrant/downloads && msiexec.exe /i couchdb-2.3.0.msi /passive'"
+    - "do.ps1 -c 'v: && npm install && node node_modules/gpii-couchdb-test-harness/provisioning/configureCouch.js'"
 
 test_job:
   stage: test          # name of the stage
   script:              # One line per command to execute
-    - "do.ps1 -c 'set HEADLESS=true && v: && npm install && npm test'"
+    - "do.ps1 -c 'set GPII_TEST_COUCH_USE_EXTERNAL=true && set HEADLESS=true && v: && npm install && npm test'"
