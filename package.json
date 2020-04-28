@@ -21,7 +21,7 @@
     },
     "homepage": "https://github.com/GPII/gpii-express-user",
     "dependencies": {
-        "foundation-sites": "6.3.1",
+        "foundation-sites": "6.6.3",
         "gpii-binder": "1.1.0",
         "gpii-express": "1.0.15",
         "gpii-handlebars": "2.1.0",
@@ -38,7 +38,7 @@
         "eslint-config-fluid": "1.4.0",
         "eslint": "6.8.0",
         "gpii-couchdb-test-harness": "1.0.1",
-        "gpii-grunt-lint-all": "1.0.5",
+        "gpii-grunt-lint-all": "1.0.7",
         "gpii-mail-test": "1.0.5",
         "gpii-webdriver": "1.1.0",
         "grunt": "1.1.0",
