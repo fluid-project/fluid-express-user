@@ -24,6 +24,7 @@ setup_job:
     - "do.ps1 -c 'cd /users/vagrant/downloads && wget http://dl.bintray.com/apache/couchdb/win/2.3.0/couchdb-2.3.0.msi'"
     - "do.ps1 -c 'cd /users/vagrant/downloads && msiexec.exe /i couchdb-2.3.0.msi /passive'"
     - "do.ps1 -c 'v: && npm install && node node_modules/gpii-couchdb-test-harness/provisioning/configureCouch.js'"
+    - "do.ps1 -c 'npm install -g grunt"
 
 test_job:
   stage: test          # name of the stage
