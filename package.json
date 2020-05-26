@@ -26,7 +26,7 @@
         "gpii-express": "1.0.15",
         "gpii-handlebars": "2.1.0",
         "gpii-json-schema": "2.1.2",
-        "infusion": "3.0.0-dev.20200317T122331Z.1aa7ea8a1.FLUID-6145",
+        "infusion": "3.0.0-dev.20200525T143422Z.f7f6aab.FLUID-6148",
         "kettle": "1.12.0",
         "markdown-it": "10.0.0",
         "nodemailer": "6.4.6",
