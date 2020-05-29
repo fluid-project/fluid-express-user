@@ -39,7 +39,7 @@
         "eslint": "7.1.0",
         "gpii-couchdb-test-harness": "1.0.1",
         "gpii-grunt-lint-all": "1.0.7",
-        "gpii-mail-test": "1.0.6-dev.20200529T084151Z.c472755.GPII-4496",
+        "gpii-mail-test": "1.0.6",
         "gpii-webdriver": "1.1.0",
         "grunt": "1.1.0",
         "handlebars": "4.7.6",
