@@ -42,11 +42,7 @@ gpii.tests.express.user.signup.caseHolder.verifyResponse = function (response, b
 gpii.tests.express.user.signup.caseHolder.fullSignupVerifyEmail = function (signupRequest, verificationRequest, testEnvironment) {
     gpii.tests.express.user.signup.caseHolder.extractVerificationCode(testEnvironment).then(gpii.tests.express.user.signup.caseHolder.checkVerificationCode).then(function (code) {
         signupRequest.code = code;
-        var path = "/api/user/verify/" + signupRequest.code;
-
-        // I can't fix this with the model, so I have to override it completely
-        verificationRequest.options.path = path;
-        verificationRequest.send({}, { headers: { "Accept": "application/json" }});
+        verificationRequest.send({}, { headers: { "Accept": "application/json" }, termMap: { code: code } });
     });
 };
 
@@ -63,6 +59,15 @@ gpii.tests.express.user.signup.caseHolder.checkEnvironmentForVerificationCode = 
 gpii.tests.express.user.signup.caseHolder.extractVerificationCode = function (testEnvironment) {
     return gpii.test.express.user.extractCode(testEnvironment, "https?://[^/]+/api/user/verify/([a-z0-9-]+)");
 };
+
+fluid.defaults("gpii.tests.express.user.signup.verifyRequest", {
+    gradeNames: ["gpii.test.express.user.request"],
+    endpoint: "api/user/verify/%code",
+    termMap: {
+        "code": "%code"
+    },
+    method: "GET"
+});
 
 // Each test has a request instance of `kettle.test.request.http` or `kettle.test.request.httpCookie`, and a test module that wires the request to the listener that handles its results.
 fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
@@ -93,11 +98,7 @@ fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
             }
         },
         bogusVerificationRequest: {
-            type: "gpii.test.express.user.request",
-            options: {
-                endpoint: "api/user/verify/xxxxxxxxx",
-                method: "GET"
-            }
+            type: "gpii.tests.express.user.signup.verifyRequest"
         },
         resendVerification: {
             type: "gpii.test.express.user.request",
@@ -133,11 +134,7 @@ fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
             }
         },
         fullSignupVerifyVerificationRequest: {
-            type: "kettle.test.request.httpCookie",
-            options: {
-                port: "{testEnvironment}.options.port",
-                method: "GET"
-            }
+            type: "gpii.tests.express.user.signup.verifyRequest"
         },
         fullSignupLoginRequest: {
             type: "gpii.test.express.user.request",

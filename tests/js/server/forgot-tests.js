@@ -68,7 +68,10 @@ fluid.defaults("gpii.tests.express.user.reset.caseHolder", {
             options: {
                 user: "{caseHolder}.options.testUser",
                 endpoint: "api/user/reset/%code",
-                method:   "POST"
+                method:   "POST",
+                termMap: {
+                    "code": "%code"
+                }
             }
         },
         fullResetLoginRequest: {
@@ -93,6 +96,9 @@ fluid.defaults("gpii.tests.express.user.reset.caseHolder", {
                     email:    "existing@localhost",
                     password: "Password1",
                     confirm:  "MismatchedPassword1"
+                },
+                termMap: {
+                    "code": "%code"
                 },
                 endpoint: "api/user/reset/%code",
                 method:   "POST"
@@ -220,8 +226,7 @@ gpii.tests.express.user.reset.caseHolder.fullResetExtractCodeFromEmailAndReset =
 
             if (matches) {
                 var code = matches[1];
-                resetRequest.options.path = fluid.stringTemplate(resetRequest.options.path, { code: code});
-                resetRequest.send({ password: resetRequest.options.user.password, confirm: resetRequest.options.user.confirm });
+                resetRequest.send({ password: resetRequest.options.user.password, confirm: resetRequest.options.user.confirm }, { termMap: { code: code } });
             }
         },
         function (error) {
