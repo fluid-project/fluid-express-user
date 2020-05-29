@@ -16,62 +16,61 @@
     // The core schema holder, which defines the fields used in every other user-related schema.
     fluid.defaults("gpii.express.user.schemaHolder", {
         gradeNames: ["gpii.schema.schemaHolder"],
-        // TODO: Move this back into the schema.
-        definitions: {
-            email: {
-                type: "string",
-                format: "email",
-                required: true,
-                errors: {
-                    "": "gpii.express.user.email"
-                }
-            },
-            username: {
-                required: true,
-                type: "string",
-                minLength: 1,
-                errors: {
-                    "": "gpii.express.user.username"
-                }
-            },
-            password: {
-                required: true,
-                errors: {
-                    "": "gpii.express.user.password.length"
-                },
-                allOf: [
-                    {
-                        type: "string",
-                        minLength: 8
-                    },
-                    {
-                        type: "string",
-                        errors: {
-                            "": "gpii.express.user.password.uppercase"
-                        },
-                        pattern: "[A-Z]+"
-                    },
-                    {
-                        type: "string",
-                        errors: {
-                            "": "gpii.express.user.password.lowercase"
-                        },
-                        pattern: "[a-z]+"
-                    },
-                    {
-                        type: "string",
-                        errors: {
-                            "": "gpii.express.user.password.complexity"
-                        },
-                        pattern: "[^a-zA-Z]"
-                    }
-                ]
-            }
-        },
         schema: {
             type: "object",
             title: "gpii-express-user core user schema",
-            description: "This schema defines the common format for user data transmitted and received by the gpii-express-user library."
+            description: "This schema defines the common format for user data transmitted and received by the gpii-express-user library.",
+            definitions: {
+                email: {
+                    type: "string",
+                    format: "email",
+                    required: true,
+                    errors: {
+                        "": "gpii.express.user.email"
+                    }
+                },
+                username: {
+                    required: true,
+                    type: "string",
+                    minLength: 1,
+                    errors: {
+                        "": "gpii.express.user.username"
+                    }
+                },
+                password: {
+                    required: true,
+                    errors: {
+                        "": "gpii.express.user.password.length"
+                    },
+                    allOf: [
+                        {
+                            type: "string",
+                            minLength: 8
+                        },
+                        {
+                            type: "string",
+                            errors: {
+                                "": "gpii.express.user.password.uppercase"
+                            },
+                            pattern: "[A-Z]+"
+                        },
+                        {
+                            type: "string",
+                            errors: {
+                                "": "gpii.express.user.password.lowercase"
+                            },
+                            pattern: "[a-z]+"
+                        },
+                        {
+                            type: "string",
+                            errors: {
+                                "": "gpii.express.user.password.complexity"
+                            },
+                            pattern: "[^a-zA-Z]"
+                        }
+                    ]
+                }
+            }
         }
     });
 
@@ -82,9 +81,7 @@
             title: "'Forgot password' schema.",
             description: "This schema defines the format accepted when requesting a password reset.",
             properties: {
-                // TODO: Revert
-                // email: "{that}.options.schema.definitions.email"
-                email: "{that}.options.definitions.email"
+                email: "{that}.options.schema.definitions.email"
             }
         }
     });
@@ -96,11 +93,8 @@
             title: "gpii-express-user user password reset schema",
             description: "This schema defines the format accepted when resetting a user's password.",
             properties: {
-                // TODO: Revert
-                // password: "{that}.options.schema.definitions.password",
-                // confirm: "{that}.options.schema.definitions.confirm",
-                password: "{that}.options.definitions.password",
-                confirm: "{that}.options.definitions.confirm",
+                password: "{that}.options.schema.definitions.password",
+                confirm: "{that}.options.schema.definitions.confirm",
                 code: {
                     type: "string",
                     required: true,
@@ -120,17 +114,11 @@
             title: "gpii-express-user user signup schema",
             description: "This schema defines the format accepted when creating a new user.",
             properties: {
-                // TODO: Revert
-                // email: "{that}.options.schema.definitions.email",
-                // username: "{that}.options.schema.definitions.username",
-                // password: "{that}.options.schema.definitions.password",
-                // confirm: "{that}.options.schema.definitions.confirm",
-                // profile: "{that}.options.schema.definitions.profile"
-                email: "{that}.options.definitions.email",
-                username: "{that}.options.definitions.username",
-                password: "{that}.options.definitions.password",
-                confirm: "{that}.options.definitions.confirm",
-                profile: "{that}.options.definitions.profile"
+                email: "{that}.options.schema.definitions.email",
+                username: "{that}.options.schema.definitions.username",
+                password: "{that}.options.schema.definitions.password",
+                confirm: "{that}.options.schema.definitions.confirm",
+                profile: "{that}.options.schema.definitions.profile"
             }
         }
     });
@@ -142,9 +130,7 @@
             title: "gpii-express-user user resend verification code schema",
             description: "This schema defines the format accepted when requesting that a verification code be resent.",
             properties: {
-                // TODO: Revert
-                // email: "{that}.options.schema.definitions.email"
-                email: "{that}.options.definitions.email"
+                email: "{that}.options.schema.definitions.email"
             }
         }
     });
@@ -158,11 +144,8 @@
             properties: {
                 username: {
                     anyOf: [
-                        // TODO: Revert
-                        // "{that}.options.schema.definitions.username",
-                        // "{that}.options.schema.definitions.email"
-                        "{that}.options.definitions.username",
-                        "{that}.options.definitions.email"
+                        "{that}.options.schema.definitions.username",
+                        "{that}.options.schema.definitions.email"
                     ],
                     errors: {
                         "": "gpii.express.user.username.or.email.required"
