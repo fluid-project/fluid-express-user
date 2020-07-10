@@ -79,16 +79,17 @@ fluid.defaults("gpii.express.user.login.post", {
     gradeNames:    ["gpii.express.user.validationGatedRouter"],
     path:          "/",
     method:        "post",
-    schemaKey:     "user-login.json",
-    handlerGrades: ["gpii.express.user.login.post.handler"]
+    handlerGrades: ["gpii.express.user.login.post.handler"],
+    components: {
+        schemaHolder: {
+            type: "gpii.express.user.schemaHolder.login"
+        }
+    }
 });
 
 fluid.defaults("gpii.express.user.login", {
     gradeNames: ["gpii.express.router"],
     path:       "/login",
-    events: {
-        onSchemasDereferenced: null
-    },
     rules: {
         user: {
             "username": "name", // Default configuration is designed for CouchDB and express-couchUser field naming conventions.
@@ -128,12 +129,7 @@ fluid.defaults("gpii.express.user.login", {
         postRouter: {
             type: "gpii.express.user.login.post",
             options: {
-                priority: "after:getRouter",
-                listeners: {
-                    "onSchemasDereferenced.notifyParent": {
-                        func: "{gpii.express.user.login}.events.onSchemasDereferenced.fire"
-                    }
-                }
+                priority: "after:getRouter"
             }
         }
     }

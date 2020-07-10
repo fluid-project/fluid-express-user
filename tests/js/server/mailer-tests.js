@@ -5,9 +5,9 @@
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
-var fs         = require("fs");
-var jqUnit     = require("node-jqunit");
-var MailParser = require("mailparser").MailParser;
+var fs           = require("fs");
+var jqUnit       = require("node-jqunit");
+var simpleParser = require("mailparser").simpleParser;
 
 require("gpii-mail-test");
 var kettle = require("kettle");
@@ -26,17 +26,17 @@ gpii.mailer.tests.checkResponse = function (mailServerComponent, expected) {
     jqUnit.assertTrue("There should be mail content...", mailContent && mailContent.length > 0);
 
     if (expected) {
-        var mailparser = new MailParser();
-
-        mailparser.on("end", function (message) {
-            jqUnit.start();
-            jqUnit.assertLeftHand("The message sent should be as expected", expected, message);
-        });
-
-        // send the email source to the parser
         jqUnit.stop();
-        mailparser.write(mailContent);
-        mailparser.end();
+        simpleParser(mailContent).then(
+            function (message) {
+                jqUnit.start();
+                jqUnit.assertLeftHand("The message sent should be as expected.", expected, message);
+            },
+            function (error) {
+                jqUnit.start();
+                jqUnit.fail("There should be no mail errors: ", error);
+            }
+        );
     }
 };
 
@@ -44,14 +44,30 @@ fluid.defaults("gpii.mailer.tests.caseHolder", {
     gradeNames: ["gpii.test.express.caseHolder"],
     expected: {
         textMessage: {
-            from:    [ { address: "sample@localhost", name: "" }],
-            to:      [ { address: "other@localhost",  name: "" }],
+            from: {
+                value: [ { address: "sample@localhost", name: "" }],
+                html: "<span class=\"mp_address_group\"><a href=\"mailto:sample@localhost\" class=\"mp_address_email\">sample@localhost</a></span>",
+                text: "sample@localhost"
+            },
+            to: {
+                value: [ { address: "other@localhost",  name: "" }],
+                html: "<span class=\"mp_address_group\"><a href=\"mailto:other@localhost\" class=\"mp_address_email\">other@localhost</a></span>",
+                text: "other@localhost"
+            },
             subject: "sample text message...",
             text:    "This is a sample message body."
         },
         templateMessage: {
-            from:    [ { address: "sample@localhost", name: "" }],
-            to:      [ { address: "other@localhost",  name: "" }],
+            from: {
+                value: [ { address: "sample@localhost", name: "" }],
+                html: "<span class=\"mp_address_group\"><a href=\"mailto:sample@localhost\" class=\"mp_address_email\">sample@localhost</a></span>",
+                text: "sample@localhost"
+            },
+            to: {
+                value: [ { address: "other@localhost",  name: "" }],
+                html: "<span class=\"mp_address_group\"><a href=\"mailto:other@localhost\" class=\"mp_address_email\">other@localhost</a></span>",
+                text: "other@localhost"
+            },
             subject: "sample template message...",
             text:    "I am convincingly and customizably happy to be writing you.",
             html:    "I am convincingly and customizably <p><em>happy</em></p>\n to be writing you."
@@ -135,7 +151,11 @@ fluid.defaults("gpii.mailer.tests.caseHolder", {
                 transportOptions: {
                     port: "{testEnvironment}.options.mailPort"
                 },
-                templateDirs: ["%gpii-express-user/tests/templates", "%gpii-express-user/src/templates"],
+                templateDirs: {
+                    user: "%gpii-express-user/src/templates",
+                    validation: "%gpii-json-schema/src/templates",
+                    testUser: "%gpii-express-user/tests/templates"
+                },
                 textTemplateKey: "mail-text",
                 htmlTemplateKey: "mail-html"
             }

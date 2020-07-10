@@ -51,15 +51,22 @@ fluid.defaults("gpii.tests.express.user.forgot.client.caseHolder", {
                             listener: "{testEnvironment}.webdriver.actionsHelper",
                             args:     [[{fn: "sendKeys", args: [gpii.webdriver.Key.TAB, "NewPass12345!", gpii.webdriver.Key.TAB, "DifferentPass12345!", gpii.webdriver.Key.ENTER]}]]
                         },
+                        // Now that the schema validated model component's initial pass occurs later, we need to wait
+                        // before we check for a validation error.
                         {
                             event:    "{testEnvironment}.webdriver.events.onActionsHelperComplete",
+                            listener: "{testEnvironment}.webdriver.sleep",
+                            args:     [250]
+                        },
+                        {
+                            event:    "{testEnvironment}.webdriver.events.onSleepComplete",
                             listener: "{testEnvironment}.webdriver.findElement",
-                            args:     [{ css: ".fieldError"}]
+                            args:     [{ css: ".reset-error"}]
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
                             listener: "gpii.test.webdriver.inspectElement",
-                            args:     ["A reset failure message should now be displayed...", "{arguments}.0", "getText", "The 'confirm' field must match the 'password' field."] // message, element, elementFn, expectedValue, jqUnitFn
+                            args:     ["A reset failure message should now be displayed...", "{arguments}.0", "getText", "Your password and confirmation password do not match."] // message, element, elementFn, expectedValue, jqUnitFn
                         },
                         {
                             func: "{testEnvironment}.webdriver.findElement",
@@ -268,7 +275,6 @@ fluid.defaults("gpii.tests.express.user.forgot.client.environment", {
     gradeNames: ["gpii.test.express.user.environment.withBrowser"],
     resetPattern: "(http.+reset/[a-z0-9-]+)",
     port: 7533,
-    pouchPort: 7534,
     mailPort:  4082,
     forgotUrl: {
         expander: {

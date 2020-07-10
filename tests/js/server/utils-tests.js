@@ -94,7 +94,6 @@ fluid.defaults("gpii.tests.express.user.utils.caseHolder", {
 fluid.defaults("gpii.tests.express.user.utils.environment", {
     gradeNames: ["gpii.test.express.user.environment"],
     port:       8778,
-    pouchPort:  8764,
     mailPort:   8725,
     components: {
         caseHolder: {
@@ -104,10 +103,11 @@ fluid.defaults("gpii.tests.express.user.utils.environment", {
             type: "gpii.express.user.utils",
             options: {
                 couch:  {
+                    port: 25984,
                     userDbUrl: {
                         expander: {
                             funcName: "fluid.stringTemplate",
-                            args: ["http://127.0.0.1:%port/users", { port: "{environment}.options.pouchPort"}]
+                            args: ["http://127.0.0.1:%port/users", { port: "{utils}.options.couch.port"}]
                         }
                     }
                 }

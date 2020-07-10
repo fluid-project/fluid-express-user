@@ -8,40 +8,47 @@
 "use strict";
 var fluid = require("infusion");
 
+fluid.require("%gpii-json-schema");
+fluid.require("%gpii-express-user");
+require("../../common/schemaHolders.js");
+
+fluid.defaults("gpii.express.user.validationMiddleware", {
+    gradeNames: ["gpii.schema.validationMiddleware", "fluid.resourceLoader"],
+    resources: {
+        schema: {
+            promiseFunc: "{gpii.express.user.schemaHolder}.generateSchema"
+        }
+    },
+    model: {
+        inputSchema: "{that}.resources.schema.parsed"
+    },
+    messageDirs: {
+        user: "%gpii-express-user/src/messages"
+    },
+    invokers: {
+        middleware: {
+            funcName: "gpii.schema.validationMiddleware.rejectOrForward",
+            args:     ["{gpii.schema.validator}", "{that}", "{that}.model.inputSchema", "{arguments}.0", "{arguments}.1", "{arguments}.2"] // globalValidator, validationMiddleware, schema, request, response, next
+        }
+    }
+});
+
 fluid.defaults("gpii.express.user.validationGatedRouter", {
     gradeNames: ["gpii.express.router"],
-    events: {
-        onSchemasDereferenced: null
-    },
     components: {
+        schemaHolder: {
+            type: "gpii.express.user.schemaHolder"
+        },
         validationMiddleware: {
-            type: "gpii.schema.validationMiddleware",
+            type: "gpii.express.user.validationMiddleware",
             options: {
-                priority:  "first",
-                schemaKey: "{gpii.express.user.validationGatedRouter}.options.schemaKey",
-                messages: {
-                    error: "The information you provided is incomplete or incorrect.  Please check the following:"
-                },
-                listeners: {
-                    "onSchemasDereferenced.notifyParent": {
-                        func: "{gpii.express.user.validationGatedRouter}.events.onSchemasDereferenced.fire"
-                    }
-                }
+                priority:  "first"
             }
         },
-        // TODO:  Add a schema key for validation errors and add those headers here
-        validationJsonMiddleware: {
-            type: "gpii.express.middleware.error",
-            options: {
-                priority:    "after:validationMiddleware",
-                // priority:          "after:validationHtmlErrorMiddleware",
-                defaultStatusCode: 400
-            }
-        },
-        // If we've made it this far, we don't need the above headers
         requestAwareMiddleware: {
             type: "gpii.express.middleware.requestAware",
             options: {
+                priority: "after:validationMiddleware",
                 handlerGrades: "{gpii.express.user.validationGatedRouter}.options.handlerGrades"
             }
         }

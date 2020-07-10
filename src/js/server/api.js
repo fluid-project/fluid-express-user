@@ -28,8 +28,10 @@ fluid.defaults("gpii.express.user.api", {
     gradeNames:   ["gpii.express.router"],
     path:         "/user",
     method:       "use",
-    templateDirs: ["%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
-    schemaDirs:    "%gpii-express-user/src/schemas",
+    templateDirs: {
+        user: "%gpii-express-user/src/templates",
+        validation: "%gpii-json-schema/src/templates"
+    },
     events: {
         onLoginReady:  "null",
         onResetReady:  "null",
@@ -43,11 +45,12 @@ fluid.defaults("gpii.express.user.api", {
         }
     },
     couch: {
-        userDbName: "_users",
+        port: 5984,
+        userDbName: "users",
         userDbUrl: {
             expander: {
                 funcName: "fluid.stringTemplate",
-                args:     ["http://admin:admin@localhost:%port/%userDbName", "{that}.options.couch"]
+                args:     ["http://localhost:%port/%userDbName", { port: "{that}.options.couch.port", userDbName: "{that}.options.couch.userDbName" }]
             }
         }
     },
@@ -89,12 +92,7 @@ fluid.defaults("gpii.express.user.api", {
         login: {
             type: "gpii.express.user.login",
             options: {
-                priority: "after:session",
-                listeners: {
-                    "onSchemasDereferenced.notifyParent": {
-                        func: "{gpii.express.user.api}.events.onLoginReady.fire"
-                    }
-                }
+                priority: "after:session"
             }
         },
         logout: {
@@ -106,23 +104,13 @@ fluid.defaults("gpii.express.user.api", {
         reset: {
             type: "gpii.express.user.reset",
             options: {
-                priority: "after:session",
-                listeners: {
-                    "onSchemasDereferenced.notifyParent": {
-                        func: "{gpii.express.user.api}.events.onResetReady.fire"
-                    }
-                }
+                priority: "after:session"
             }
         },
         signup: {
             type:     "gpii.express.user.signup",
             options: {
-                priority: "after:session",
-                listeners: {
-                    "onSchemasDereferenced.notifyParent": {
-                        func: "{gpii.express.user.api}.events.onSignupReady.fire"
-                    }
-                }
+                priority: "after:session"
             }
         },
         verify: {

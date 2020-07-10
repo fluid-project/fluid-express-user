@@ -37,8 +37,8 @@ fluid.registerNamespace("gpii.express.user.mailer");
 // `mailOptions` can be found in [the nodemailer documentation](https://github.com/andris9/Nodemailer).
 //
 gpii.express.user.mailer.sendMessage = function (that, mailOptions) {
-    var transport = nodemailer.createTransport(smtpTransport(that.options.transportOptions));
-    transport.sendMail(mailOptions, that.handleSendResult);
+    var transport = nodemailer.createTransport(smtpTransport(fluid.copy(that.options.transportOptions)));
+    transport.sendMail(fluid.copy(mailOptions), that.handleSendResult);
 };
 
 // When we know the results of sending the message, fire an appropriate event so that other components can take action.
@@ -107,7 +107,7 @@ fluid.registerNamespace("gpii.express.user.mailer.handlebars");
 // output.
 //
 gpii.express.user.mailer.handlebars.sendTemplateMessage = function (that, mailOptions, context) {
-    var fullMailOptions = mailOptions || {};
+    var fullMailOptions = fluid.copy(mailOptions) || {};
 
     if (!that.options.textTemplateKey && !that.options.htmlTemplateKey) {
         fluid.fail("Cannot generate email without a text and/or html mail template.  Check your configuration.");

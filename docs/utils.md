@@ -17,7 +17,7 @@ This component requires the same CouchDB options as other components in this mod
 | ------------------ | ---------- | ----------- |
 | `couch.port`       | `{String}` | The port on which our CouchDB instance runs. |
 | `couch.userDbName` | `{String}` | The CouchDB database name containing our user records.  Defaults to `users`. |
-| `couch.userDbUrl`  | `{String}` | The URL of our CouchDB instance.  By default this is expanded from `userDbName` above using the pattern `http://admin:admin@localhost:%port/%userDbName` (see above). |
+| `couch.userDbUrl`  | `{String}` | The URL of our CouchDB instance.  By default this is expanded from `userDbName` above using the pattern `http://localhost:%port/%userDbName` (see above). |
 
 ### Component Invokers
 

@@ -6,7 +6,7 @@
 
     fluid.registerNamespace("gpii.express.user.frontend.login");
 
-        // If the user controls are used to log out, we have to manually clear the success message.
+    // If the user controls are used to log out, we have to manually clear the success message.
     // If we delegate this to the controls component, it might clobber success messages for things other than the login.
     gpii.express.user.frontend.login.checkAndClearSuccess = function (that) {
         if (!that.model.user || !that.model.user.username) {
@@ -16,15 +16,14 @@
     };
 
     fluid.defaults("gpii.express.user.frontend.login", {
-        gradeNames: ["gpii.schemas.client.errorAwareForm"],
-        templates: {
+        gradeNames: ["gpii.express.user.frontend.errorAwareForm"],
+        templateKeys: {
             initial: "login-viewport",
             success: "common-success"
         },
         model: {
             user: null
         },
-        schemaKey: "user-login.json",
         ajaxOptions: {
             url:      "/api/user/login",
             method:   "POST",
@@ -39,6 +38,9 @@
             }
         },
         components: {
+            schemaHolder: {
+                type: "gpii.express.user.schemaHolder.login"
+            },
             success: {
                 options: {
                     listeners: {

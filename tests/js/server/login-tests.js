@@ -39,7 +39,7 @@ gpii.tests.express.user.login.caseHolder.verifyResponse = function (response, bo
     var data = typeof body === "string" ? JSON.parse(body) : body;
 
     if (hasCurrentUser) {
-        jqUnit.assertEquals("The current user should be returned.", "existing", data.user.username);
+        jqUnit.assertEquals("The current user should be returned.", "existing", fluid.get(data, "user.username"));
     }
 };
 
@@ -174,7 +174,6 @@ fluid.defaults("gpii.tests.express.user.login.caseHolder", {
 fluid.defaults("gpii.tests.express.user.login.environment", {
     gradeNames: ["gpii.test.express.user.environment"],
     port:       8778,
-    pouchPort:  8764,
     mailPort:   8725,
     components: {
         caseHolder: {

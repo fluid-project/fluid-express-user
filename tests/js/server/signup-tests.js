@@ -42,11 +42,7 @@ gpii.tests.express.user.signup.caseHolder.verifyResponse = function (response, b
 gpii.tests.express.user.signup.caseHolder.fullSignupVerifyEmail = function (signupRequest, verificationRequest, testEnvironment) {
     gpii.tests.express.user.signup.caseHolder.extractVerificationCode(testEnvironment).then(gpii.tests.express.user.signup.caseHolder.checkVerificationCode).then(function (code) {
         signupRequest.code = code;
-        var path = "/api/user/verify/" + signupRequest.code;
-
-        // I can't fix this with the model, so I have to override it completely
-        verificationRequest.options.path = path;
-        verificationRequest.send({}, { headers: { "Accept": "application/json" }});
+        verificationRequest.send({}, { headers: { "Accept": "application/json" }, termMap: { code: code } });
     });
 };
 
@@ -64,6 +60,15 @@ gpii.tests.express.user.signup.caseHolder.extractVerificationCode = function (te
     return gpii.test.express.user.extractCode(testEnvironment, "https?://[^/]+/api/user/verify/([a-z0-9-]+)");
 };
 
+fluid.defaults("gpii.tests.express.user.signup.verifyRequest", {
+    gradeNames: ["gpii.test.express.user.request"],
+    endpoint: "api/user/verify/%code",
+    termMap: {
+        "code": "%code"
+    },
+    method: "GET"
+});
+
 // Each test has a request instance of `kettle.test.request.http` or `kettle.test.request.httpCookie`, and a test module that wires the request to the listener that handles its results.
 fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
     gradeNames: ["gpii.test.webdriver.caseHolder"],
@@ -78,6 +83,13 @@ fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
                 method:   "POST"
             }
         },
+        mismatchedPasswordCreateRequest: {
+            type: "gpii.test.express.user.request",
+            options: {
+                endpoint: "api/user/signup",
+                method:   "POST"
+            }
+        },
         incompleteUserCreateRequest: {
             type: "gpii.test.express.user.request",
             options: {
@@ -86,11 +98,7 @@ fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
             }
         },
         bogusVerificationRequest: {
-            type: "gpii.test.express.user.request",
-            options: {
-                endpoint: "api/user/verify/xxxxxxxxx",
-                method: "GET"
-            }
+            type: "gpii.tests.express.user.signup.verifyRequest"
         },
         resendVerification: {
             type: "gpii.test.express.user.request",
@@ -126,11 +134,7 @@ fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
             }
         },
         fullSignupVerifyVerificationRequest: {
-            type: "kettle.test.request.httpCookie",
-            options: {
-                port: "{testEnvironment}.options.port",
-                method: "GET"
-            }
+            type: "gpii.tests.express.user.signup.verifyRequest"
         },
         fullSignupLoginRequest: {
             type: "gpii.test.express.user.request",
@@ -155,7 +159,8 @@ fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
                         {
                             listener: "gpii.tests.express.user.signup.caseHolder.verifyResponse",
                             event:    "{incompleteUserCreateRequest}.events.onComplete",
-                            args:     ["{incompleteUserCreateRequest}.nativeResponse", "{arguments}.0", 400, ["isError"], ["user"]]
+                            args:     ["{incompleteUserCreateRequest}.nativeResponse", "{arguments}.0", 400, [], ["isValid", "user"]]
+                            // TODO: Add a transforming error handler to ensure that validation errors also have `isError` set.
                         }
                     ]
                 },
@@ -165,12 +170,27 @@ fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
                     sequence: [
                         {
                             func: "{duplicateUserCreateRequest}.send",
-                            args: [{ username: "new", password: "new", confirm: "new", email: "existing@localhost"}]
+                            args: [{ username: "new", password: "NewPassw0rd", confirm: "NewPassw0rd", email: "existing@localhost"}]
                         },
                         {
                             listener: "gpii.tests.express.user.signup.caseHolder.verifyResponse",
                             event:    "{duplicateUserCreateRequest}.events.onComplete",
-                            args:     ["{duplicateUserCreateRequest}.nativeResponse", "{arguments}.0", 400, ["isError"], ["user"]] // response, body, statusCode, truthy, falsy, hasCurrentUser
+                            args:     ["{duplicateUserCreateRequest}.nativeResponse", "{arguments}.0", 403, ["isError"], ["user"]] // response, body, statusCode, truthy, falsy, hasCurrentUser
+                        }
+                    ]
+                },
+                {
+                    name: "Attempt to create an account with a mismatched password and confirmation password.",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{mismatchedPasswordCreateRequest}.send",
+                            args: [{ username: "new", password: "NewPassw0rd", confirm: "NewerPassw0rd", email: "newboot@localhost"}]
+                        },
+                        {
+                            listener: "gpii.tests.express.user.signup.caseHolder.verifyResponse",
+                            event:    "{mismatchedPasswordCreateRequest}.events.onComplete",
+                            args:     ["{mismatchedPasswordCreateRequest}.nativeResponse", "{arguments}.0", 400, ["isError"], ["user"]] // response, body, statusCode, truthy, falsy, hasCurrentUser
                         }
                     ]
                 },
@@ -282,7 +302,6 @@ fluid.defaults("gpii.tests.express.user.signup.caseHolder", {
 fluid.defaults("gpii.tests.express.user.signup.environment", {
     gradeNames: ["gpii.test.express.user.environment"],
     port:       8778,
-    pouchPort:  8764,
     mailPort:   8725,
     components: {
         caseHolder: {

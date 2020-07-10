@@ -16,14 +16,6 @@ var fs           = require("fs");
 
 fluid.registerNamespace("gpii.tests.express.user.reset.caseHolder");
 
-// Listen for the email with the reset code and launch the reset request
-gpii.tests.express.user.reset.caseHolder.fullResetVerifyEmail = function (verificationRequest, testEnvironment) {
-    gpii.tests.express.user.reset.caseHolder.extractResetCode(testEnvironment).then(gpii.express.user.signup.test.caseHolder.checkResetCode).then(function (code) {
-        verificationRequest.options.path = fluid.stringTemplate(verificationRequest.options.path, { code: code });
-        verificationRequest.send({}, { headers: { "Accept": "application/json" }});
-    });
-};
-
 gpii.tests.express.user.reset.caseHolder.checkResetCode = function (code) {
     jqUnit.assertNotNull("There should be a verification code in the email sent to the user.", code);
     return code;
@@ -43,7 +35,8 @@ fluid.defaults("gpii.tests.express.user.reset.caseHolder", {
     testUser: {
         username: "existing",
         email:    "existing@localhost",
-        password: "Password1"
+        password: "Password1",
+        confirm:  "Password1"
     },
     components: {
         cookieJar: {
@@ -70,18 +63,44 @@ fluid.defaults("gpii.tests.express.user.reset.caseHolder", {
                 method:   "POST"
             }
         },
-        fullResetVerifyResetRequest: {
+        fullResetResetRequest: {
             type: "gpii.test.express.user.request",
             options: {
                 user: "{caseHolder}.options.testUser",
                 endpoint: "api/user/reset/%code",
-                method:   "POST"
+                method:   "POST",
+                termMap: {
+                    "code": "%code"
+                }
             }
         },
         fullResetLoginRequest: {
             type: "gpii.test.express.user.request",
             options: {
                 endpoint: "api/user/login",
+                method:   "POST"
+            }
+        },
+        mismatchedPasswordsForgotRequest: {
+            type: "gpii.test.express.user.request",
+            options: {
+                endpoint: "api/user/forgot",
+                method:   "POST"
+            }
+        },
+        mismatchedPasswordsResetRequest: {
+            type: "gpii.test.express.user.request",
+            options: {
+                user: {
+                    username: "existing",
+                    email:    "existing@localhost",
+                    password: "Password1",
+                    confirm:  "MismatchedPassword1"
+                },
+                termMap: {
+                    "code": "%code"
+                },
+                endpoint: "api/user/reset/%code",
                 method:   "POST"
             }
         }
@@ -96,7 +115,7 @@ fluid.defaults("gpii.tests.express.user.reset.caseHolder", {
                     sequence: [
                         {
                             func: "{bogusResetRequest}.send",
-                            args: [{ code: "utter-nonsense-which-should-never-work", password: "Something123" }]
+                            args: [{ code: "utter-nonsense-which-should-never-work", password: "Something123", confirm: "Something123"  }]
                         },
                         {
                             listener: "gpii.tests.express.user.reset.caseHolder.verifyResponse",
@@ -120,14 +139,14 @@ fluid.defaults("gpii.tests.express.user.reset.caseHolder", {
                         //    args: ["{fullResetForgotRequest}", "{fullResetForgotRequest}.nativeResponse", "{arguments}.0", 200]
                         //},
                         {
-                            listener: "gpii.tests.express.user.reset.caseHolder.fullResetVerifyEmail",
+                            listener: "gpii.tests.express.user.reset.caseHolder.fullResetExtractCodeFromEmailAndReset",
                             event:    "{testEnvironment}.smtp.mailServer.events.onMessageReceived",
-                            args:     ["{fullResetVerifyResetRequest}", "{testEnvironment}"]
+                            args:     ["{testEnvironment}", "{fullResetResetRequest}"] // testEnvironment, resetRequest
                         },
                         {
                             listener: "gpii.tests.express.user.reset.caseHolder.verifyResponse",
-                            event: "{fullResetVerifyResetRequest}.events.onComplete",
-                            args: ["{fullResetVerifyResetRequest}.nativeResponse", "{arguments}.0", 200, ["message"]]
+                            event: "{fullResetResetRequest}.events.onComplete",
+                            args: ["{fullResetResetRequest}.nativeResponse", "{arguments}.0", 200, ["message"]]
                         },
                         {
                             func: "{fullResetLoginRequest}.send",
@@ -137,6 +156,26 @@ fluid.defaults("gpii.tests.express.user.reset.caseHolder", {
                             listener: "gpii.tests.express.user.reset.caseHolder.verifyResponse",
                             event: "{fullResetLoginRequest}.events.onComplete",
                             args: ["{fullResetLoginRequest}.nativeResponse", "{arguments}.0", 200, ["user"]]
+                        }
+                    ]
+                },
+                {
+                    name: "Attempt to reset a password with a mismatched confirmation password.",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{mismatchedPasswordsForgotRequest}.send",
+                            args: [ { email: "{that}.options.testUser.email" } ]
+                        },
+                        {
+                            listener: "gpii.tests.express.user.reset.caseHolder.fullResetExtractCodeFromEmailAndReset",
+                            event:    "{testEnvironment}.smtp.mailServer.events.onMessageReceived",
+                            args:     ["{testEnvironment}", "{mismatchedPasswordsResetRequest}"] // testEnvironment, resetRequest
+                        },
+                        {
+                            listener: "gpii.tests.express.user.reset.caseHolder.verifyResponse",
+                            event: "{mismatchedPasswordsResetRequest}.events.onComplete",
+                            args: ["{mismatchedPasswordsResetRequest}.nativeResponse", "{arguments}.0", 400, ["message", "isError"], ["user"]]
                         }
                     ]
                 }
@@ -165,41 +204,41 @@ gpii.tests.express.user.reset.caseHolder.verifyResponse = function (response, bo
     }
 
     if (hasCurrentUser) {
-        jqUnit.assertEquals("The current user should be returned.", "admin", data.user.name);
+        jqUnit.assertEquals("The current user should be returned.", "admin", fluid.get(data, "user.name"));
     }
 };
 
 // Listen for the email with the verification code and launch the verification request
-gpii.tests.express.user.reset.caseHolder.fullResetVerifyEmail = function (resetRequest, testEnvironment) {
-    var content = fs.readFileSync(testEnvironment.smtp.mailServer.currentMessageFile);
+gpii.tests.express.user.reset.caseHolder.fullResetExtractCodeFromEmailAndReset = function (testEnvironment, resetRequest) {
+    var mailContent = fs.readFileSync(testEnvironment.smtp.mailServer.currentMessageFile);
 
-    var MailParser = require("mailparser").MailParser,
-        mailparser = new MailParser({ debug: false });
+    var simpleParser = require("mailparser").simpleParser;
 
-    // If this gets any deeper, refactor to use a separate function
-    mailparser.on("end", function (mailObject) {
-        var content = mailObject.text;
-        var resetCodeRegexp = new RegExp("https?://[^/]+/api/user/reset/([a-z0-9-]+)", "i");
-        var matches = content.toString().match(resetCodeRegexp);
+    jqUnit.stop();
+    simpleParser(mailContent).then(
+        function (mailObject) {
+            jqUnit.start();
+            var content = mailObject.text;
+            var resetCodeRegexp = new RegExp("https?://[^/]+/api/user/reset/([a-z0-9-]+)", "i");
+            var matches = content.toString().match(resetCodeRegexp);
 
-        jqUnit.assertNotNull("There should be a reset code in the email sent to the user.", matches);
+            jqUnit.assertNotNull("There should be a reset code in the email sent to the user.", matches);
 
-        if (matches) {
-            var code = matches[1];
-            resetRequest.options.path = fluid.stringTemplate(resetRequest.options.path, { code: code});
-
-            resetRequest.send({ password: resetRequest.options.user.password, confirm: resetRequest.options.user.password});
+            if (matches) {
+                var code = matches[1];
+                resetRequest.send({ password: resetRequest.options.user.password, confirm: resetRequest.options.user.confirm }, { termMap: { code: code } });
+            }
+        },
+        function (error) {
+            jqUnit.start();
+            jqUnit.fail("There should be no mail errors: ", error);
         }
-    });
-
-    mailparser.write(content);
-    mailparser.end();
+    );
 };
 
 fluid.defaults("gpii.tests.express.user.reset.environment", {
     gradeNames: ["gpii.test.express.user.environment"],
     port:       8779,
-    pouchPort:  8765,
     mailPort:   8825,
     components: {
         caseHolder: {

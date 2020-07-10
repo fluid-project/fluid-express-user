@@ -9,7 +9,7 @@ require("gpii-express");
 require("gpii-handlebars");
 require("gpii-mail-test");
 
-require("./test-harness-pouch");
+require("./test-harness-couch");
 
 
 fluid.defaults("gpii.test.express.user.harness.gated.handler", {
@@ -28,6 +28,10 @@ fluid.defaults("gpii.test.express.user.harness.express", {
         record: 1000000,
         target: "{that gpii.express.handlerDispatcher}.options.timeout"
     },
+    messageDirs: {
+        validation: "%gpii-json-schema/src/messages",
+        user: "%gpii-express-user/src/messages"
+    },
     components: {
         // Front-end content used by some GET calls
         modules: {
@@ -44,24 +48,22 @@ fluid.defaults("gpii.test.express.user.harness.express", {
             options: {
                 namespace:    "inline",
                 priority:     "after:modules",
-                path:         "/hbs"
+                path:         "/templates"
             }
         },
-        schemas: {
-            type: "gpii.express.router.static",
+        messageBundleLoader: {
+            type: "gpii.handlebars.i18n.messageBundleLoader",
             options: {
-                namespace: "schemas",
-                priority:  "after:inline",
-                path:      "/schemas",
-                content:   "%gpii-express-user/src/schemas"
+                messageDirs: "{gpii.test.express.user.harness.express}.options.messageDirs"
             }
         },
-        inlineSchemas: {
-            type: "gpii.schema.inlineMiddleware",
+        messages: {
+            type: "gpii.handlebars.inlineMessageBundlingMiddleware",
             options: {
-                namespace:  "inlineSchemas",
-                priority:   "after:schemas",
-                schemaDirs: "%gpii-express-user/src/schemas"
+                messageDirs: "{gpii.test.express.user.harness.express}.options.messageDirs",
+                model: {
+                    messageBundles: "{messageBundleLoader}.model.messageBundles"
+                }
             }
         },
         api: {
@@ -69,15 +71,9 @@ fluid.defaults("gpii.test.express.user.harness.express", {
             options: {
                 path:      "/api/user",
                 namespace: "api",
-                priority:  "after:inlineSchemas",
+                priority:  "after:inline",
                 couch:  {
-                    userDbName: "users",
-                    userDbUrl: {
-                        expander: {
-                            funcName: "fluid.stringTemplate",
-                            args: ["http://localhost:%port/%userDbName", "{that}.options.couch"]
-                        }
-                    }
+                    port: 25984
                 },
                 app: {
                     name: "gpii-express.user test harness..."
@@ -107,6 +103,7 @@ fluid.defaults("gpii.test.express.user.harness.express", {
         jsonErrors: {
             type: "gpii.express.middleware.error",
             options: {
+                defaultStatusCode: 400, // TODO: discuss handling this in gpii-json-schema
                 priority: "after:src"
             }
         }
@@ -116,9 +113,13 @@ fluid.defaults("gpii.test.express.user.harness.express", {
 fluid.defaults("gpii.test.express.user.harness", {
     gradeNames: ["fluid.component"],
     port:       "5379",
-    pouchPort:  "9735",
+    couchPort:  "25984",
     mailPort:   "5225",
-    templateDirs: ["%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
+    templateDirs: {
+        user: "%gpii-express-user/src/templates",
+        validation: "%gpii-json-schema/src/templates",
+        testUser: "%gpii-express-user/tests/templates"
+    },
     baseUrl: {
         expander: {
             funcName: "fluid.stringTemplate",
@@ -155,7 +156,7 @@ fluid.defaults("gpii.test.express.user.harness", {
                     api: {
                         options: {
                             couch:  {
-                                port: "{harness}.options.pouchPort"
+                                port: "{harness}.options.couchPort"
                             },
                             app: {
                                 url:  "{harness}.options.baseUrl"
@@ -165,10 +166,12 @@ fluid.defaults("gpii.test.express.user.harness", {
                 }
             }
         },
-        pouch: {
-            type: "gpii.test.express.user.pouch",
+        couch: {
+            type: "gpii.test.express.user.couch",
             options: {
-                port: "{harness}.options.pouchPort"
+                couch: {
+                    port: "{harness}.options.couchPort"
+                }
             }
         },
         smtp: {

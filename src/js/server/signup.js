@@ -13,6 +13,8 @@ require("./lib/password");
 
 fluid.registerNamespace("gpii.express.user.signup.post.handler");
 
+// TODO: We have to confirm that the passwords match on our own in some function reused in both signup and reset.
+
 // Check to see if the user exists.
 gpii.express.user.signup.post.handler.lookupExistingUser = function (that) {
     that.reader.get(that.options.request.body).then(that.checkForExistingUser);
@@ -21,6 +23,10 @@ gpii.express.user.signup.post.handler.lookupExistingUser = function (that) {
 gpii.express.user.signup.post.handler.checkForExistingUser = function (that, utils, response) {
     if (response && response.username) {
         that.sendResponse(403, { isError: true, message: "A user with this email or username already exists."});
+    }
+    // Post Draft v5, JSON Schemas can no longer validate based on the data in the payload, so we have to check this here.
+    else if (that.options.request.body.password !== that.options.request.body.confirm) {
+        that.sendResponse(400, { isError: true, message: "Your password and confirmation password do not match."});
     }
     else {
         var body = that.options.request.body;
@@ -99,7 +105,6 @@ fluid.defaults("gpii.express.user.signup.post", {
     codeKey:          "verification_code",  // Must match the value in gpii.express.user.verify
     couchPath:        "/_design/lookup/_view/byUsernameOrEmail",
     handlerGrades:    ["gpii.express.user.signup.post.handler"],
-    schemaKey:        "user-signup.json",
     urls: {
         read:  {
             expander: {
@@ -121,15 +126,17 @@ fluid.defaults("gpii.express.user.signup.post", {
     ],
     termMaps: {
         read: { username: "%username", email: "%email"}
+    },
+    components: {
+        schemaHolder: {
+            type: "gpii.express.user.schemaHolder.signup"
+        }
     }
 });
 
 fluid.defaults("gpii.express.user.signup", {
     gradeNames: ["gpii.express.router"],
     path:       "/signup",
-    events: {
-        onSchemasDereferenced: null
-    },
     rules: {
         user: {
             "username": "name", // Default configuration is designed for CouchDB and express-couchUser field naming conventions.
@@ -158,14 +165,7 @@ fluid.defaults("gpii.express.user.signup", {
             }
         },
         postRouter: {
-            type: "gpii.express.user.signup.post",
-            options: {
-                listeners: {
-                    "onSchemasDereferenced.notifyParent": {
-                        func: "{gpii.express.user.signup}.events.onSchemasDereferenced.fire"
-                    }
-                }
-            }
+            type: "gpii.express.user.signup.post"
         }
     }
 });

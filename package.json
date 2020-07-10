@@ -2,9 +2,13 @@
     "name": "gpii-express-user",
     "version": "1.0.2",
     "description": "A series of Fluid components to provide simple user management.",
-    "main": "src/js/index.js",
+    "main": "index.js",
     "scripts": {
-        "test": "node node_modules/istanbul/lib/cli.js cover tests/all-tests.js"
+        "pretest": "node node_modules/rimraf/bin.js coverage/* reports/* instrumented/*",
+        "test": "npm run test:webdriver && npm run test:node",
+        "test:webdriver": "node tests/js/browser/index.js",
+        "test:node": "node node_modules/nyc/bin/nyc.js node tests/js/server/index.js",
+        "posttest": "node node_modules/nyc/bin/nyc.js report --reporter html --reporter text-summary"
     },
     "repository": {
         "type": "git",
@@ -17,31 +21,32 @@
     },
     "homepage": "https://github.com/GPII/gpii-express-user",
     "dependencies": {
-        "foundation-sites": "6.3.1",
-        "gpii-binder": "1.0.3",
-        "gpii-express": "1.0.14",
-        "gpii-handlebars": "1.1.0",
-        "gpii-json-schema": "1.0.5",
-        "infusion": "3.0.0-dev.20180326T173646Z.8c6a109b1",
-        "kettle": "1.7.3",
-        "markdown-it": "8.4.1",
-        "nodemailer": "4.6.7",
+        "foundation-sites": "6.6.3",
+        "gpii-binder": "1.1.0",
+        "gpii-express": "1.0.15",
+        "gpii-handlebars": "2.1.2",
+        "gpii-json-schema": "2.1.3",
+        "infusion": "3.0.0-dev.20200528T154535Z.9cd9261.FLUID-6145",
+        "kettle": "1.12.0",
+        "markdown-it": "11.0.0",
+        "nodemailer": "6.4.8",
         "nodemailer-smtp-transport": "2.7.4",
-        "request": "2.87.0"
+        "request": "2.88.2"
     },
     "devDependencies": {
-        "cookie": "0.3.1",
-        "eslint": "5.1.0",
-        "eslint-config-fluid": "1.3.0",
-        "gpii-grunt-lint-all": "1.0.1-dev.20180706T153657Z.4cbbd61",
-        "gpii-mail-test": "1.0.3",
-        "gpii-pouchdb": "1.0.12",
-        "gpii-webdriver": "1.0.2",
-        "grunt": "1.0.3",
-        "handlebars": "4.0.11",
-        "istanbul": "0.4.5",
-        "mailparser": "0.6.2",
+        "cookie": "0.4.1",
+        "eslint-config-fluid": "1.4.0",
+        "eslint": "7.1.0",
+        "gpii-couchdb-test-harness": "1.0.1",
+        "gpii-grunt-lint-all": "1.0.7",
+        "gpii-mail-test": "1.0.6",
+        "gpii-webdriver": "1.1.0",
+        "grunt": "1.1.0",
+        "handlebars": "4.7.6",
+        "mailparser": "2.7.7",
         "node-jqunit": "1.1.8",
-        "pagedown": "1.1.0"
+        "nyc": "15.0.1",
+        "pagedown": "1.1.0",
+        "rimraf": "3.0.2"
     }
 }

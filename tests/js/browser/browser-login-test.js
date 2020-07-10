@@ -165,7 +165,6 @@ fluid.defaults("gpii.tests.express.user.login.client.caseHolder", {
 fluid.defaults("gpii.tests.express.user.login.client.environment", {
     gradeNames: ["gpii.test.express.user.environment.withBrowser"],
     port:       7542,
-    pouchPort:  7524,
     mailPort:   4099,
     loginUrl: {
         expander: {

@@ -7,7 +7,7 @@ var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
 var fs = require("fs");
-var MailParser = require("mailparser").MailParser;
+var simpleParser = require("mailparser").simpleParser;
 
 fluid.registerNamespace("gpii.test.express.user");
 
@@ -16,29 +16,26 @@ gpii.test.express.user.extractCode = function (testEnvironment, pattern) {
 
     var promise = fluid.promise();
 
-    var mailParser = new MailParser({debug: false});
+    simpleParser(content).then(
+        function (mailObject) {
+            var content = mailObject.text;
+            if (content) {
+                var verificationCodeRegexp = new RegExp(pattern, "i");
+                var matches = content.toString().match(verificationCodeRegexp);
 
-    // If this gets any deeper, refactor to use a separate function
-    mailParser.on("end", function (mailObject) {
-        var content = mailObject.text;
-        if (content) {
-            var verificationCodeRegexp = new RegExp(pattern, "i");
-            var matches = content.toString().match(verificationCodeRegexp);
-
-            if (matches) {
-                promise.resolve(matches[1]);
+                if (matches) {
+                    promise.resolve(matches[1]);
+                }
+                else {
+                    promise.reject();
+                }
             }
             else {
                 promise.reject();
             }
-        }
-        else {
-            promise.reject();
-        }
-    });
-
-    mailParser.write(content);
-    mailParser.end();
+        },
+        promise.reject
+    );
 
     return promise;
 };

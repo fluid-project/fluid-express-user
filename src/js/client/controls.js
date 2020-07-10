@@ -27,7 +27,7 @@
             type:     "GET",
             url:      "/api/user/logout"
         },
-        templates: {
+        templateKeys: {
             initial: "controls-viewport"
         },
         rules: {
@@ -65,7 +65,7 @@
             },
             renderInitialMarkup: {
                 func: "{that}.renderMarkup",
-                args: ["initial", "{that}.options.templates.initial", "{that}.model", "html"]
+                args: ["initial", "{that}.options.templateKeys.initial", "{that}.model", "html"]
             }
         },
         listeners: {

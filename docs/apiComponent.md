@@ -86,7 +86,7 @@ this component supports the following unique options:
 | `app.url`          | `{String}` | The public facing URL for this application. |
 | `couch.port`       | `{String}` | The port on which our CouchDB instance runs. |
 | `couch.userDbName` | `{String}` | The CouchDB database name containing our user records.  Defaults to `users`. |
-| `couch.userDbUrl`  | `{String}` | The URL of our CouchDB instance.  By default this is expanded from `userDbName` above using the pattern `http://admin:admin@localhost:%port/%userDbName` (see above). |
+| `couch.userDbUrl`  | `{String}` | The URL of our CouchDB instance.  By default this is expanded from `userDbName` above using the pattern `http://localhost:%port/%userDbName` (see above). |
 | `schemaDirs`       | `{Array}`  | An array of schema directories that contain our [JSON Schemas](http://json-schema.org/). Supports package-relative paths like '%gpii-express-user/src/templates'. |
 | `templateDirs`     | `{Array}`  | An array of template directories that contain our Handlebars templates.  Supports package-relative paths like "%gpii-express-user/src/templates". |
 
