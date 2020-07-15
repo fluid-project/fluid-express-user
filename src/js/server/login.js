@@ -1,19 +1,18 @@
 /* eslint-env node */
 "use strict";
 var fluid  = require("infusion");
-var gpii   = fluid.registerNamespace("gpii");
 
-fluid.registerNamespace("gpii.express.user.login.post.handler");
+fluid.registerNamespace("fluid.express.user.login.post.handler");
 
-require("gpii-handlebars");
-require("gpii-json-schema");
+require("fluid-handlebars");
+require("fluid-json-schema");
 
 require("./lib/datasource");
 require("./lib/password");
 
-fluid.registerNamespace("gpii.express.user.login");
+fluid.registerNamespace("fluid.express.user.login");
 
-gpii.express.user.login.post.handler.verifyPassword = function (that, utils, request) {
+fluid.express.user.login.post.handler.verifyPassword = function (that, utils, request) {
     utils.unlockUser(request.body.username, request.body.password).then(
         function (data) {
             var user = fluid.model.transformWithRules(data, that.options.rules.user);
@@ -26,9 +25,9 @@ gpii.express.user.login.post.handler.verifyPassword = function (that, utils, req
     );
 };
 
-fluid.defaults("gpii.express.user.login.post.handler", {
-    gradeNames: ["gpii.express.handler"],
-    sessionKey: "_gpii_user",
+fluid.defaults("fluid.express.user.login.post.handler", {
+    gradeNames: ["fluid.express.handler"],
+    sessionKey: "_fluid_user",
     messages: {
         success: "You have successfully logged in.",
         failure: "Invalid username or password."
@@ -42,16 +41,16 @@ fluid.defaults("gpii.express.user.login.post.handler", {
     method: "post",
     invokers: {
         handleRequest: {
-            funcName: "gpii.express.user.login.post.handler.verifyPassword",
-            args: ["{that}", "{gpii.express.user.utils}", "{that}.options.request"]
+            funcName: "fluid.express.user.login.post.handler.verifyPassword",
+            args: ["{that}", "{fluid.express.user.utils}", "{that}.options.request"]
         }
     },
     components: {
         reader: {
             // TODO:  Replace with the new "asymmetric" dataSource once that code has been reviewed
-            type: "gpii.express.user.couchdb.read",
+            type: "fluid.express.user.couchdb.read",
             options: {
-                url: "{gpii.express.user.login.post.handler}.options.url",
+                url: "{fluid.express.user.login.post.handler}.options.url",
                 rules: {
                     read: {
                         "":         "rows.0.value",
@@ -61,12 +60,12 @@ fluid.defaults("gpii.express.user.login.post.handler", {
                 termMap: { username: "%username"},
                 listeners: {
                     "onRead.verifyPassword": {
-                        nameSpace: "gpii.express.user.login",
-                        funcName:  "gpii.express.user.login.post.handler.verifyPassword",
-                        args:      ["{gpii.express.user.login.post.handler}", "{arguments}.0", "{arguments}"]
+                        nameSpace: "fluid.express.user.login",
+                        funcName:  "fluid.express.user.login.post.handler.verifyPassword",
+                        args:      ["{fluid.express.user.login.post.handler}", "{arguments}.0", "{arguments}"]
                     },
                     "onError.sendErrorResponse": {
-                        func: "{gpii.express.user.login.post.handler}.sendResponse",
+                        func: "{fluid.express.user.login.post.handler}.sendResponse",
                         args: [500, { isError: true, message: "Error checking username and password."}]
                     }
                 }
@@ -75,20 +74,20 @@ fluid.defaults("gpii.express.user.login.post.handler", {
     }
 });
 
-fluid.defaults("gpii.express.user.login.post", {
-    gradeNames:    ["gpii.express.user.validationGatedRouter"],
+fluid.defaults("fluid.express.user.login.post", {
+    gradeNames:    ["fluid.express.user.validationGatedRouter"],
     path:          "/",
     method:        "post",
-    handlerGrades: ["gpii.express.user.login.post.handler"],
+    handlerGrades: ["fluid.express.user.login.post.handler"],
     components: {
         schemaHolder: {
-            type: "gpii.express.user.schemaHolder.login"
+            type: "fluid.express.user.schemaHolder.login"
         }
     }
 });
 
-fluid.defaults("gpii.express.user.login", {
-    gradeNames: ["gpii.express.router"],
+fluid.defaults("fluid.express.user.login", {
+    gradeNames: ["fluid.express.router"],
     path:       "/login",
     rules: {
         user: {
@@ -100,34 +99,34 @@ fluid.defaults("gpii.express.user.login", {
     distributeOptions: [
         {
             source: "{that}.options.couch",
-            target: "{that gpii.express.router}.options.couch"
+            target: "{that fluid.express.router}.options.couch"
         },
         {
             source: "{that}.options.couch",
-            target: "{that gpii.express.handler}.options.couch"
+            target: "{that fluid.express.handler}.options.couch"
         },
         {
             source: "{that}.options.rules",
-            target: "{that gpii.express.handler}.options.rules"
+            target: "{that fluid.express.handler}.options.rules"
         }
     ],
     components: {
         getRouter: {
-            type: "gpii.express.singleTemplateMiddleware",
+            type: "fluid.express.singleTemplateMiddleware",
             options: {
                 namespace: "getRouter",
                 templateKey: "pages/login",
                 rules: {
                     contextToExpose: {
                         model: {
-                            user: "req.session._gpii_user"
+                            user: "req.session._fluid_user"
                         }
                     }
                 }
             }
         },
         postRouter: {
-            type: "gpii.express.user.login.post",
+            type: "fluid.express.user.login.post",
             options: {
                 priority: "after:getRouter"
             }

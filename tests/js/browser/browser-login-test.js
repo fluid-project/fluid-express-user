@@ -6,12 +6,11 @@
 /* eslint-env node */
 "use strict";
 var fluid      = require("infusion");
-var gpii       = fluid.registerNamespace("gpii");
 
 require("../lib/");
 
-fluid.defaults("gpii.tests.express.user.login.client.caseHolder", {
-    gradeNames: ["gpii.test.webdriver.caseHolder"],
+fluid.defaults("fluid.tests.express.user.login.client.caseHolder", {
+    gradeNames: ["fluid.test.webdriver.caseHolder"],
     rawModules: [
         {
             name: "Testing login functions with a test browser...",
@@ -27,17 +26,17 @@ fluid.defaults("gpii.tests.express.user.login.client.caseHolder", {
                         {
                             event:    "{testEnvironment}.webdriver.events.onGetComplete",
                             listener: "{testEnvironment}.webdriver.wait",
-                            args:     [gpii.webdriver.until.elementLocated({ css: ".login-form"})]
+                            args:     [fluid.webdriver.until.elementLocated({ css: ".login-form"})]
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onWaitComplete",
                             listener: "{testEnvironment}.webdriver.actionsHelper",
-                            args:     [[{fn: "sendKeys", args: [gpii.webdriver.Key.TAB, "existing", gpii.webdriver.Key.TAB, "password", gpii.webdriver.Key.ENTER]}]]
+                            args:     [[{fn: "sendKeys", args: [fluid.webdriver.Key.TAB, "existing", fluid.webdriver.Key.TAB, "password", fluid.webdriver.Key.ENTER]}]]
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onActionsHelperComplete",
                             listener: "{testEnvironment}.webdriver.wait",
-                            args:     [gpii.webdriver.until.elementLocated({ css: ".login-success .success"})]
+                            args:     [fluid.webdriver.until.elementLocated({ css: ".login-success .success"})]
                         },
                         {
                             func: "{testEnvironment}.webdriver.findElement",
@@ -45,7 +44,7 @@ fluid.defaults("gpii.tests.express.user.login.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
-                            listener: "gpii.test.webdriver.inspectElement",
+                            listener: "fluid.test.webdriver.inspectElement",
                             args:     ["A login success message should now be displayed...", "{arguments}.0", "getText", "You have successfully logged in."] // message, element, elementFn, expectedValue, jqUnitFn
                         },
                         {
@@ -54,7 +53,7 @@ fluid.defaults("gpii.tests.express.user.login.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
-                            listener: "gpii.test.webdriver.inspectElement",
+                            listener: "fluid.test.webdriver.inspectElement",
                             args:     ["A login failure message should not be displayed...", "{arguments}.0", "getText", ""] // message, element, elementFn, expectedValue, jqUnitFn
                         },
                         {
@@ -63,7 +62,7 @@ fluid.defaults("gpii.tests.express.user.login.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
-                            listener: "gpii.test.webdriver.inspectElement",
+                            listener: "fluid.test.webdriver.inspectElement",
                             args:     ["The login form should no longer be visible...", "{arguments}.0", "isDisplayed", false] // message, element, elementFn, expectedValue, jqUnitFn
                         },
                         {
@@ -72,17 +71,17 @@ fluid.defaults("gpii.tests.express.user.login.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
-                            listener: "gpii.test.webdriver.inspectElement",
+                            listener: "fluid.test.webdriver.inspectElement",
                             args:     ["The username should now be displayed.", "{arguments}.0", "getText", "existing"] // message, element, elementFn, expectedValue, jqUnitFn
                         },
                         {
                             func: "{testEnvironment}.webdriver.actionsHelper",
-                            args: [[{fn: "sendKeys", args: [gpii.webdriver.Key.TAB, gpii.webdriver.Key.ENTER, gpii.webdriver.Key.ENTER]}]]
+                            args: [[{fn: "sendKeys", args: [fluid.webdriver.Key.TAB, fluid.webdriver.Key.ENTER, fluid.webdriver.Key.ENTER]}]]
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onActionsHelperComplete",
                             listener: "{testEnvironment}.webdriver.wait",
-                            args:     [gpii.webdriver.until.elementLocated({ css: ".login-form"})]
+                            args:     [fluid.webdriver.until.elementLocated({ css: ".login-form"})]
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onWaitComplete",
@@ -91,7 +90,7 @@ fluid.defaults("gpii.tests.express.user.login.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
-                            listener: "gpii.test.webdriver.inspectElement",
+                            listener: "fluid.test.webdriver.inspectElement",
                             args:     ["The login form should be visible again...", "{arguments}.0", "isDisplayed", true] // message, element, elementFn, expectedValue, jqUnitFn
                         },
                         {
@@ -100,7 +99,7 @@ fluid.defaults("gpii.tests.express.user.login.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
-                            listener: "gpii.test.webdriver.inspectElement",
+                            listener: "fluid.test.webdriver.inspectElement",
                             args:     ["The user controls should no longer indicate that the user is logged in.", "{arguments}.0", "getText", "Not Logged In"] // message, element, elementFn, expectedValue, jqUnitFn
                         }
                     ]
@@ -116,17 +115,17 @@ fluid.defaults("gpii.tests.express.user.login.client.caseHolder", {
                         {
                             event:    "{testEnvironment}.webdriver.events.onGetComplete",
                             listener: "{testEnvironment}.webdriver.wait",
-                            args:     [gpii.webdriver.until.elementLocated({ css: ".login-form"})]
+                            args:     [fluid.webdriver.until.elementLocated({ css: ".login-form"})]
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onWaitComplete",
                             listener: "{testEnvironment}.webdriver.actionsHelper",
-                            args:     [[{fn: "sendKeys", args: [gpii.webdriver.Key.TAB, "bogusUsername", gpii.webdriver.Key.TAB, "bogusPassword", gpii.webdriver.Key.ENTER]}]]
+                            args:     [[{fn: "sendKeys", args: [fluid.webdriver.Key.TAB, "bogusUsername", fluid.webdriver.Key.TAB, "bogusPassword", fluid.webdriver.Key.ENTER]}]]
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onActionsHelperComplete",
                             listener: "{testEnvironment}.webdriver.wait",
-                            args:     [gpii.webdriver.until.elementLocated({ css: ".login-error .alert"})]
+                            args:     [fluid.webdriver.until.elementLocated({ css: ".login-error .alert"})]
                         },
                         {
                             func: "{testEnvironment}.webdriver.findElement",
@@ -134,7 +133,7 @@ fluid.defaults("gpii.tests.express.user.login.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
-                            listener: "gpii.test.webdriver.inspectElement",
+                            listener: "fluid.test.webdriver.inspectElement",
                             args:     ["A login failure message should be displayed...", "{arguments}.0", "getText", "Invalid username or password."] // message, element, elementFn, expectedValue, jqUnitFn
                         },
                         {
@@ -143,7 +142,7 @@ fluid.defaults("gpii.tests.express.user.login.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
-                            listener: "gpii.test.webdriver.inspectElement",
+                            listener: "fluid.test.webdriver.inspectElement",
                             args:     ["A login success message should not be displayed...", "{arguments}.0", "getText", ""] // message, element, elementFn, expectedValue, jqUnitFn
                         },
                         {
@@ -152,7 +151,7 @@ fluid.defaults("gpii.tests.express.user.login.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
-                            listener: "gpii.test.webdriver.inspectElement",
+                            listener: "fluid.test.webdriver.inspectElement",
                             args:     ["The login form should still be visible...", "{arguments}.0", "isDisplayed", true] // message, element, elementFn, expectedValue, jqUnitFn
                         }
                     ]
@@ -162,8 +161,8 @@ fluid.defaults("gpii.tests.express.user.login.client.caseHolder", {
     ]
 });
 
-fluid.defaults("gpii.tests.express.user.login.client.environment", {
-    gradeNames: ["gpii.test.express.user.environment.withBrowser"],
+fluid.defaults("fluid.tests.express.user.login.client.environment", {
+    gradeNames: ["fluid.test.express.user.environment.withBrowser"],
     port:       7542,
     mailPort:   4099,
     loginUrl: {
@@ -174,9 +173,9 @@ fluid.defaults("gpii.tests.express.user.login.client.environment", {
     },
     components: {
         testCaseHolder: {
-            type: "gpii.tests.express.user.login.client.caseHolder"
+            type: "fluid.tests.express.user.login.client.caseHolder"
         }
     }
 });
 
-gpii.test.webdriver.allBrowsers({ baseTestEnvironment: "gpii.tests.express.user.login.client.environment"});
+fluid.test.webdriver.allBrowsers({ baseTestEnvironment: "fluid.tests.express.user.login.client.environment"});

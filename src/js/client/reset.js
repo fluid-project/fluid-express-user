@@ -4,10 +4,10 @@
 //
 (function () {
     "use strict";
-    fluid.registerNamespace("gpii.express.user.frontend.reset");
+    fluid.registerNamespace("fluid.express.user.frontend.reset");
 
-    fluid.defaults("gpii.express.user.frontend.reset", {
-        gradeNames: ["gpii.express.user.frontend.errorAwareForm"],
+    fluid.defaults("fluid.express.user.frontend.reset", {
+        gradeNames: ["fluid.express.user.frontend.errorAwareForm"],
         ajaxOptions: {
             type:    "POST",
             url:     {
@@ -24,7 +24,6 @@
         },
         rules: {
             successResponseToModel: {
-                // TODO:  Review once https://issues.gpii.net/browse/GPII-1587 is resolved
                 successMessage: {
                     literalValue: "Your password has been reset."
                 }
@@ -48,7 +47,7 @@
         },
         components: {
             schemaHolder: {
-                type: "gpii.express.user.schemaHolder.reset"
+                type: "fluid.express.user.schemaHolder.reset"
             }
         }
     });

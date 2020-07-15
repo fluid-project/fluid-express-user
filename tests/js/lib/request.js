@@ -4,8 +4,8 @@
 "use strict";
 var fluid = require("infusion");
 
-fluid.defaults("gpii.test.express.user.request", {
-    gradeNames: ["gpii.test.express.request"],
+fluid.defaults("fluid.test.express.user.request", {
+    gradeNames: ["fluid.test.express.request"],
     headers: {
         accept: "application/json"
     },

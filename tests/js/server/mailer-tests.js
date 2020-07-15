@@ -3,24 +3,23 @@
 /* eslint-env node */
 "use strict";
 var fluid = require("infusion");
-var gpii  = fluid.registerNamespace("gpii");
 
 var fs           = require("fs");
 var jqUnit       = require("node-jqunit");
 var simpleParser = require("mailparser").simpleParser;
 
-require("gpii-mail-test");
+require("fluid-mail-test");
 var kettle = require("kettle");
 kettle.loadTestingSupport();
 
 require("../../../src/js/server/lib/mailer");
 
-var express = require("gpii-express");
+var express = require("fluid-express");
 express.loadTestingSupport();
 
-fluid.registerNamespace("gpii.mailer.tests");
+fluid.registerNamespace("fluid.mailer.tests");
 
-gpii.mailer.tests.checkResponse = function (mailServerComponent, expected) {
+fluid.mailer.tests.checkResponse = function (mailServerComponent, expected) {
     var mailContent = fs.readFileSync(mailServerComponent.currentMessageFile, "utf8");
 
     jqUnit.assertTrue("There should be mail content...", mailContent && mailContent.length > 0);
@@ -40,8 +39,8 @@ gpii.mailer.tests.checkResponse = function (mailServerComponent, expected) {
     }
 };
 
-fluid.defaults("gpii.mailer.tests.caseHolder", {
-    gradeNames: ["gpii.test.express.caseHolder"],
+fluid.defaults("fluid.mailer.tests.caseHolder", {
+    gradeNames: ["fluid.test.express.caseHolder"],
     expected: {
         textMessage: {
             from: {
@@ -102,7 +101,7 @@ fluid.defaults("gpii.mailer.tests.caseHolder", {
                             args: ["{caseHolder}.options.messages.textMessage"]
                         },
                         {
-                            listener: "gpii.mailer.tests.checkResponse",
+                            listener: "fluid.mailer.tests.checkResponse",
                             event: "{testEnvironment}.events.onMessageReceived",
                             args:  ["{arguments}.0", "{caseHolder}.options.expected.textMessage"]
                         },
@@ -122,7 +121,7 @@ fluid.defaults("gpii.mailer.tests.caseHolder", {
                             args: ["{caseHolder}.options.messages.templateMessage", "{caseHolder}.options.templateMessageContext"]
                         },
                         {
-                            listener: "gpii.mailer.tests.checkResponse",
+                            listener: "fluid.mailer.tests.checkResponse",
                             event: "{testEnvironment}.events.onMessageReceived",
                             args:  ["{arguments}.0", "{caseHolder}.options.expected.templateMessage"]
                         },
@@ -138,7 +137,7 @@ fluid.defaults("gpii.mailer.tests.caseHolder", {
     ],
     components: {
         textMailer: {
-            type: "gpii.express.user.mailer.text",
+            type: "fluid.express.user.mailer.text",
             options: {
                 transportOptions: {
                     port: "{testEnvironment}.options.mailPort"
@@ -146,15 +145,15 @@ fluid.defaults("gpii.mailer.tests.caseHolder", {
             }
         },
         templateMailer: {
-            type: "gpii.express.user.mailer.handlebars",
+            type: "fluid.express.user.mailer.handlebars",
             options: {
                 transportOptions: {
                     port: "{testEnvironment}.options.mailPort"
                 },
                 templateDirs: {
-                    user: "%gpii-express-user/src/templates",
-                    validation: "%gpii-json-schema/src/templates",
-                    testUser: "%gpii-express-user/tests/templates"
+                    user: "%fluid-express-user/src/templates",
+                    validation: "%fluid-json-schema/src/templates",
+                    testUser: "%fluid-express-user/tests/templates"
                 },
                 textTemplateKey: "mail-text",
                 htmlTemplateKey: "mail-html"
@@ -163,7 +162,7 @@ fluid.defaults("gpii.mailer.tests.caseHolder", {
     }
 });
 
-fluid.defaults("gpii.mailer.tests.environment", {
+fluid.defaults("fluid.mailer.tests.environment", {
     gradeNames: ["fluid.test.testEnvironment"],
     mailPort:   "9925",
     events: {
@@ -173,7 +172,7 @@ fluid.defaults("gpii.mailer.tests.environment", {
     },
     components: {
         mailServer: {
-            type:          "gpii.test.mail.smtp",
+            type:          "fluid.test.mail.smtp",
             createOnEvent: "constructFixtures",
             options: {
                 port: "{testEnvironment}.options.mailPort",
@@ -195,10 +194,10 @@ fluid.defaults("gpii.mailer.tests.environment", {
             }
         },
         caseHolder: {
-            type: "gpii.mailer.tests.caseHolder"
+            type: "fluid.mailer.tests.caseHolder"
         }
     }
 
 });
 
-fluid.test.runTests("gpii.mailer.tests.environment");
+fluid.test.runTests("fluid.mailer.tests.environment");

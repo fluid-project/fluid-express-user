@@ -1,9 +1,8 @@
 /* eslint-env node */
 "use strict";
 var fluid = require("infusion");
-var gpii  = fluid.registerNamespace("gpii");
 
-fluid.registerNamespace("gpii.test.express.user.client");
+fluid.registerNamespace("fluid.test.express.user.client");
 
 var fs           = require("fs");
 var simpleParser = require("mailparser").simpleParser;
@@ -17,7 +16,7 @@ var simpleParser = require("mailparser").simpleParser;
 //
 // See the "forgot" and "signup" tests for concrete examples.
 //
-gpii.test.express.user.client.continueFromEmail = function (environment, urlPatternString) {
+fluid.test.express.user.client.continueFromEmail = function (environment, urlPatternString) {
     var mailFileContents = fs.readFileSync(environment.smtp.mailServer.currentMessageFile, "utf8");
 
     // This is a MIME message, it will mangle the lines and special characters unless we decode it.

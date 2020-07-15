@@ -1,4 +1,4 @@
-# gpii-express-user
+# fluid-express-user
 
 This package provides a series of server and client-side Fluid components to provide simple user management, including:
 
@@ -9,7 +9,7 @@ This package provides a series of server and client-side Fluid components to pro
 
 ## Server Side Components
 
-The server side components are intended to be used with a `gpii.express` instance, and provide the REST API endpoints
+The server side components are intended to be used with a `fluid.express` instance, and provide the REST API endpoints
 documented in `src/docs/api.md`. Before you can use the server side components, you must set up your database with the
 views included in `src/views` (see that directory for details).
 
@@ -20,15 +20,15 @@ between any two sites that use this package.
 
 When writing your own server-side components that depend on the current user's information, the current user will
 always be available as part of the `request.session` object.  The user key may change depending on your configuration,
-by default the user is found at `request.session._gpii_user`.
+by default the user is found at `request.session._fluid_user`.
 
 ## Client Side Components
 
 The client-side components provided here are intended to be used with the server-side API running on the same hostname
 and port that hosts the client-side content.  No CORS, proxy, or other mechanism is provided to handle remote lookups.
 
-To use the client side components, set up your `gpii.express` instance with a static handler that will serve up the
-contents of `src/js/client`, and a `gpii.express.hb` instance that can serve up the required template content.  It is
+To use the client side components, set up your `fluid.express` instance with a static handler that will serve up the
+contents of `src/js/client`, and a `fluid.express.hb` instance that can serve up the required template content.  It is
 recommended that you copy the sample template content found in `src/templates` to your template directory and customize
 based on your specific needs.
 
