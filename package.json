@@ -39,7 +39,7 @@
         "eslint": "7.4.0",
         "fluid-couchdb-test-harness": "1.0.1-dev.20200715T134250Z.f4a80a7.FLUID-6524",
         "fluid-grunt-lint-all": "1.0.8",
-        "fluid-mail-test": "1.0.7-dev.20200715T140135Z.b27c361.FLUID-6524",
+        "fluid-mail-test": "1.0.7",
         "fluid-webdriver": "1.1.1",
         "grunt": "1.2.1",
         "handlebars": "4.7.6",
