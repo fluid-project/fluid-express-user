@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      couchdb:
+        image: couchdb
+        ports:
+          - 25984:5984
+        env:
+          COUCHDB_USER: admin
+          COUCHDB_PASSWORD: admin
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    env:
+      HEADLESS: true
+      FLUID_TEST_COUCH_USE_EXTERNAL: true
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Node.js dependencies
+        run: npm install
+
+      - name: Lint Code
+        run: $(npm bin)/grunt lint
+
+      - name: Node Tests
+        run: npm test
