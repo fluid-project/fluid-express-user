@@ -24,7 +24,6 @@ jobs:
         node-version: [12.x]
 
     env:
-      HEADLESS: true
       FLUID_TEST_COUCH_USE_EXTERNAL: true
       BROWSERS: chrome
 
