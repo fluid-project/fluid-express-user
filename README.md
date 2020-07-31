@@ -34,3 +34,10 @@ based on your specific needs.
 
 For an example of both the server-side configuration and of serving up client-side content, check out the configuration
 of `tests/js/launch-test-harness.js` and `tests/js/test-harness.js`,
+
+## Tests
+
+To run the tests in this package, use the command `npm test`.
+
+The tests in this package make use of [fluid-couchdb-test-harness](https://github.com/fluid-project/fluid-couchdb-test-harness),
+see that package for supported environments and configuration options.
