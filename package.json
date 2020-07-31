@@ -37,6 +37,7 @@
         "cookie": "0.4.1",
         "eslint-config-fluid": "1.4.0",
         "eslint": "7.5.0",
+        "eslint-plugin-markdown": "1.0.2",
         "fluid-couchdb-test-harness": "1.1.0",
         "fluid-grunt-lint-all": "1.0.8",
         "fluid-mail-test": "1.0.7",
