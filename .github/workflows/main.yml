@@ -36,6 +36,7 @@ jobs:
 
       - name: Node Tests
         run: npm run test:node
+        timeout-minutes: 5
 
       - name: Debug
         run: docker ps -a
