@@ -10,14 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      couchdb:
-        image: couchdb
-        ports:
-          - 25984:5984
-        env:
-          COUCHDB_USER: admin
-          COUCHDB_PASSWORD: admin
+    timeout-minutes: 20
 
     strategy:
       matrix:
@@ -25,7 +18,7 @@ jobs:
 
     env:
       HEADLESS: true
-      FLUID_TEST_COUCH_USE_EXTERNAL: true
+      BROWSERS: chrome
 
     steps:
       - uses: actions/checkout@v2
@@ -39,7 +32,13 @@ jobs:
         run: npm install
 
       - name: Lint Code
-        run: $(npm bin)/grunt lint
+        run: npm run lint
 
       - name: Node Tests
-        run: npm test
+        run: npm run test:node
+
+      - name: Stop all Docker containers
+        run: docker rm -f $(docker ps -q -a)
+
+      - name: Browser Tests
+        run: npm run test:webdriver
