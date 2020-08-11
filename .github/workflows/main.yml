@@ -18,6 +18,7 @@ jobs:
 
     env:
       HEADLESS: true
+      BROWSERS: chrome
 
     steps:
       - uses: actions/checkout@v2
@@ -35,12 +36,9 @@ jobs:
 
       - name: Node Tests
         run: npm run test:node
-        timeout-minutes: 2
 
       - name: Stop all Docker containers
         run: docker rm -f $(docker ps -q -a)
-        if: ${{ always() }}
 
       - name: Browser Tests
         run: npm run test:webdriver
-        if: ${{ always() }}
