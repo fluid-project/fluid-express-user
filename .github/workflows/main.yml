@@ -37,5 +37,11 @@ jobs:
       - name: Node Tests
         run: npm run test:node
 
+      - name: Debug
+        run: docker ps -a
+
+      - name: Debug 2
+        run: sudo netstat -antp | grep LISTEN
+
       - name: Browser Tests
         run: npm run test:webdriver
