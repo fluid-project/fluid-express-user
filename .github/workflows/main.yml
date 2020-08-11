@@ -40,9 +40,12 @@ jobs:
 
       - name: Debug
         run: docker ps -a
+        if: ${{ always() }}
 
       - name: Debug 2
         run: sudo netstat -antp | grep LISTEN
+        if: ${{ always() }}
 
       - name: Browser Tests
         run: npm run test:webdriver
+        if: ${{ always() }}
