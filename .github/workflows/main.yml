@@ -12,15 +12,6 @@ jobs:
 
     timeout-minutes: 20
 
-    services:
-      couchdb:
-        image: couchdb
-        ports:
-          - 25984:5984
-        env:
-          COUCHDB_USER: admin
-          COUCHDB_PASSWORD: admin
-
     strategy:
       matrix:
         node-version: [12.x]
@@ -41,10 +32,10 @@ jobs:
         run: npm install
 
       - name: Lint Code
-        run: $(npm bin)/grunt lint
+        run: npm run lint
 
       - name: Node Tests
-        run: xvfb-run --auto-servernum npm test
+        run: npm run test:node
 
-      - name: Cleanup after xvfb
-        uses: bcomnes/cleanup-xvfb@v1
+      - name: Browser Tests
+        run: npm run test:webdriver

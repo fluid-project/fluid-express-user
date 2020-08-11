@@ -4,6 +4,7 @@
     "description": "A series of Fluid components to provide simple user management.",
     "main": "index.js",
     "scripts": {
+        "lint": "grunt lint",
         "pretest": "node node_modules/rimraf/bin.js coverage/* reports/* instrumented/*",
         "test": "npm run test:webdriver && npm run test:node",
         "test:webdriver": "node tests/js/browser/index.js",
