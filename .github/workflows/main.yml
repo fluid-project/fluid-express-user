@@ -34,9 +34,21 @@ jobs:
       - name: Lint Code
         run: npm run lint
 
-      - name: Node Tests
-        run: npm run test:node
-        timeout-minutes: 2
+#      - name: Node Tests
+#        run: npm run test:node
+#        timeout-minutes: 2
+#
+#      - name: Debug
+#        run: docker ps -a
+#        if: ${{ always() }}
+#
+#      - name: Debug 2
+#        run: sudo netstat -antp | grep LISTEN
+#        if: ${{ always() }}
+
+      - name: Browser Tests
+        run: npm run test:webdriver
+        if: ${{ always() }}
 
       - name: Debug
         run: docker ps -a
@@ -44,8 +56,4 @@ jobs:
 
       - name: Debug 2
         run: sudo netstat -antp | grep LISTEN
-        if: ${{ always() }}
-
-      - name: Browser Tests
-        run: npm run test:webdriver
         if: ${{ always() }}
