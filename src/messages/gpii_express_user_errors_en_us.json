@@ -1,15 +1,15 @@
 {
-    "gpii.express.user.email": "You must provide a valid email address.",
-    "gpii.express.user.username": "Username must be a non-empty string.",
-    "gpii.express.user.password.length": "The password must be at least 8 characters long.",
-    "gpii.express.user.password.uppercase": "The password must have at least one uppercase letter.",
-    "gpii.express.user.password.lowercase": "The password must have at least one lowercase letter.",
-    "gpii.express.user.password.complexity": "The password must have at least one number or special character.",
-    "gpii.express.user.username.or.email.required": "You must provide a valid username or email address.",
-    "gpii.express.user.password.required": "You must enter a password.",
-    "gpii.express.user.reset.code.required": "You must provide a valid reset code.",
-    "gpii.express.user.reset.code.invalid": "The reset code you provided is invalid.",
-    "gpii.express.user.reset.code.expired": "Your reset code is too old.  Please request another one.",
-    "gpii.express.user.reset.password.mismatch": "The password and confirmation password must match.",
-    "gpii.express.user.reset.success": "Your password has been reset."
+    "fluid.express.user.email": "You must provide a valid email address.",
+    "fluid.express.user.username": "Username must be a non-empty string.",
+    "fluid.express.user.password.length": "The password must be at least 8 characters long.",
+    "fluid.express.user.password.uppercase": "The password must have at least one uppercase letter.",
+    "fluid.express.user.password.lowercase": "The password must have at least one lowercase letter.",
+    "fluid.express.user.password.complexity": "The password must have at least one number or special character.",
+    "fluid.express.user.username.or.email.required": "You must provide a valid username or email address.",
+    "fluid.express.user.password.required": "You must enter a password.",
+    "fluid.express.user.reset.code.required": "You must provide a valid reset code.",
+    "fluid.express.user.reset.code.invalid": "The reset code you provided is invalid.",
+    "fluid.express.user.reset.code.expired": "Your reset code is too old.  Please request another one.",
+    "fluid.express.user.reset.password.mismatch": "The password and confirmation password must match.",
+    "fluid.express.user.reset.success": "Your password has been reset."
 }

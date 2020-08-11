@@ -1,13 +1,13 @@
-# `gpii.express.user.api.forgot`
+# `fluid.express.user.api.forgot`
 
 This component provides a REST endpoint that can be used to request a password reset code.  The reset code is sent to
 the user in an email message, which they can use to continue the process using [`/user/reset`](resetComponent.md).
 
 This component is an instance of
-[`gpii.express.router.passthrough`](https://github.com/GPII/gpii-express/blob/master/docs/router.md) which wraps two
-routers.  One is an instance of `gpii.express.singleTemplateRouter` that renders a "forgot password" form using the
-templates defined in this package when this endpoint receives a `GET` request.  The other
-(`gpii.express.user.api.forgot.post`, see below) handles `POST` requests, such as AJAX requests sent using the above
+[`fluid.express.router.passthrough`](https://github.com/fluid-project/fluid-express/blob/master/docs/router.md) which
+wraps two routers.  One is an instance of `fluid.express.singleTemplateRouter` that renders a "forgot password" form
+using the templates defined in this package when this endpoint receives a `GET` request.  The other
+(`fluid.express.user.api.forgot.post`, see below) handles `POST` requests, such as AJAX requests sent using the above
 form.
 
 For details about making REST calls against the API endpoint provided by this component, see the [API docs](apidocs.md).
@@ -15,41 +15,41 @@ For details about making REST calls against the API endpoint provided by this co
 ## Component options
 
 In addition to the options for any instance of
-[`gpii.express.router`](https://github.com/GPII/gpii-express/blob/master/docs/router.md), this component supports the
-following unique options:
+[`fluid.express.router`](https://github.com/fluid-project/fluid-express/blob/master/docs/router.md), this component
+supports the following unique options:
 
 | Option                | Type       | Description |
 | --------------------- | ---------- | ----------- |
-| `codeIssuedKey`       | `{String}` | The field key to use to indicate whether a user has had a reset code issued already.  Should match what is used in [`gpii.express.user.api.reset`](resetComponent.md). |
-| `couch`               | `{Object}` | The CouchDB options used to read and write data from Couch.  Generally distributed to this grade by the `gpii.express.user.api` component. |
+| `codeIssuedKey`       | `{String}` | The field key to use to indicate whether a user has had a reset code issued already.  Should match what is used in [`fluid.express.user.api.reset`](resetComponent.md). |
+| `couch`               | `{Object}` | The CouchDB options used to read and write data from Couch.  Generally distributed to this grade by the `fluid.express.user.api` component. |
 | `defaultContext`      | `{Object}` | The context (data) available to the renderer used to deliver the "forgot password" form. |
 | `resetCodeLength`     | `{Number}` | The length of the reset code we will generate and send to the user via email. |
-| `resetCodeKey`        | `{String}` | The field key to use when storing the generated code in the user's CouchDB record. Should match what is used in [`gpii.express.user.api.reset`](resetComponent.md). |
-| `templates.form`      | `{String}` | The location of the template to be used for the "forgot password" for, relative to the `templateDirs` option of our `gpii.handlebars` instance. |
-| `templates.mail.html` | `{String}` | The location of the email template to be used for the HTML version of the "forgot password" email. This is defined relative to the `templateDirs` option of our `gpii.handlebars` instance. |
-| `templates.mail.text` | `{String}` | The location of the email template to be used for the text version of the "forgot password" email. This is defined relative to the `templateDirs` option of our `gpii.handlebars` instance. |
+| `resetCodeKey`        | `{String}` | The field key to use when storing the generated code in the user's CouchDB record. Should match what is used in [`fluid.express.user.api.reset`](resetComponent.md). |
+| `templates.form`      | `{String}` | The location of the template to be used for the "forgot password" for, relative to the `templateDirs` option of our `fluid.handlebars` instance. |
+| `templates.mail.html` | `{String}` | The location of the email template to be used for the HTML version of the "forgot password" email. This is defined relative to the `templateDirs` option of our `fluid.handlebars` instance. |
+| `templates.mail.text` | `{String}` | The location of the email template to be used for the text version of the "forgot password" email. This is defined relative to the `templateDirs` option of our `fluid.handlebars` instance. |
 | `urls.read`           | `{String}` | The URL to use when reading user information from CouchDB.  Derived from `options.couch.userDbUrl` (see above) by default. |
 | `urls.write`          | `{String}` | The URL to use when writing user information to CouchDB.  Derived from `options.couch.userDbUrl` (see above) by default. |
 
 ## Component Invokers
 
 This component has no unique invokers.  For details on the `route` invoker it inherits from
-`gpii.express.router.passthrough`, see the [`gpii.express` router documentation](https://github.com/GPII/gpii-express/blob/master/docs/router.md).
+`fluid.express.router.passthrough`, see the [`fluid.express` router documentation](https://github.com/fluid-project/fluid-express/blob/master/docs/router.md).
 
-## `gpii.express.user.api.forgot.post`
+## `fluid.express.user.api.forgot.post`
 
 This component is an instance of
-[`gpii.express.requestAware.router`]((https://github.com/GPII/gpii-express/blob/master/docs/requestAwareRouter.md)) with
-its own `handler` (see `gpii.express.user.api.forgot.post.handler` below).  It has no unique invokers or component
+[`fluid.express.requestAware.router`]((https://github.com/fluid-project/fluid-express/blob/master/docs/requestAwareRouter.md))
+with its own `handler` (see `fluid.express.user.api.forgot.post.handler` below).  It has no unique invokers or component
 options.
 
-## `gpii.express.user.api.forgot.post.handler`
+## `fluid.express.user.api.forgot.post.handler`
 
 The handler that actually fields individual requests.
 
 ### Component options
 
-The handler instance used here receives a subset of the options sent to `gpii.express.user.api.post` (see above).  In
+The handler instance used here receives a subset of the options sent to `fluid.express.user.api.post` (see above).  In
 addition, it has the following unique options:
 
 | Option                | Type       | Description |

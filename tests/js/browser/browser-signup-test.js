@@ -6,12 +6,11 @@
 /* eslint-env node */
 "use strict";
 var fluid         = require("infusion");
-var gpii          = fluid.registerNamespace("gpii");
 
 require("../lib/");
 
-fluid.defaults("gpii.tests.express.user.signup.client.caseHolder", {
-    gradeNames: ["gpii.test.webdriver.caseHolder"],
+fluid.defaults("fluid.tests.express.user.signup.client.caseHolder", {
+    gradeNames: ["fluid.test.webdriver.caseHolder"],
     rawModules: [
         {
             name: "Testing self signup functions with a test browser...",
@@ -27,23 +26,23 @@ fluid.defaults("gpii.tests.express.user.signup.client.caseHolder", {
                         {
                             event:    "{testEnvironment}.webdriver.events.onGetComplete",
                             listener: "{testEnvironment}.webdriver.wait",
-                            args:     [gpii.webdriver.until.elementLocated({ css: ".signup-form"})]
+                            args:     [fluid.webdriver.until.elementLocated({ css: ".signup-form"})]
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onWaitComplete",
                             listener: "{testEnvironment}.webdriver.actionsHelper",
                             args:     [[{fn: "sendKeys", args: [
-                                gpii.webdriver.Key.TAB, "duplicate",
-                                gpii.webdriver.Key.TAB, "existing@localhost",
-                                gpii.webdriver.Key.TAB, "Password1!",
-                                gpii.webdriver.Key.TAB, "Password1!",
-                                gpii.webdriver.Key.ENTER
+                                fluid.webdriver.Key.TAB, "duplicate",
+                                fluid.webdriver.Key.TAB, "existing@localhost",
+                                fluid.webdriver.Key.TAB, "Password1!",
+                                fluid.webdriver.Key.TAB, "Password1!",
+                                fluid.webdriver.Key.ENTER
                             ]}]]
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onActionsHelperComplete",
                             listener: "{testEnvironment}.webdriver.wait",
-                            args:     [gpii.webdriver.until.elementLocated({ css: ".signup-error .alert"})]
+                            args:     [fluid.webdriver.until.elementLocated({ css: ".signup-error .alert"})]
                         },
                         {
                             func: "{testEnvironment}.webdriver.findElement",
@@ -51,7 +50,7 @@ fluid.defaults("gpii.tests.express.user.signup.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
-                            listener: "gpii.test.webdriver.inspectElement",
+                            listener: "fluid.test.webdriver.inspectElement",
                             args:     ["A signup failure message should be displayed...", "{arguments}.0", "getText", "A user with this email or username already exists."] // message, element, elementFn, expectedValue, jqUnitFn
                         },
                         {
@@ -60,7 +59,7 @@ fluid.defaults("gpii.tests.express.user.signup.client.caseHolder", {
                         },
                         {
                             event: "{testEnvironment}.webdriver.events.onFindElementComplete",
-                            listener: "gpii.test.webdriver.inspectElement",
+                            listener: "fluid.test.webdriver.inspectElement",
                             args: ["A success message should not be displayed...", "{arguments}.0", "getText", ""] // message, element, elementFn, expectedValue, jqUnitFn
                         }
                     ]
@@ -76,23 +75,23 @@ fluid.defaults("gpii.tests.express.user.signup.client.caseHolder", {
                         {
                             event:    "{testEnvironment}.webdriver.events.onGetComplete",
                             listener: "{testEnvironment}.webdriver.wait",
-                            args:     [gpii.webdriver.until.elementLocated({ css: ".signup-form"})]
+                            args:     [fluid.webdriver.until.elementLocated({ css: ".signup-form"})]
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onWaitComplete",
                             listener: "{testEnvironment}.webdriver.actionsHelper",
                             args:     [[{fn: "sendKeys", args: [
-                                gpii.webdriver.Key.TAB, "existing",
-                                gpii.webdriver.Key.TAB, "new.email@localhost",
-                                gpii.webdriver.Key.TAB, "Password1!",
-                                gpii.webdriver.Key.TAB, "Password1!",
-                                gpii.webdriver.Key.ENTER
+                                fluid.webdriver.Key.TAB, "existing",
+                                fluid.webdriver.Key.TAB, "new.email@localhost",
+                                fluid.webdriver.Key.TAB, "Password1!",
+                                fluid.webdriver.Key.TAB, "Password1!",
+                                fluid.webdriver.Key.ENTER
                             ]}]]
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onActionsHelperComplete",
                             listener: "{testEnvironment}.webdriver.wait",
-                            args:     [gpii.webdriver.until.elementLocated({ css: ".signup-error .alert"})]
+                            args:     [fluid.webdriver.until.elementLocated({ css: ".signup-error .alert"})]
                         },
                         {
                             func: "{testEnvironment}.webdriver.findElement",
@@ -100,7 +99,7 @@ fluid.defaults("gpii.tests.express.user.signup.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
-                            listener: "gpii.test.webdriver.inspectElement",
+                            listener: "fluid.test.webdriver.inspectElement",
                             args:     ["A signup failure message should be displayed...", "{arguments}.0", "getText", "A user with this email or username already exists."] // message, element, elementFn, expectedValue, jqUnitFn
                         },
                         {
@@ -109,7 +108,7 @@ fluid.defaults("gpii.tests.express.user.signup.client.caseHolder", {
                         },
                         {
                             event: "{testEnvironment}.webdriver.events.onFindElementComplete",
-                            listener: "gpii.test.webdriver.inspectElement",
+                            listener: "fluid.test.webdriver.inspectElement",
                             args: ["A success message should not be displayed...", "{arguments}.0", "getText", ""] // message, element, elementFn, expectedValue, jqUnitFn
                         }
                     ]
@@ -125,23 +124,23 @@ fluid.defaults("gpii.tests.express.user.signup.client.caseHolder", {
                         {
                             event:    "{testEnvironment}.webdriver.events.onGetComplete",
                             listener: "{testEnvironment}.webdriver.wait",
-                            args:     [gpii.webdriver.until.elementLocated({ css: ".signup-form"})]
+                            args:     [fluid.webdriver.until.elementLocated({ css: ".signup-form"})]
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onWaitComplete",
                             listener: "{testEnvironment}.webdriver.actionsHelper",
                             args:     [[{fn: "sendKeys", args: [
-                                gpii.webdriver.Key.TAB, "newbie",
-                                gpii.webdriver.Key.TAB, "newbie@localhost",
-                                gpii.webdriver.Key.TAB, "Password1!",
-                                gpii.webdriver.Key.TAB, "Password2!",
-                                gpii.webdriver.Key.ENTER
+                                fluid.webdriver.Key.TAB, "newbie",
+                                fluid.webdriver.Key.TAB, "newbie@localhost",
+                                fluid.webdriver.Key.TAB, "Password1!",
+                                fluid.webdriver.Key.TAB, "Password2!",
+                                fluid.webdriver.Key.ENTER
                             ]}]]
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onActionsHelperComplete",
                             listener: "{testEnvironment}.webdriver.wait",
-                            args:     [gpii.webdriver.until.elementLocated({ css: ".signup-error .alert"})]
+                            args:     [fluid.webdriver.until.elementLocated({ css: ".signup-error .alert"})]
                         },
                         {
                             func: "{testEnvironment}.webdriver.findElement",
@@ -149,7 +148,7 @@ fluid.defaults("gpii.tests.express.user.signup.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
-                            listener: "gpii.test.webdriver.inspectElement",
+                            listener: "fluid.test.webdriver.inspectElement",
                             args:     ["A signup failure message should be displayed...", "{arguments}.0", "getText", "Your password and confirmation password do not match."] // message, element, elementFn, expectedValue, jqUnitFn
                         },
                         {
@@ -158,7 +157,7 @@ fluid.defaults("gpii.tests.express.user.signup.client.caseHolder", {
                         },
                         {
                             event: "{testEnvironment}.webdriver.events.onFindElementComplete",
-                            listener: "gpii.test.webdriver.inspectElement",
+                            listener: "fluid.test.webdriver.inspectElement",
                             args: ["A success message should not be displayed...", "{arguments}.0", "getText", ""] // message, element, elementFn, expectedValue, jqUnitFn
                         }
                     ]
@@ -174,7 +173,7 @@ fluid.defaults("gpii.tests.express.user.signup.client.caseHolder", {
                         {
                             event:    "{testEnvironment}.webdriver.events.onGetComplete",
                             listener: "{testEnvironment}.webdriver.wait",
-                            args:     [gpii.webdriver.until.elementLocated({ css: ".alert"})]
+                            args:     [fluid.webdriver.until.elementLocated({ css: ".alert"})]
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onWaitComplete",
@@ -183,7 +182,7 @@ fluid.defaults("gpii.tests.express.user.signup.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
-                            listener: "gpii.test.webdriver.inspectElement",
+                            listener: "fluid.test.webdriver.inspectElement",
                             args:     ["A verification failure message should be displayed...", "{arguments}.0", "getText", "You must provide a valid verification code to use this interface."] // message, element, elementFn, expectedValue, jqUnitFn
                         }
                     ]
@@ -199,22 +198,22 @@ fluid.defaults("gpii.tests.express.user.signup.client.caseHolder", {
                         {
                             event:    "{testEnvironment}.webdriver.events.onGetComplete",
                             listener: "{testEnvironment}.webdriver.wait",
-                            args:     [gpii.webdriver.until.elementLocated({ css: ".signup-form"})]
+                            args:     [fluid.webdriver.until.elementLocated({ css: ".signup-form"})]
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onWaitComplete",
                             listener: "{testEnvironment}.webdriver.actionsHelper",
                             args:     [[{fn: "sendKeys", args: [
-                                gpii.webdriver.Key.TAB, "newbie",
-                                gpii.webdriver.Key.TAB, "newbie@localhost",
-                                gpii.webdriver.Key.TAB, "Password1!",
-                                gpii.webdriver.Key.TAB, "Password1!",
-                                gpii.webdriver.Key.ENTER
+                                fluid.webdriver.Key.TAB, "newbie",
+                                fluid.webdriver.Key.TAB, "newbie@localhost",
+                                fluid.webdriver.Key.TAB, "Password1!",
+                                fluid.webdriver.Key.TAB, "Password1!",
+                                fluid.webdriver.Key.ENTER
                             ]}]]
                         },
                         // We should have successfully submitted our form and should be able to continue from email.
                         {
-                            listener: "gpii.test.express.user.client.continueFromEmail",
+                            listener: "fluid.test.express.user.client.continueFromEmail",
                             event:    "{testEnvironment}.smtp.events.onMessageReceived",
                             args:     ["{testEnvironment}", "{testEnvironment}.options.verifyPattern"]
                         },
@@ -228,17 +227,17 @@ fluid.defaults("gpii.tests.express.user.signup.client.caseHolder", {
                         {
                             event:    "{testEnvironment}.webdriver.events.onGetComplete",
                             listener: "{testEnvironment}.webdriver.wait",
-                            args:     [gpii.webdriver.until.elementLocated({ css: ".login-form"})]
+                            args:     [fluid.webdriver.until.elementLocated({ css: ".login-form"})]
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onWaitComplete",
                             listener: "{testEnvironment}.webdriver.actionsHelper",
-                            args:     [[{fn: "sendKeys", args: [gpii.webdriver.Key.TAB, "newbie", gpii.webdriver.Key.TAB, "Password1!", gpii.webdriver.Key.ENTER]}]]
+                            args:     [[{fn: "sendKeys", args: [fluid.webdriver.Key.TAB, "newbie", fluid.webdriver.Key.TAB, "Password1!", fluid.webdriver.Key.ENTER]}]]
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onActionsHelperComplete",
                             listener: "{testEnvironment}.webdriver.wait",
-                            args:     [gpii.webdriver.until.elementLocated({ css: ".login-success .success"})]
+                            args:     [fluid.webdriver.until.elementLocated({ css: ".login-success .success"})]
                         },
                         {
                             func: "{testEnvironment}.webdriver.findElement",
@@ -246,7 +245,7 @@ fluid.defaults("gpii.tests.express.user.signup.client.caseHolder", {
                         },
                         {
                             event:    "{testEnvironment}.webdriver.events.onFindElementComplete",
-                            listener: "gpii.test.webdriver.inspectElement",
+                            listener: "fluid.test.webdriver.inspectElement",
                             args:     ["A login success message should now be displayed...", "{arguments}.0", "getText", "You have successfully logged in."] // message, element, elementFn, expectedValue, jqUnitFn
                         }
                     ]
@@ -256,8 +255,8 @@ fluid.defaults("gpii.tests.express.user.signup.client.caseHolder", {
     ]
 });
 
-fluid.defaults("gpii.tests.express.user.signup.client.environment", {
-    gradeNames: ["gpii.test.express.user.environment.withBrowser"],
+fluid.defaults("fluid.tests.express.user.signup.client.environment", {
+    gradeNames: ["fluid.test.express.user.environment.withBrowser"],
     port:       7532,
     mailPort:   4089,
     verifyPattern: "(http.+verify/[a-z0-9-]+)",
@@ -281,9 +280,9 @@ fluid.defaults("gpii.tests.express.user.signup.client.environment", {
     },
     components: {
         testCaseHolder: {
-            type: "gpii.tests.express.user.signup.client.caseHolder"
+            type: "fluid.tests.express.user.signup.client.caseHolder"
         }
     }
 });
 
-gpii.test.webdriver.allBrowsers({ baseTestEnvironment: "gpii.tests.express.user.signup.client.environment" });
+fluid.test.webdriver.allBrowsers({ baseTestEnvironment: "fluid.tests.express.user.signup.client.environment" });

@@ -1,25 +1,26 @@
-# `gpii.express.user.api.current`
+# `fluid.express.user.api.current`
 
 This component provides a REST endpoint that displays information about the current user (and indicates whether they are
-logged in).  It is an instance of [`gpii.express.requestAware.router`]((https://github.com/GPII/gpii-express/blob/master/docs/requestAwareRouter.md))
-with its own `handler` (see `gpii.express.user.api.current.handler` below).
+logged in).  It is an instance of [`fluid.express.requestAware.router`]((https://github.com/fluid-project/fluid-express/blob/master/docs/requestAwareRouter.md))
+with its own `handler` (see `fluid.express.user.api.current.handler` below).
 
 For details about making REST calls against the API endpoint provided by this component, see the [API docs](apidocs.md).
 
 ## Component options
 
 This component supports only the common options available to any
-[`gpii.express.router`](https://github.com/GPII/gpii-express/blob/master/docs/router.md) or
-[`gpii.express.requestAware.router`](https://github.com/GPII/gpii-express/blob/master/docs/requestAwareRouter.md) instance.
+[`fluid.express.router`](https://github.com/fluid-project/fluid-express/blob/master/docs/router.md) or
+[`fluid.express.requestAware.router`](https://github.com/fluid-project/fluid-express/blob/master/docs/requestAwareRouter.md)
+instance.
 
-## `gpii.express.user.api.current.handler`
+## `fluid.express.user.api.current.handler`
 
-This component is an instance of [`gpii.express.handler`]((https://github.com/GPII/gpii-express/blob/master/docs/handler.md)),
+This component is an instance of [`fluid.express.handler`]((https://github.com/fluid-project/fluid-express/blob/master/docs/handler.md)),
 meant for use with the above `requestAwareRouter`.
 
 ### Component options
 
-In addition to the options for any instance of [`gpii.express.router`](https://github.com/GPII/gpii-express/blob/master/docs/router.md),
+In addition to the options for any instance of [`fluid.express.router`](https://github.com/fluid-project/fluid-express/blob/master/docs/router.md),
 this component supports the following unique options:
 
 | Option       | Type       | Description |
@@ -32,5 +33,5 @@ this component supports the following unique options:
 
 * Returns: Nothing.
 
-Fulfills the standard contract for an instance of [`gpii.express.handler`]((https://github.com/GPII/gpii-express/blob/master/docs/handler.md)).
+Fulfills the standard contract for an instance of [`fluid.express.handler`]((https://github.com/fluid-project/fluid-express/blob/master/docs/handler.md)).
 It sends either information about the current user, or a message indicating that the user is not already logged in.

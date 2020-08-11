@@ -4,14 +4,13 @@
 /* eslint-env node */
 "use strict";
 var fluid = require("infusion");
-var gpii  = fluid.registerNamespace("gpii");
 
 var fs = require("fs");
 var simpleParser = require("mailparser").simpleParser;
 
-fluid.registerNamespace("gpii.test.express.user");
+fluid.registerNamespace("fluid.test.express.user");
 
-gpii.test.express.user.extractCode = function (testEnvironment, pattern) {
+fluid.test.express.user.extractCode = function (testEnvironment, pattern) {
     var content = fs.readFileSync(testEnvironment.smtp.mailServer.currentMessageFile, "utf8");
 
     var promise = fluid.promise();

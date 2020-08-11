@@ -6,50 +6,49 @@
 /* eslint-env node */
 "use strict";
 var fluid  = require("infusion");
-var gpii   = fluid.registerNamespace("gpii");
 var jqUnit = require("node-jqunit");
 
 require("../../../src/js/server/lib/password");
 
-fluid.registerNamespace("gpii.express.user.password.tests");
-gpii.express.user.password.tests.runTests = function (that) {
+fluid.registerNamespace("fluid.express.user.password.tests");
+fluid.express.user.password.tests.runTests = function (that) {
     jqUnit.module("Unit test password encoding functions...");
 
     jqUnit.test("Confirm that a range of known passwords are encoded as expected with full arguments...", function () {
         fluid.each(that.options.expected, function (options, password) {
-            var actualEncodedString = gpii.express.user.password.encode(password, options.salt, options.iterations, 20);
+            var actualEncodedString = fluid.express.user.password.encode(password, options.salt, options.iterations, 20);
             jqUnit.assertEquals("The password should have been encoded correctly...", options.derived_key, actualEncodedString);
         });
     });
 
     jqUnit.test("Confirm that a range of known passwords are encoded as expected with the defaults...", function () {
         fluid.each(that.options.expected, function (options, password) {
-            var actualEncodedString = gpii.express.user.password.encode(password, options.salt);
+            var actualEncodedString = fluid.express.user.password.encode(password, options.salt);
             jqUnit.assertEquals("The password should have been encoded correctly...", options.derived_key, actualEncodedString);
         });
     });
 
     jqUnit.test("Confirm that a known password with other arguments is handled correctly...", function () {
         fluid.each(that.options.oddball, function (options, password) {
-            var actualEncodedString = gpii.express.user.password.encode(password, options.salt, options.iterations, options.keyLength, options.digest);
+            var actualEncodedString = fluid.express.user.password.encode(password, options.salt, options.iterations, options.keyLength, options.digest);
             jqUnit.assertEquals("The password should have been encoded correctly...", options.derived_key, actualEncodedString);
         });
     });
 
     jqUnit.test("Confirm that hashes are generated as expected...", function () {
-        var saltString = gpii.express.user.password.generateSalt(24);
+        var saltString = fluid.express.user.password.generateSalt(24);
         jqUnit.assertEquals("The salt string should be of twice the byte length...", 48, saltString.length);
 
         var saltInt = parseInt(saltString, 16);
         jqUnit.assertTrue("The salt string should evaluate to a number when parsed as hex...", Number.isInteger(saltInt));
 
-        var secondSaltString = gpii.express.user.password.generateSalt(24);
+        var secondSaltString = fluid.express.user.password.generateSalt(24);
         jqUnit.assertNotEquals("A different salt should be returned each time...", saltString, secondSaltString);
 
     });
 };
 
-fluid.defaults("gpii.express.user.password.tests", {
+fluid.defaults("fluid.express.user.password.tests", {
     gradeNames: ["fluid.component"],
     expected: {
         "admin": {
@@ -76,10 +75,10 @@ fluid.defaults("gpii.express.user.password.tests", {
     },
     listeners: {
         "onCreate.runTests": {
-            funcName: "gpii.express.user.password.tests.runTests",
+            funcName: "fluid.express.user.password.tests.runTests",
             args:     ["{that}"]
         }
     }
 });
 
-gpii.express.user.password.tests();
+fluid.express.user.password.tests();

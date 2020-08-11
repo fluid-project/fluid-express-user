@@ -26,8 +26,8 @@ jobs:
         node-version: [12.x]
 
     env:
-      HEADLESS: true
       FLUID_TEST_COUCH_USE_EXTERNAL: true
+      BROWSERS: chrome
 
     steps:
       - uses: actions/checkout@v2
@@ -44,4 +44,7 @@ jobs:
         run: $(npm bin)/grunt lint
 
       - name: Node Tests
-        run: npm test
+        run: xvfb-run --auto-servernum npm test
+
+      - name: Cleanup after xvfb
+        uses: bcomnes/cleanup-xvfb@v1

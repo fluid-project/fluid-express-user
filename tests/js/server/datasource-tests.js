@@ -8,41 +8,40 @@
 var fluid  = require("infusion");
 fluid.logObjectRenderChars = 4096;
 
-var gpii   = fluid.registerNamespace("gpii");
 var jqUnit = require("node-jqunit");
 
 require("../lib/");
 
 require("../../../src/js/server/lib/datasource");
 
-fluid.registerNamespace("gpii.express.user.datasource.tests");
-gpii.express.user.datasource.tests.checkResult = function (that, response, expected) {
+fluid.registerNamespace("fluid.express.user.datasource.tests");
+fluid.express.user.datasource.tests.checkResult = function (that, response, expected) {
     jqUnit.assertLeftHand("The response should equal or be a superset of the expected response...", expected, response);
 };
 
-gpii.express.user.datasource.tests.handleError = function (that, error) {
+fluid.express.user.datasource.tests.handleError = function (that, error) {
     jqUnit.fail("There was an unhandled error:", JSON.stringify(error, null, 2));
 };
 
-fluid.defaults("gpii.express.user.datasource.tests.read", {
-    gradeNames: ["gpii.express.user.couchdb.read"],
+fluid.defaults("fluid.express.user.datasource.tests.read", {
+    gradeNames: ["fluid.express.user.couchdb.read"],
     listeners: {
         "onError.fail": {
-            funcName: "gpii.express.user.datasource.tests.handleError",
+            funcName: "fluid.express.user.datasource.tests.handleError",
             args:     ["{that}", "{arguments}.0"],
             priority: "first"
         }
     }
 });
 
-fluid.defaults("gpii.express.user.datasource.tests.read.byId", {
-    gradeNames: ["gpii.express.user.datasource.tests.read"],
+fluid.defaults("fluid.express.user.datasource.tests.read.byId", {
+    gradeNames: ["fluid.express.user.datasource.tests.read"],
     url:         "http://localhost:25984/users/%_id",
     termMap:    { _id: "%_id"}
 });
 
-fluid.defaults("gpii.express.user.datasource.tests.writable", {
-    gradeNames: ["gpii.express.user.couchdb.writable"],
+fluid.defaults("fluid.express.user.datasource.tests.writable", {
+    gradeNames: ["fluid.express.user.couchdb.writable"],
     termMaps: {
         read: { _id: "%_id"},
         write: { _id: "%_id"}
@@ -52,15 +51,15 @@ fluid.defaults("gpii.express.user.datasource.tests.writable", {
     },
     listeners: {
         "onError.fail": {
-            funcName: "gpii.express.user.datasource.tests.handleError",
+            funcName: "fluid.express.user.datasource.tests.handleError",
             args:     ["{that}", "{arguments}.0"],
             priority: "first"
         }
     }
 });
 
-fluid.defaults("gpii.express.users.datasource.tests.caseHolder", {
-    gradeNames: ["gpii.test.webdriver.caseHolder"],
+fluid.defaults("fluid.express.users.datasource.tests.caseHolder", {
+    gradeNames: ["fluid.test.webdriver.caseHolder"],
     expected: {
         sample: {
             "username": "sample",
@@ -98,7 +97,7 @@ fluid.defaults("gpii.express.users.datasource.tests.caseHolder", {
                             args: [{ _id: "org.couchdb.user:sample"}]
                         },
                         {
-                            listener: "gpii.express.user.datasource.tests.checkResult",
+                            listener: "fluid.express.user.datasource.tests.checkResult",
                             event:    "{idReader}.events.onRead",
                             priority: "last",
                             args:     ["{caseHolder}", "{arguments}.0", "{caseHolder}.options.expected.sample"]
@@ -114,7 +113,7 @@ fluid.defaults("gpii.express.users.datasource.tests.caseHolder", {
                             args: [{ key: "org.couchdb.user:sample"}]
                         },
                         {
-                            listener: "gpii.express.user.datasource.tests.checkResult",
+                            listener: "fluid.express.user.datasource.tests.checkResult",
                             event:    "{allDocsReader}.events.onRead",
                             priority: "last",
                             args:     ["{caseHolder}", "{arguments}.0", "{caseHolder}.options.expected.sample"]
@@ -132,7 +131,7 @@ fluid.defaults("gpii.express.users.datasource.tests.caseHolder", {
                 //            args:  [ null, "{that}.options.expected.created"]
                 //        },
                 //        {
-                //            listener: "gpii.express.user.datasource.tests.checkResult",
+                //            listener: "fluid.express.user.datasource.tests.checkResult",
                 //            event:    "{createWriter}.events.onWrite",
                 //            priority: "last",
                 //            args:     ["{caseHolder}", "{arguments}.0", "{caseHolder}.options.expected.createResponse"]
@@ -142,7 +141,7 @@ fluid.defaults("gpii.express.users.datasource.tests.caseHolder", {
                 //            args: [{ _id: "created"}]
                 //        },
                 //        {
-                //            listener: "gpii.express.user.datasource.tests.checkResult",
+                //            listener: "fluid.express.user.datasource.tests.checkResult",
                 //            event:    "{verifyCreateReader}.events.onRead",
                 //            priority: "last",
                 //            args:     ["{caseHolder}", "{arguments}.0", "{caseHolder}.options.expected.created"]
@@ -158,7 +157,7 @@ fluid.defaults("gpii.express.users.datasource.tests.caseHolder", {
                 //            args:  [ null, "{that}.options.expected.updated", { _id: "existing"}]
                 //        },
                 //        {
-                //            listener: "gpii.express.user.datasource.tests.checkResult",
+                //            listener: "fluid.express.user.datasource.tests.checkResult",
                 //            event:    "{updateWriter}.events.onWrite",
                 //            priority: "last",
                 //            args:     ["{caseHolder}", "{arguments}.0", "{caseHolder}.options.expected.updateResponse"]
@@ -168,7 +167,7 @@ fluid.defaults("gpii.express.users.datasource.tests.caseHolder", {
                 //            args: [{ _id: "existing"}]
                 //        },
                 //        {
-                //            listener: "gpii.express.user.datasource.tests.checkResult",
+                //            listener: "fluid.express.user.datasource.tests.checkResult",
                 //            event:    "{verifyUpdateReader}.events.onRead",
                 //            priority: "last",
                 //            args:     ["{caseHolder}", "{arguments}.0", "{caseHolder}.options.expected.updated"]
@@ -180,10 +179,10 @@ fluid.defaults("gpii.express.users.datasource.tests.caseHolder", {
     ],
     components: {
         idReader: {
-            type: "gpii.express.user.datasource.tests.read.byId"
+            type: "fluid.express.user.datasource.tests.read.byId"
         },
         allDocsReader: {
-            type: "gpii.express.user.datasource.tests.read",
+            type: "fluid.express.user.datasource.tests.read",
             options: {
                 rules: {
                     read: {
@@ -195,7 +194,7 @@ fluid.defaults("gpii.express.users.datasource.tests.caseHolder", {
             }
         },
         createWriter: {
-            type: "gpii.express.user.datasource.tests.writable",
+            type: "fluid.express.user.datasource.tests.writable",
             options: {
                 urls: {
                     read:  "http://localhost:25984/users/%_id",
@@ -204,10 +203,10 @@ fluid.defaults("gpii.express.users.datasource.tests.caseHolder", {
             }
         },
         verifyCreateReader: {
-            type: "gpii.express.user.datasource.tests.read.byId"
+            type: "fluid.express.user.datasource.tests.read.byId"
         },
         updateWriter: {
-            type: "gpii.express.user.datasource.tests.writable",
+            type: "fluid.express.user.datasource.tests.writable",
             options: {
                 urls: {
                     read:  "http://localhost:25984/users/%_id",
@@ -216,18 +215,18 @@ fluid.defaults("gpii.express.users.datasource.tests.caseHolder", {
             }
         },
         verifyUpdateReader: {
-            type: "gpii.express.user.datasource.tests.read.byId"
+            type: "fluid.express.user.datasource.tests.read.byId"
         }
     }
 });
 
-fluid.defaults("gpii.express.user.datasource.tests", {
-    gradeNames: ["gpii.test.express.user.environment"],
+fluid.defaults("fluid.express.user.datasource.tests", {
+    gradeNames: ["fluid.test.express.user.environment"],
     components: {
         testCaseHolder: {
-            type: "gpii.express.users.datasource.tests.caseHolder"
+            type: "fluid.express.users.datasource.tests.caseHolder"
         }
     }
 });
 
-fluid.test.runTests("gpii.express.user.datasource.tests");
+fluid.test.runTests("fluid.express.user.datasource.tests");

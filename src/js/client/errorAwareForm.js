@@ -1,7 +1,7 @@
 (function (fluid) {
     "use strict";
-    fluid.defaults("gpii.express.user.frontend.errorAwareForm", {
-        gradeNames: ["gpii.schema.client.errorAwareForm"],
+    fluid.defaults("fluid.express.user.frontend.errorAwareForm", {
+        gradeNames: ["fluid.schema.client.errorAwareForm"],
         resources: {
             modelSchema: {
                 promiseFunc: "{schemaHolder}.generateSchema"
@@ -13,7 +13,7 @@
         },
         components: {
             schemaHolder: {
-                type: "gpii.express.user.schemaHolder"
+                type: "fluid.express.user.schemaHolder"
             }
         }
     });

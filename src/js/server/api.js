@@ -4,14 +4,14 @@
 
     See the documentation for more details:
 
-    https://github.com/GPII/gpii-express-user/blob/master/docs/apiComponent.md
+    https://github.com/fluid-project/fluid-express-user/blob/master/docs/apiComponent.md
 
  */
 /* eslint-env node */
 "use strict";
 var fluid = require("infusion");
 
-require("gpii-express");
+require("fluid-express");
 require("./current.js");
 require("./docs.js");
 require("./forgot.js");
@@ -22,15 +22,15 @@ require("./signup.js");
 require("./verify.js");
 require("./utils.js");
 
-fluid.registerNamespace("gpii.express.user.api");
+fluid.registerNamespace("fluid.express.user.api");
 
-fluid.defaults("gpii.express.user.api", {
-    gradeNames:   ["gpii.express.router"],
+fluid.defaults("fluid.express.user.api", {
+    gradeNames:   ["fluid.express.router"],
     path:         "/user",
     method:       "use",
     templateDirs: {
-        user: "%gpii-express-user/src/templates",
-        validation: "%gpii-json-schema/src/templates"
+        user: "%fluid-express-user/src/templates",
+        validation: "%fluid-json-schema/src/templates"
     },
     events: {
         onLoginReady:  "null",
@@ -57,70 +57,70 @@ fluid.defaults("gpii.express.user.api", {
     distributeOptions: [
         {
             "source": "{that}.options.couch",
-            "target": "{that gpii.express.router}.options.couch"
+            "target": "{that fluid.express.router}.options.couch"
         },
         {
             "source": "{that}.options.couch",
-            "target": "{that gpii.express.user.utils}.options.couch"
+            "target": "{that fluid.express.user.utils}.options.couch"
         },
         {
             source: "{that}.options.app",
-            target: "{that gpii.express.router}.options.app"
+            target: "{that fluid.express.router}.options.app"
         },
         {
             source: "{that}.options.schemaDirs",
-            target: "{that gpii.schema.parser}.options.schemaDirs"
+            target: "{that fluid.schema.parser}.options.schemaDirs"
         }
     ],
     components: {
         utils: {
-            type:     "gpii.express.user.utils"
+            type:     "fluid.express.user.utils"
         },
         // API Endpoints (routers)
         current: {
-            type:     "gpii.express.user.current",
+            type:     "fluid.express.user.current",
             options: {
                 priority: "after:session"
             }
         },
         forgot: {
-            type:     "gpii.express.user.forgot",
+            type:     "fluid.express.user.forgot",
             options: {
                 priority: "after:session"
             }
         },
         login: {
-            type: "gpii.express.user.login",
+            type: "fluid.express.user.login",
             options: {
                 priority: "after:session"
             }
         },
         logout: {
-            type:     "gpii.express.user.logout",
+            type:     "fluid.express.user.logout",
             options: {
                 priority: "after:session"
             }
         },
         reset: {
-            type: "gpii.express.user.reset",
+            type: "fluid.express.user.reset",
             options: {
                 priority: "after:session"
             }
         },
         signup: {
-            type:     "gpii.express.user.signup",
+            type:     "fluid.express.user.signup",
             options: {
                 priority: "after:session"
             }
         },
         verify: {
-            type:     "gpii.express.user.verify",
+            type:     "fluid.express.user.verify",
             options: {
                 priority: "after:session"
             }
         },
         docs: {
-            type:     "gpii.express.api.docs.router",
+            type:     "fluid.express.api.docs.router",
             options: {
                 priority: "last"
             }
@@ -131,32 +131,32 @@ fluid.defaults("gpii.express.user.api", {
 
 /*
 
-    A mix-in grade that adds the required session middleware to an instance of `gpii.express` or `gpii.express.router`.
+    A mix-in grade that adds the required session middleware to an instance of `fluid.express` or `fluid.express.router`.
 
     See the documentation for details:
 
-    https://github.com/GPII/gpii-express-user/blob/master/docs/apiComponent.md
+    https://github.com/fluid-project/fluid-express-user/blob/master/docs/apiComponent.md
 
  */
-fluid.defaults("gpii.express.user.withRequiredMiddleware", {
+fluid.defaults("fluid.express.user.withRequiredMiddleware", {
     components: {
         json: {
-            type: "gpii.express.middleware.bodyparser.json",
+            type: "fluid.express.middleware.bodyparser.json",
             options: {
                 priority: "first"
             }
         },
         urlencoded: {
-            type: "gpii.express.middleware.bodyparser.urlencoded",
+            type: "fluid.express.middleware.bodyparser.urlencoded",
             options: {
                 priority: "after:json"
             }
         },
         handlebars: {
-            type: "gpii.express.hb",
+            type: "fluid.express.hb",
             options: {
                 priority: "after:urlencoded",
-                templateDirs: "{gpii.express.user.withRequiredMiddleware}.options.templateDirs",
+                templateDirs: "{fluid.express.user.withRequiredMiddleware}.options.templateDirs",
                 components: {
                     renderer: {
                         options: {
@@ -175,13 +175,13 @@ fluid.defaults("gpii.express.user.withRequiredMiddleware", {
             }
         },
         cookieparser: {
-            type:     "gpii.express.middleware.cookieparser",
+            type:     "fluid.express.middleware.cookieparser",
             options: {
                 priority: "first"
             }
         },
         session: {
-            type: "gpii.express.middleware.session",
+            type: "fluid.express.middleware.session",
             options: {
                 priority: "after:cookieparser",
                 sessionOptions: {

@@ -1,13 +1,12 @@
 /* eslint-env node */
 "use strict";
 var fluid = require("infusion");
-var gpii  = fluid.registerNamespace("gpii");
 
-require("gpii-webdriver");
-gpii.webdriver.loadTestingSupport();
+require("fluid-webdriver");
+fluid.webdriver.loadTestingSupport();
 
-require("gpii-express");
-gpii.express.loadTestingSupport();
+require("fluid-express");
+fluid.express.loadTestingSupport();
 
 var kettle = require("kettle");
 kettle.loadTestingSupport();

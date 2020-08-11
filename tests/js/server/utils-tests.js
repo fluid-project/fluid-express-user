@@ -1,32 +1,30 @@
 /*
 
-  Tests for the gpii.express.user.utils component.
+  Tests for the fluid.express.user.utils component.
 
  */
 /* eslint-env node */
 "use strict";
-
 var fluid        = require("infusion");
-var gpii         = fluid.registerNamespace("gpii");
 
 require("../../../");
 require("../lib/");
 
 var jqUnit       = require("node-jqunit");
 
-fluid.registerNamespace("gpii.tests.express.user.utils.caseHolder");
+fluid.registerNamespace("fluid.tests.express.user.utils.caseHolder");
 
-gpii.tests.express.user.utils.createUser = function (utils) {
+fluid.tests.express.user.utils.createUser = function (utils) {
     var prom = utils.createNewUser({
         username: "myFirstUser",
         password: "this is a password",
-        email: "myFirstUser@gpii.net"
+        email: "myFirstUser@fluid.net"
     });
     prom.then(function (data) {
         jqUnit.assertEquals("Generated Couch ID", "org.couch.db.user:myFirstUser", data._id);
-        jqUnit.assertEquals("Email", "myFirstUser@gpii.net", data.email);
+        jqUnit.assertEquals("Email", "myFirstUser@fluid.net", data.email);
         jqUnit.assertEquals("Username", "myFirstUser", data.username);
-        jqUnit.assertTrue("Unlock the password", gpii.express.user.utils.verifyPassword(data, "this is a password"));
+        jqUnit.assertTrue("Unlock the password", fluid.express.user.utils.verifyPassword(data, "this is a password"));
     }, function (err) {
         jqUnit.fail("Unable to create user with error: " + err);
     });
@@ -35,16 +33,16 @@ gpii.tests.express.user.utils.createUser = function (utils) {
 
 // TODO Can the Infusion IoC tasks resolve references? ie. instead of this function
 // use {
-//    task: ["{gpii.express.user.utils}.unlockUser"],
+//    task: ["{fluid.express.user.utils}.unlockUser"],
 //    args: ["existing", "password"],
-gpii.tests.express.user.utils.unlockPromise = function (utils, username, password) {
+fluid.tests.express.user.utils.unlockPromise = function (utils, username, password) {
     return utils.unlockUser(username, password);
 };
 
 // Each test has a request instance of `kettle.test.request.http` or `kettle.test.request.httpCookie`,
 // and a test module that wires the request to the listener that handles its results.
-fluid.defaults("gpii.tests.express.user.utils.caseHolder", {
-    gradeNames: ["gpii.test.webdriver.caseHolder"],
+fluid.defaults("fluid.tests.express.user.utils.caseHolder", {
+    gradeNames: ["fluid.test.webdriver.caseHolder"],
     rawModules: [
         {
             name: "Testing login functions...",
@@ -54,8 +52,8 @@ fluid.defaults("gpii.tests.express.user.utils.caseHolder", {
                     type: "test",
                     sequence: [
                         {
-                            task: "gpii.tests.express.user.utils.createUser",
-                            args: ["{gpii.express.user.utils}"],
+                            task: "fluid.tests.express.user.utils.createUser",
+                            args: ["{fluid.express.user.utils}"],
                             resolve: "jqUnit.assert",
                             resolveArgs: ["Successfully created User"]
                         }
@@ -66,8 +64,8 @@ fluid.defaults("gpii.tests.express.user.utils.caseHolder", {
                     type: "test",
                     sequence: [
                         {
-                            task: "gpii.tests.express.user.utils.unlockPromise",
-                            args: ["{gpii.express.user.utils}", "existing", "password"],
+                            task: "fluid.tests.express.user.utils.unlockPromise",
+                            args: ["{fluid.express.user.utils}", "existing", "password"],
                             resolve: "jqUnit.assertEquals",
                             resolveArgs: ["Check verified username", "existing", "{arguments}.0.username"]
                         }
@@ -78,8 +76,8 @@ fluid.defaults("gpii.tests.express.user.utils.caseHolder", {
                     type: "test",
                     sequence: [
                         {
-                            task: "gpii.tests.express.user.utils.unlockPromise",
-                            args: ["{gpii.express.user.utils}", "not-existing", "password"],
+                            task: "fluid.tests.express.user.utils.unlockPromise",
+                            args: ["{fluid.express.user.utils}", "not-existing", "password"],
                             reject: "jqUnit.assert",
                             rejectArgs: ["Succeeded in not unlocking with incorrect credentials."]
                         }
@@ -91,16 +89,16 @@ fluid.defaults("gpii.tests.express.user.utils.caseHolder", {
     ]
 });
 
-fluid.defaults("gpii.tests.express.user.utils.environment", {
-    gradeNames: ["gpii.test.express.user.environment"],
+fluid.defaults("fluid.tests.express.user.utils.environment", {
+    gradeNames: ["fluid.test.express.user.environment"],
     port:       8778,
     mailPort:   8725,
     components: {
         caseHolder: {
-            type: "gpii.tests.express.user.utils.caseHolder"
+            type: "fluid.tests.express.user.utils.caseHolder"
         },
         utils: {
-            type: "gpii.express.user.utils",
+            type: "fluid.express.user.utils",
             options: {
                 couch:  {
                     port: 25984,
@@ -116,4 +114,4 @@ fluid.defaults("gpii.tests.express.user.utils.environment", {
     }
 });
 
-fluid.test.runTests("gpii.tests.express.user.utils.environment");
+fluid.test.runTests("fluid.tests.express.user.utils.environment");

@@ -3,15 +3,14 @@
 (function () {
     "use strict";
 
-    fluid.defaults("gpii.express.user.frontend.signup", {
-        gradeNames: ["gpii.express.user.frontend.errorAwareForm"],
+    fluid.defaults("fluid.express.user.frontend.signup", {
+        gradeNames: ["fluid.express.user.frontend.errorAwareForm"],
         ajaxOptions: {
             type:   "POST",
             url:    "/api/user/signup",
             json:   true
         },
         rules: {
-            // TODO:  Review once https://issues.gpii.net/browse/GPII-1587 is resolved
             modelToRequestPayload: {
                 name:     "username",
                 password: "password",
@@ -51,12 +50,12 @@
         },
         components: {
             schemaHolder: {
-                type: "gpii.express.user.schemaHolder.signup"
+                type: "fluid.express.user.schemaHolder.signup"
             }
         }
     });
 
-    fluid.defaults("gpii.express.user.frontend.signup.hasUserControls", {
-        gradeNames: ["gpii.express.user.frontend.signup", "gpii.ul.hasUserControls"]
+    fluid.defaults("fluid.express.user.frontend.signup.hasUserControls", {
+        gradeNames: ["fluid.express.user.frontend.signup", "fluid.ul.hasUserControls"]
     });
 })(jQuery);
