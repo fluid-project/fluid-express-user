@@ -6,11 +6,10 @@
 /* eslint-env node */
 "use strict";
 var fluid  = require("infusion");
-var gpii   = fluid.registerNamespace("gpii");
 
-fluid.registerNamespace("gpii.express.user.current.handler");
+fluid.registerNamespace("fluid.express.user.current.handler");
 
-gpii.express.user.current.handler.verifyUserSession = function (that) {
+fluid.express.user.current.handler.verifyUserSession = function (that) {
     if (that.options.request.session && that.options.request.session[that.options.sessionKey]) {
         that.sendResponse(200, { user: that.options.request.session[that.options.sessionKey]});
     }
@@ -19,19 +18,19 @@ gpii.express.user.current.handler.verifyUserSession = function (that) {
     }
 };
 
-fluid.defaults("gpii.express.user.current.handler", {
-    gradeNames: ["gpii.express.handler"],
-    sessionKey: "_gpii_user",
+fluid.defaults("fluid.express.user.current.handler", {
+    gradeNames: ["fluid.express.handler"],
+    sessionKey: "_fluid_user",
     invokers: {
         handleRequest: {
-            funcName: "gpii.express.user.current.handler.verifyUserSession",
+            funcName: "fluid.express.user.current.handler.verifyUserSession",
             args:     ["{that}"]
         }
     }
 });
 
-fluid.defaults("gpii.express.user.current", {
-    gradeNames:    ["gpii.express.middleware.requestAware"],
+fluid.defaults("fluid.express.user.current", {
+    gradeNames:    ["fluid.express.middleware.requestAware"],
     path:          "/current",
-    handlerGrades: ["gpii.express.user.current.handler"]
+    handlerGrades: ["fluid.express.user.current.handler"]
 });

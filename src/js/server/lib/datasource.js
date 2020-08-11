@@ -12,7 +12,7 @@
 //   "onRead.logResponse": {
 //     funcName: "console.log",
 //     args: ["I received the following response:", "{arguments}.0"],
-//     priority: "after:gpii.express.user.couchdb.read"
+//     priority: "after:fluid.express.user.couchdb.read"
 //   }
 // }
 //
@@ -21,15 +21,14 @@
 /* eslint-env node */
 "use strict";
 var fluid  = require("infusion");
-var gpii   = fluid.registerNamespace("gpii");
 
 require("kettle");
 
-fluid.registerNamespace("gpii.express.user.couchdb.read");
+fluid.registerNamespace("fluid.express.user.couchdb.read");
 
 // Replacement for a similar function in the default implementation in dataSource.js.  Adds support for rule-based
 // decoding of couch response, which can work with lists, individual records, shows, whatever.
-gpii.express.user.couchdb.read.transformCouchResults = function (that, resp) {
+fluid.express.user.couchdb.read.transformCouchResults = function (that, resp) {
     // if undefined, pass that through as per dataSource (just for consistency in FS-backed tests)
     var togo;
     if (resp === undefined) {
@@ -49,7 +48,7 @@ gpii.express.user.couchdb.read.transformCouchResults = function (that, resp) {
     return togo;
 };
 
-fluid.defaults("gpii.express.user.couchdb.read", {
+fluid.defaults("fluid.express.user.couchdb.read", {
     gradeNames: ["kettle.dataSource.URL"],
     writable:   false,
     rules: {
@@ -59,9 +58,9 @@ fluid.defaults("gpii.express.user.couchdb.read", {
     },
     listeners: {
         "onRead.transformCouchResults": {
-            funcName:  "gpii.express.user.couchdb.read.transformCouchResults",
+            funcName:  "fluid.express.user.couchdb.read.transformCouchResults",
             args:      ["{that}", "{arguments}.0"],
-            namespace: "gpii.express.user.couchdb",
+            namespace: "fluid.express.user.couchdb",
             priority:  "after:encoding"
         }
     }
@@ -74,10 +73,10 @@ fluid.defaults("gpii.express.user.couchdb.read", {
 //
 // Also allows rewriting of all payloads and responses using transformation rules.
 
-fluid.registerNamespace("gpii.express.user.couchdb.writable");
+fluid.registerNamespace("fluid.express.user.couchdb.writable");
 
 // A replacement for the default couch "write" operation that removes the hard-coded `value` wrapper in favor of rules.
-gpii.express.user.couchdb.writable.transformModelToCouch = function (that, model, options) {
+fluid.express.user.couchdb.writable.transformModelToCouch = function (that, model, options) {
     var jsonModel = typeof model === "string" ? JSON.parse(model) : model; // TODO: WHYYYYYYY?????
     var doc = fluid.model.transformWithRules(jsonModel, that.options.rules.write);
     var original = that.reader.get(that.reader.options.directModel, {filterNamespaces: ["JSON"]});
@@ -95,7 +94,7 @@ gpii.express.user.couchdb.writable.transformModelToCouch = function (that, model
     return togo;
 };
 
-fluid.defaults("gpii.express.user.couchdb.writable", {
+fluid.defaults("fluid.express.user.couchdb.writable", {
     // We cannot directly extend the existing couch grade in Kettle because it has a non-namespaced listener for
     // `onRead`. The gradeNames and listener are copied from that grade.
     gradeNames: ["kettle.dataSource.URL.writable"],
@@ -128,15 +127,15 @@ fluid.defaults("gpii.express.user.couchdb.writable", {
     directModel: "{that}.options.directModels.write",
     listeners: {
         "onWrite.transformModelToCouch": {
-            funcName:  "gpii.express.user.couchdb.writable.transformModelToCouch",
+            funcName:  "fluid.express.user.couchdb.writable.transformModelToCouch",
             args:      ["{that}", "{arguments}.0", "{arguments}.1"], // model, options
-            namespace: "gpii.express.user.couchdb",
+            namespace: "fluid.express.user.couchdb",
             priority:  "after:encoding"
         },
         "onError.log": {
             priority:  100,
             funcName:  "fluid.log",
-            namespace: "gpii.express.user.couchdb",
+            namespace: "fluid.express.user.couchdb",
             args:      ["There was an error in writing to couch:", "{arguments}.0"]
         }
     },
@@ -150,7 +149,7 @@ fluid.defaults("gpii.express.user.couchdb.writable", {
         //    type: "kettle.dataSource.urlResolver"
         //},
         reader: {
-            type: "gpii.express.user.couchdb.read",
+            type: "fluid.express.user.couchdb.read",
             options: {
                 url: "{writable}.options.urls.read",
                 directModel: "{writable}.options.directModels.read",

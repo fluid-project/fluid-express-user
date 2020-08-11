@@ -6,14 +6,13 @@
 /* eslint-env node */
 "use strict";
 var fluid = require("infusion");
-var gpii  = fluid.registerNamespace("gpii");
 
 var jqUnit = require("node-jqunit");
 
-fluid.registerNamespace("gpii.test.express");
-gpii.test.express.user.verifyResponse = function (response, body, statusCode, truthy, falsy) {
+fluid.registerNamespace("fluid.test.express");
+fluid.test.express.user.verifyResponse = function (response, body, statusCode, truthy, falsy) {
     if (!statusCode) { statusCode = 200; }
-    gpii.test.express.helpers.isSaneResponse(response, body, statusCode);
+    fluid.test.express.helpers.isSaneResponse(response, body, statusCode);
 
     var data = typeof body === "string" ? JSON.parse(body) : body;
 

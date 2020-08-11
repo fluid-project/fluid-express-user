@@ -11,4 +11,4 @@ require("./src/js/server/lib/validationGatedRouter");
 
 require("./src/js/server/api.js");
 
-fluid.module.register("gpii-express-user", __dirname, require);
+fluid.module.register("fluid-express-user", __dirname, require);

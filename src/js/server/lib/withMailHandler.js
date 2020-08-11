@@ -1,7 +1,7 @@
 /*
 
- `gpii.express.user.withMailHandler` is an instance of `gpii.express.handler` that has an additional invoker to
- send outgoing mail.  The underlying mailer uses `gpii-handlebars` to render the content, and expects to be passed
+ `fluid.express.user.withMailHandler` is an instance of `fluid.express.handler` that has an additional invoker to
+ send outgoing mail.  The underlying mailer uses `fluid-handlebars` to render the content, and expects to be passed
  raw configuration data, which we generate using our data and rules, as follows:
 
      1. `mailOptions` is a map of valid configuration options for `nodemailer-smtp-transport`.  These options are
@@ -27,23 +27,22 @@ per that documentation.
 /* eslint-env node */
 "use strict";
 var fluid  = require("infusion");
-var gpii   = fluid.registerNamespace("gpii");
 
-require("gpii-express");
+require("fluid-express");
 
-fluid.registerNamespace("gpii.express.user.withMailHandler");
+fluid.registerNamespace("fluid.express.user.withMailHandler");
 
-gpii.express.user.withMailHandler.sendMessage = function (that) {
+fluid.express.user.withMailHandler.sendMessage = function (that) {
     var mailOptions     = fluid.model.transformWithRules(that, that.options.rules.mailOptions, {});
     var templateContext = fluid.model.transformWithRules(that, that.options.rules.mailTemplateContext, {});
 
     that.mailer.sendMessage(mailOptions, templateContext);
 };
 
-fluid.defaults("gpii.express.user.withMailHandler", {
-    gradeNames:   ["gpii.express.handler"],
-    replyAddress: "noreply@ul.gpii.net",
-    templateDirs: "{gpii.express.user.api}.options.templateDirs",
+fluid.defaults("fluid.express.user.withMailHandler", {
+    gradeNames:   ["fluid.express.handler"],
+    replyAddress: "noreply@ul.fluid.net",
+    templateDirs: "{fluid.express.user.api}.options.templateDirs",
     messages: {
         success: "Email sent.",
         error:   "Email could not be sent.  Contact an administrator."
@@ -63,19 +62,19 @@ fluid.defaults("gpii.express.user.withMailHandler", {
     },
     components: {
         mailer: {
-            type: "gpii.express.user.mailer.handlebars",
+            type: "fluid.express.user.mailer.handlebars",
             options: {
-                messages:        "{gpii.express.user.withMailHandler}.options.messages",
-                templateDirs:    "{gpii.express.user.api}.options.templateDirs",
-                htmlTemplateKey: "{gpii.express.user.withMailHandler}.options.templates.mail.html",
-                textTemplateKey: "{gpii.express.user.withMailHandler}.options.templates.mail.text",
+                messages:        "{fluid.express.user.withMailHandler}.options.messages",
+                templateDirs:    "{fluid.express.user.api}.options.templateDirs",
+                htmlTemplateKey: "{fluid.express.user.withMailHandler}.options.templates.mail.html",
+                textTemplateKey: "{fluid.express.user.withMailHandler}.options.templates.mail.text",
                 listeners: {
                     "onSuccess.sendResponse": {
-                        func: "{gpii.express.user.withMailHandler}.sendResponse",
+                        func: "{fluid.express.user.withMailHandler}.sendResponse",
                         args: [200, { message: "{that}.options.messages.success"}]
                     },
                     "onError.sendResponse": {
-                        func: "{gpii.express.user.withMailHandler}.sendResponse",
+                        func: "{fluid.express.user.withMailHandler}.sendResponse",
                         args: [500, { isError: true, message: "{that}.options.messages.error"}]
                     },
                     // The error handler is passed the error and a text response.  Log the response.
@@ -90,7 +89,7 @@ fluid.defaults("gpii.express.user.withMailHandler", {
     },
     invokers: {
         sendMessage: {
-            funcName: "gpii.express.user.withMailHandler.sendMessage",
+            funcName: "fluid.express.user.withMailHandler.sendMessage",
             args:     ["{that}"]
         }
     }

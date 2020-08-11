@@ -5,33 +5,31 @@
  */
 /* eslint-env node */
 "use strict";
-
 var fluid        = require("infusion");
-var gpii         = fluid.registerNamespace("gpii");
 
 require("../lib/");
 
 var jqUnit       = require("node-jqunit");
 var fs           = require("fs");
 
-fluid.registerNamespace("gpii.tests.express.user.reset.caseHolder");
+fluid.registerNamespace("fluid.tests.express.user.reset.caseHolder");
 
-gpii.tests.express.user.reset.caseHolder.checkResetCode = function (code) {
+fluid.tests.express.user.reset.caseHolder.checkResetCode = function (code) {
     jqUnit.assertNotNull("There should be a verification code in the email sent to the user.", code);
     return code;
 };
 
-gpii.tests.express.user.reset.caseHolder.checkEnvironmentForResetCode = function (testEnvironment) {
-    gpii.tests.express.user.reset.caseHolder.extractResetCode(testEnvironment).then(gpii.tests.express.user.reset.caseHolder.checkResetCode);
+fluid.tests.express.user.reset.caseHolder.checkEnvironmentForResetCode = function (testEnvironment) {
+    fluid.tests.express.user.reset.caseHolder.extractResetCode(testEnvironment).then(fluid.tests.express.user.reset.caseHolder.checkResetCode);
 };
 
-gpii.tests.express.user.reset.caseHolder.extractResetCode = function (testEnvironment) {
-    return gpii.test.express.user.extractCode(testEnvironment, "https?://[^/]+/api/user/reset/([a-z0-9-]+)");
+fluid.tests.express.user.reset.caseHolder.extractResetCode = function (testEnvironment) {
+    return fluid.test.express.user.extractCode(testEnvironment, "https?://[^/]+/api/user/reset/([a-z0-9-]+)");
 };
 
 // Each test has a request instance of `kettle.test.request.http` or `kettle.test.request.httpCookie`, and a test module that wires the request to the listener that handles its results.
-fluid.defaults("gpii.tests.express.user.reset.caseHolder", {
-    gradeNames: ["gpii.test.webdriver.caseHolder"],
+fluid.defaults("fluid.tests.express.user.reset.caseHolder", {
+    gradeNames: ["fluid.test.webdriver.caseHolder"],
     testUser: {
         username: "existing",
         email:    "existing@localhost",
@@ -43,28 +41,28 @@ fluid.defaults("gpii.tests.express.user.reset.caseHolder", {
             type: "kettle.test.cookieJar"
         },
         loginRequest: {
-            type: "gpii.test.express.user.request",
+            type: "fluid.test.express.user.request",
             options: {
                 endpoint: "api/user/login",
                 method:   "POST"
             }
         },
         bogusResetRequest: {
-            type: "gpii.test.express.user.request",
+            type: "fluid.test.express.user.request",
             options: {
                 endpoint: "api/user/reset/NONSENSE",
                 method:   "POST"
             }
         },
         fullResetForgotRequest: {
-            type: "gpii.test.express.user.request",
+            type: "fluid.test.express.user.request",
             options: {
                 endpoint: "api/user/forgot",
                 method:   "POST"
             }
         },
         fullResetResetRequest: {
-            type: "gpii.test.express.user.request",
+            type: "fluid.test.express.user.request",
             options: {
                 user: "{caseHolder}.options.testUser",
                 endpoint: "api/user/reset/%code",
@@ -75,21 +73,21 @@ fluid.defaults("gpii.tests.express.user.reset.caseHolder", {
             }
         },
         fullResetLoginRequest: {
-            type: "gpii.test.express.user.request",
+            type: "fluid.test.express.user.request",
             options: {
                 endpoint: "api/user/login",
                 method:   "POST"
             }
         },
         mismatchedPasswordsForgotRequest: {
-            type: "gpii.test.express.user.request",
+            type: "fluid.test.express.user.request",
             options: {
                 endpoint: "api/user/forgot",
                 method:   "POST"
             }
         },
         mismatchedPasswordsResetRequest: {
-            type: "gpii.test.express.user.request",
+            type: "fluid.test.express.user.request",
             options: {
                 user: {
                     username: "existing",
@@ -118,7 +116,7 @@ fluid.defaults("gpii.tests.express.user.reset.caseHolder", {
                             args: [{ code: "utter-nonsense-which-should-never-work", password: "Something123", confirm: "Something123"  }]
                         },
                         {
-                            listener: "gpii.tests.express.user.reset.caseHolder.verifyResponse",
+                            listener: "fluid.tests.express.user.reset.caseHolder.verifyResponse",
                             event: "{bogusResetRequest}.events.onComplete",
                             args: ["{bogusResetRequest}.nativeResponse", "{arguments}.0", 400, ["isError"]] // response, body, statusCode, truthy, falsy, hasCurrentUser
                         }
@@ -134,17 +132,17 @@ fluid.defaults("gpii.tests.express.user.reset.caseHolder", {
                         },
                         // If we catch this event, the timing won't work out to cache the initial response.  We can safely ignore it for now.
                         //{
-                        //    listener: "gpii.tests.express.user.reset.caseHolder.verifyResponse",
+                        //    listener: "fluid.tests.express.user.reset.caseHolder.verifyResponse",
                         //    event: "{fullResetForgotRequest}.events.onComplete",
                         //    args: ["{fullResetForgotRequest}", "{fullResetForgotRequest}.nativeResponse", "{arguments}.0", 200]
                         //},
                         {
-                            listener: "gpii.tests.express.user.reset.caseHolder.fullResetExtractCodeFromEmailAndReset",
+                            listener: "fluid.tests.express.user.reset.caseHolder.fullResetExtractCodeFromEmailAndReset",
                             event:    "{testEnvironment}.smtp.mailServer.events.onMessageReceived",
                             args:     ["{testEnvironment}", "{fullResetResetRequest}"] // testEnvironment, resetRequest
                         },
                         {
-                            listener: "gpii.tests.express.user.reset.caseHolder.verifyResponse",
+                            listener: "fluid.tests.express.user.reset.caseHolder.verifyResponse",
                             event: "{fullResetResetRequest}.events.onComplete",
                             args: ["{fullResetResetRequest}.nativeResponse", "{arguments}.0", 200, ["message"]]
                         },
@@ -153,7 +151,7 @@ fluid.defaults("gpii.tests.express.user.reset.caseHolder", {
                             args: [{ username: "{that}.options.testUser.username", password: "{that}.options.testUser.password"}]
                         },
                         {
-                            listener: "gpii.tests.express.user.reset.caseHolder.verifyResponse",
+                            listener: "fluid.tests.express.user.reset.caseHolder.verifyResponse",
                             event: "{fullResetLoginRequest}.events.onComplete",
                             args: ["{fullResetLoginRequest}.nativeResponse", "{arguments}.0", 200, ["user"]]
                         }
@@ -168,12 +166,12 @@ fluid.defaults("gpii.tests.express.user.reset.caseHolder", {
                             args: [ { email: "{that}.options.testUser.email" } ]
                         },
                         {
-                            listener: "gpii.tests.express.user.reset.caseHolder.fullResetExtractCodeFromEmailAndReset",
+                            listener: "fluid.tests.express.user.reset.caseHolder.fullResetExtractCodeFromEmailAndReset",
                             event:    "{testEnvironment}.smtp.mailServer.events.onMessageReceived",
                             args:     ["{testEnvironment}", "{mismatchedPasswordsResetRequest}"] // testEnvironment, resetRequest
                         },
                         {
-                            listener: "gpii.tests.express.user.reset.caseHolder.verifyResponse",
+                            listener: "fluid.tests.express.user.reset.caseHolder.verifyResponse",
                             event: "{mismatchedPasswordsResetRequest}.events.onComplete",
                             args: ["{mismatchedPasswordsResetRequest}.nativeResponse", "{arguments}.0", 400, ["message", "isError"], ["user"]]
                         }
@@ -185,9 +183,9 @@ fluid.defaults("gpii.tests.express.user.reset.caseHolder", {
 });
 
 
-gpii.tests.express.user.reset.caseHolder.verifyResponse = function (response, body, statusCode, truthy, falsy, hasCurrentUser) {
+fluid.tests.express.user.reset.caseHolder.verifyResponse = function (response, body, statusCode, truthy, falsy, hasCurrentUser) {
     if (!statusCode) { statusCode = 200; }
-    gpii.test.express.helpers.isSaneResponse(response, body, statusCode);
+    fluid.test.express.helpers.isSaneResponse(response, body, statusCode);
 
     var data = typeof body === "string" ? JSON.parse(body) : body;
 
@@ -209,7 +207,7 @@ gpii.tests.express.user.reset.caseHolder.verifyResponse = function (response, bo
 };
 
 // Listen for the email with the verification code and launch the verification request
-gpii.tests.express.user.reset.caseHolder.fullResetExtractCodeFromEmailAndReset = function (testEnvironment, resetRequest) {
+fluid.tests.express.user.reset.caseHolder.fullResetExtractCodeFromEmailAndReset = function (testEnvironment, resetRequest) {
     var mailContent = fs.readFileSync(testEnvironment.smtp.mailServer.currentMessageFile);
 
     var simpleParser = require("mailparser").simpleParser;
@@ -236,15 +234,15 @@ gpii.tests.express.user.reset.caseHolder.fullResetExtractCodeFromEmailAndReset =
     );
 };
 
-fluid.defaults("gpii.tests.express.user.reset.environment", {
-    gradeNames: ["gpii.test.express.user.environment"],
+fluid.defaults("fluid.tests.express.user.reset.environment", {
+    gradeNames: ["fluid.test.express.user.environment"],
     port:       8779,
     mailPort:   8825,
     components: {
         caseHolder: {
-            type: "gpii.tests.express.user.reset.caseHolder"
+            type: "fluid.tests.express.user.reset.caseHolder"
         }
     }
 });
 
-fluid.test.runTests("gpii.tests.express.user.reset.environment");
+fluid.test.runTests("fluid.tests.express.user.reset.environment");

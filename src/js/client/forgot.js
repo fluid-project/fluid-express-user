@@ -1,8 +1,8 @@
 // Provide a front-end to allow users to request that their password be reset...
 (function () {
     "use strict";
-    fluid.defaults("gpii.express.user.frontend.forgot", {
-        gradeNames: ["gpii.express.user.frontend.errorAwareForm"],
+    fluid.defaults("fluid.express.user.frontend.forgot", {
+        gradeNames: ["fluid.express.user.frontend.errorAwareForm"],
         ajaxOptions: {
             type: "POST",
             url:  "/api/user/forgot"
@@ -26,12 +26,12 @@
         },
         components: {
             schemaHolder: {
-                type: "gpii.express.user.schemaHolder.forgot"
+                type: "fluid.express.user.schemaHolder.forgot"
             }
         }
     });
 
-    fluid.defaults("gpii.express.user.frontend.forgot.hasUserControls", {
-        gradeNames: ["gpii.ul.hasUserControls", "gpii.express.user.frontend.forgot"]
+    fluid.defaults("fluid.express.user.frontend.forgot.hasUserControls", {
+        gradeNames: ["fluid.ul.hasUserControls", "fluid.express.user.frontend.forgot"]
     });
 })(jQuery);

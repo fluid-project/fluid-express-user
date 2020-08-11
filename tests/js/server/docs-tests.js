@@ -5,25 +5,23 @@
  */
 /* eslint-env node */
 "use strict";
-
 var fluid        = require("infusion");
-var gpii         = fluid.registerNamespace("gpii");
 
 require("../../../");
 require("../lib/");
 
-require("gpii-express");
-gpii.express.loadTestingSupport();
+require("fluid-express");
+fluid.express.loadTestingSupport();
 
 // Each test has a request instance of `kettle.test.request.http` or `kettle.test.request.httpCookie`, and a test module that wires the request to the listener that handles its results.
-fluid.defaults("gpii.tests.express.user.docs.caseHolder", {
-    gradeNames: ["gpii.test.webdriver.caseHolder"],
+fluid.defaults("fluid.tests.express.user.docs.caseHolder", {
+    gradeNames: ["fluid.test.webdriver.caseHolder"],
     components: {
         cookieJar: {
             type: "kettle.test.cookieJar"
         },
         docsRequest: {
-            type: "gpii.test.express.user.request",
+            type: "fluid.test.express.user.request",
             options: {
                 endpoint: "api/user/"
             }
@@ -42,7 +40,7 @@ fluid.defaults("gpii.tests.express.user.docs.caseHolder", {
                             args: []
                         },
                         {
-                            listener: "gpii.test.express.helpers.isSaneResponse",
+                            listener: "fluid.test.express.helpers.isSaneResponse",
                             event:    "{docsRequest}.events.onComplete",
                             args:     ["{docsRequest}.nativeResponse", "{arguments}.0", 200] // response, body, status
                         }
@@ -53,15 +51,15 @@ fluid.defaults("gpii.tests.express.user.docs.caseHolder", {
     ]
 });
 
-fluid.defaults("gpii.tests.express.user.docs.environment", {
-    gradeNames: ["gpii.test.express.user.environment"],
+fluid.defaults("fluid.tests.express.user.docs.environment", {
+    gradeNames: ["fluid.test.express.user.environment"],
     port:    8778,
     mailPort:   8725,
     components: {
         caseHolder: {
-            type: "gpii.tests.express.user.docs.caseHolder"
+            type: "fluid.tests.express.user.docs.caseHolder"
         }
     }
 });
 
-fluid.test.runTests("gpii.tests.express.user.docs.environment");
+fluid.test.runTests("fluid.tests.express.user.docs.environment");

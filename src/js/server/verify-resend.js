@@ -1,7 +1,7 @@
 /* eslint-env node */
 /*
 
-  A router endpoint to allow resending of verification codes per [CTR-104](https://issues.gpii.net/browse/CTR-104).
+  A router endpoint to allow resending of verification codes per [CTR-104](https://issues.fluid.net/browse/CTR-104).
 
   Consists of two parts:
   1. A GET handler that returns a form that can be used to request a reset.
@@ -13,14 +13,13 @@
  */
 "use strict";
 var fluid = require("infusion");
-var gpii  = fluid.registerNamespace("gpii");
 
-require("gpii-handlebars");
+require("fluid-handlebars");
 require("./lib/withMailHandler");
 
-fluid.registerNamespace("gpii.express.user.verify.resend.handler");
+fluid.registerNamespace("fluid.express.user.verify.resend.handler");
 
-gpii.express.user.verify.resend.handler.getVerificationCode = function (that, user) {
+fluid.express.user.verify.resend.handler.getVerificationCode = function (that, user) {
     if (!user || !user.username) {
         that.sendFinalResponse(404, { isError: true, message: "I couldn't find an account that matches the email address you provided."});
     }
@@ -36,8 +35,8 @@ gpii.express.user.verify.resend.handler.getVerificationCode = function (that, us
     }
 };
 
-fluid.defaults("gpii.express.user.verify.resend.handler", {
-    gradeNames: ["gpii.express.user.withMailHandler"],
+fluid.defaults("fluid.express.user.verify.resend.handler", {
+    gradeNames: ["fluid.express.user.withMailHandler"],
     templates: {
         mail: {
             text:  "email-verify-text",
@@ -61,9 +60,9 @@ fluid.defaults("gpii.express.user.verify.resend.handler", {
     components: {
         reader: {
             // TODO:  Replace with the new "asymmetric" dataSource once that code has been reviewed
-            type: "gpii.express.user.couchdb.read",
+            type: "fluid.express.user.couchdb.read",
             options: {
-                url:     "{gpii.express.user.verify.resend}.options.urls.read",
+                url:     "{fluid.express.user.verify.resend}.options.urls.read",
                 rules: {
                     read: {
                         "": "rows.0.value"
@@ -72,8 +71,8 @@ fluid.defaults("gpii.express.user.verify.resend.handler", {
                 termMap: { "email": "%email" },
                 listeners: {
                     "onRead.getVerificationCode": {
-                        funcName: "gpii.express.user.verify.resend.handler.getVerificationCode",
-                        args:     ["{gpii.express.user.verify.resend.handler}", "{arguments}.0"]
+                        funcName: "fluid.express.user.verify.resend.handler.getVerificationCode",
+                        args:     ["{fluid.express.user.verify.resend.handler}", "{arguments}.0"]
                     }
                 }
             }
@@ -81,25 +80,25 @@ fluid.defaults("gpii.express.user.verify.resend.handler", {
     }
 });
 
-fluid.registerNamespace("gpii.express.user.verify.resend.handler.html");
+fluid.registerNamespace("fluid.express.user.verify.resend.handler.html");
 
-gpii.express.user.verify.resend.handler.html.sendFinalResponse = function (that, statusCode, context) {
+fluid.express.user.verify.resend.handler.html.sendFinalResponse = function (that, statusCode, context) {
     that.options.response.status(statusCode).render(that.options.templateKey, context);
 };
 
-fluid.defaults("gpii.express.user.verify.resend.handler.html", {
-    gradeNames: ["gpii.express.user.verify.resend.handler"],
-    templateKey: "{gpii.express.user.verify.resend}.options.templates.html",
+fluid.defaults("fluid.express.user.verify.resend.handler.html", {
+    gradeNames: ["fluid.express.user.verify.resend.handler"],
+    templateKey: "{fluid.express.user.verify.resend}.options.templates.html",
     invokers: {
         sendFinalResponse: {
-            funcName: "gpii.express.user.verify.resend.handler.text.sendFinalResponse",
+            funcName: "fluid.express.user.verify.resend.handler.text.sendFinalResponse",
             args:     ["{that}", "{arguments}.0", "{arguments}.1"] // status code, template context
         }
     }
 });
 
-fluid.defaults("gpii.express.user.verify.resend.handler.json", {
-    gradeNames: ["gpii.express.user.verify.resend.handler"],
+fluid.defaults("fluid.express.user.verify.resend.handler.json", {
+    gradeNames: ["fluid.express.user.verify.resend.handler"],
     invokers: {
         sendFinalResponse: {
             func: "{that}.sendResponse",
@@ -108,12 +107,12 @@ fluid.defaults("gpii.express.user.verify.resend.handler.json", {
     }
 });
 
-fluid.defaults("gpii.express.user.verify.resend", {
-    gradeNames: ["gpii.express.router"],
+fluid.defaults("fluid.express.user.verify.resend", {
+    gradeNames: ["fluid.express.router"],
     namespace:  "resend", // Namespace to allow other routers to put themselves in the chain before or after us.
     path:       "/resend",
     method:     "use",
-    templateDirs: "{gpii.express.user.api}.options.templateDirs",
+    templateDirs: "{fluid.express.user.api}.options.templateDirs",
     urls: {
         read: {
             expander: {
@@ -124,7 +123,7 @@ fluid.defaults("gpii.express.user.verify.resend", {
     },
     components: {
         postRouter: {
-            type: "gpii.express.middleware.contentAware",
+            type: "fluid.express.middleware.contentAware",
             options: {
                 path: ["/"],
                 templates: {
@@ -133,18 +132,18 @@ fluid.defaults("gpii.express.user.verify.resend", {
                 handlers: {
                     json: {
                         contentType:   "application/json",
-                        handlerGrades: ["gpii.express.user.verify.resend.handler.json"]
+                        handlerGrades: ["fluid.express.user.verify.resend.handler.json"]
                     },
                     text: {
                         contentType:   ["text/html", "text/plain"],
-                        handlerGrades: ["gpii.express.user.verify.resend.handler.html"]
+                        handlerGrades: ["fluid.express.user.verify.resend.handler.html"]
                     }
                 },
                 method: "post"
             }
         },
         formRouter: {
-            type: "gpii.express.singleTemplateMiddleware",
+            type: "fluid.express.singleTemplateMiddleware",
             options: {
                 templateKey: "pages/verify-resend",
                 method:      "get"

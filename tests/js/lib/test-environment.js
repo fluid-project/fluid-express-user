@@ -6,22 +6,22 @@ var fluid = require("infusion");
 
 require("./test-harness");
 
-fluid.registerNamespace("gpii.test.express.user.environment");
+fluid.registerNamespace("fluid.test.express.user.environment");
 
-fluid.defaults("gpii.test.express.user.environment", {
-    gradeNames:   ["gpii.test.express.testEnvironment"],
+fluid.defaults("fluid.test.express.user.environment", {
+    gradeNames:   ["fluid.test.express.testEnvironment"],
     port:         "3959",
     couchPort:    "25984",
     mailPort:     "2525",
     path:         "/",
     templateDirs: {
-        user: "%gpii-express-user/src/templates",
-        validation: "%gpii-json-schema/src/templates",
-        testUser: "%gpii-express-user/tests/templates"
+        user: "%fluid-express-user/src/templates",
+        validation: "%fluid-json-schema/src/templates",
+        testUser: "%fluid-express-user/tests/templates"
     },
     distributeOptions: {
         source: "{that}.options.mailPort",
-        target: "{that gpii.express.user.mailer}.options.transportOptions.port"
+        target: "{that fluid.express.user.mailer}.options.transportOptions.port"
     },
     events: {
         onExpressDone: null,
@@ -43,7 +43,7 @@ fluid.defaults("gpii.test.express.user.environment", {
     },
     components: {
         express: {
-            type: "gpii.test.express.user.harness.express",
+            type: "fluid.test.express.user.harness.express",
             createOnEvent: "constructFixtures",
             options: {
                 events: {
@@ -52,7 +52,7 @@ fluid.defaults("gpii.test.express.user.environment", {
                 port:  "{testEnvironment}.options.port",
                 templateDirs: "{testEnvironment}.options.templateDirs",
                 listeners: {
-                    "stopFixtures.stopServer": { funcName: "gpii.express.stopServer", args:["{that}"] },
+                    "stopFixtures.stopServer": { funcName: "fluid.express.stopServer", args:["{that}"] },
                     "onStopped.notifyParent": { func: "{testEnvironment}.events.onExpressDone.fire"}
                 },
                 components: {
@@ -75,7 +75,7 @@ fluid.defaults("gpii.test.express.user.environment", {
             }
         },
         couch: {
-            type: "gpii.test.express.user.couch",
+            type: "fluid.test.express.user.couch",
             createOnEvent: "constructFixtures",
             options: {
                 port: "{testEnvironment}.options.couchPort",
@@ -87,7 +87,7 @@ fluid.defaults("gpii.test.express.user.environment", {
             }
         },
         smtp: {
-            type: "gpii.test.mail.smtp",
+            type: "fluid.test.mail.smtp",
             createOnEvent: "constructFixtures",
             options: {
                 port: "{testEnvironment}.options.mailPort",
@@ -102,8 +102,8 @@ fluid.defaults("gpii.test.express.user.environment", {
 });
 
 
-fluid.defaults("gpii.test.express.user.environment.withBrowser", {
-    gradeNames: ["gpii.test.express.user.environment", "gpii.test.webdriver.testEnvironment"],
+fluid.defaults("fluid.test.express.user.environment.withBrowser", {
+    gradeNames: ["fluid.test.express.user.environment", "fluid.test.webdriver.testEnvironment"],
     events: {
         onFixturesConstructed: {
             events: {

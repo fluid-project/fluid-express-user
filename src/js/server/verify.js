@@ -10,17 +10,16 @@
 /* eslint-env node */
 "use strict";
 var fluid  = require("infusion");
-var gpii   = fluid.registerNamespace("gpii");
 
 // TODO: replace this with a writable dataSource
 var request = require("request");
 
-fluid.registerNamespace("gpii.express.user.verify.handler");
+fluid.registerNamespace("fluid.express.user.verify.handler");
 
 require("./lib/datasource");
 require("./verify-resend");
 
-gpii.express.user.verify.handler.checkVerificationCode = function (that, dataSourceResponse) {
+fluid.express.user.verify.handler.checkVerificationCode = function (that, dataSourceResponse) {
     if (!dataSourceResponse || !dataSourceResponse[that.options.codeKey] || (that.options.request.params.code !== dataSourceResponse[that.options.codeKey])) {
         that.sendFinalResponse(401, { isError: true, message: "You must provide a valid verification code to use this interface."});
     }
@@ -51,16 +50,16 @@ gpii.express.user.verify.handler.checkVerificationCode = function (that, dataSou
     }
 };
 
-fluid.defaults("gpii.express.user.verify.handler", {
-    gradeNames: ["gpii.express.handler"],
-    codeKey:    "{gpii.express.user.verify}.options.codeKey",
-    urls:       "{gpii.express.user.verify}.options.urls",
+fluid.defaults("fluid.express.user.verify.handler", {
+    gradeNames: ["fluid.express.handler"],
+    codeKey:    "{fluid.express.user.verify}.options.codeKey",
+    urls:       "{fluid.express.user.verify}.options.urls",
     components: {
         reader: {
             // TODO:  Replace with the new "asymmetric" dataSource once it has been reviewed.
-            type: "gpii.express.user.couchdb.read",
+            type: "fluid.express.user.couchdb.read",
             options: {
-                url: "{gpii.express.user.verify}.options.urls.read",
+                url: "{fluid.express.user.verify}.options.urls.read",
                 rules: {
                     read: {
                         "": "rows.0.value"
@@ -69,12 +68,12 @@ fluid.defaults("gpii.express.user.verify.handler", {
                 termMap: { code: "%code"},
                 listeners: {
                     "onRead.checkVerificationCode": {
-                        nameSpace: "gpii.express.user.verify",
-                        funcName:  "gpii.express.user.verify.handler.checkVerificationCode",
-                        args:      ["{gpii.express.handler}", "{arguments}.0"] // dataSource response
+                        nameSpace: "fluid.express.user.verify",
+                        funcName:  "fluid.express.user.verify.handler.checkVerificationCode",
+                        args:      ["{fluid.express.handler}", "{arguments}.0"] // dataSource response
                     },
                     "onError.sendErrorResponse": {
-                        func: "{gpii.express.user.verify.handler}.sendFinalResponse",
+                        func: "{fluid.express.user.verify.handler}.sendFinalResponse",
                         args: [500, { isError: true, message: "{arguments}.0"}]
                     }
                 }
@@ -93,26 +92,26 @@ fluid.defaults("gpii.express.user.verify.handler", {
     }
 });
 
-fluid.registerNamespace("gpii.express.user.verify.handler.html");
+fluid.registerNamespace("fluid.express.user.verify.handler.html");
 
-gpii.express.user.verify.handler.html.sendFinalResponse = function (that, statusCode, body) {
+fluid.express.user.verify.handler.html.sendFinalResponse = function (that, statusCode, body) {
     that.options.response.status(statusCode).render(that.options.templateKey, body);
 };
 
-fluid.defaults("gpii.express.user.verify.handler.html", {
-    gradeNames:  ["gpii.express.user.verify.handler"],
+fluid.defaults("fluid.express.user.verify.handler.html", {
+    gradeNames:  ["fluid.express.user.verify.handler"],
     templateKey: "pages/verify",
     invokers: {
         sendFinalResponse: {
-            funcName: "gpii.express.user.verify.handler.html.sendFinalResponse",
+            funcName: "fluid.express.user.verify.handler.html.sendFinalResponse",
             args:     ["{that}", "{arguments}.0", "{arguments}.1"] // statusCode, response
         }
     }
 });
 
-// The JSON handler just passes the response payload on to gpii.express.handler.sendResponse
-fluid.defaults("gpii.express.user.verify.handler.json", {
-    gradeNames: ["gpii.express.user.verify.handler"],
+// The JSON handler just passes the response payload on to fluid.express.handler.sendResponse
+fluid.defaults("fluid.express.user.verify.handler.json", {
+    gradeNames: ["fluid.express.user.verify.handler"],
     invokers: {
         sendFinalResponse: {
             func: "{that}.sendResponse",
@@ -121,11 +120,11 @@ fluid.defaults("gpii.express.user.verify.handler.json", {
     }
 });
 
-fluid.defaults("gpii.express.user.verify", {
-    gradeNames: ["gpii.express.router"],
+fluid.defaults("fluid.express.user.verify", {
+    gradeNames: ["fluid.express.router"],
     method:     "use",
     path:       "/verify",
-    codeKey:    "verification_code",  // Must match the value in gpii.express.user.verify
+    codeKey:    "verification_code",  // Must match the value in fluid.express.user.verify
     urls: {
         read: {
             expander: {
@@ -142,10 +141,10 @@ fluid.defaults("gpii.express.user.verify", {
     },
     components: {
         resendRouter: {
-            type: "gpii.express.user.verify.resend"
+            type: "fluid.express.user.verify.resend"
         },
         mainRouter: {
-            type: "gpii.express.middleware.contentAware",
+            type: "fluid.express.middleware.contentAware",
             options: {
                 priority: "after:resendRouter",
                 path:   ["/:code", "/"],
@@ -153,11 +152,11 @@ fluid.defaults("gpii.express.user.verify", {
                 handlers: {
                     text: {
                         contentType:   ["text/html", "text/plain"],
-                        handlerGrades: ["gpii.express.user.verify.handler.html"]
+                        handlerGrades: ["fluid.express.user.verify.handler.html"]
                     },
                     json: {
                         contentType:   "application/json",
-                        handlerGrades: ["gpii.express.user.verify.handler.json"]
+                        handlerGrades: ["fluid.express.user.verify.handler.json"]
                     }
                 }
             }

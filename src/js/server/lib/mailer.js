@@ -6,21 +6,20 @@
   Uses [nodemailer-smtp-transport](https://github.com/andris9/nodemailer-smtp-transport) at the moment.  All options
   supported by that package can be configured using the `options.transportOptions` setting.
 
-  Mail content is created using `gpii-handlebars`.
+  Mail content is created using `fluid-handlebars`.
 
-  // TODO:  Evaluate moving this to its own package, perhaps combining with gpii-mail-test.
+  // TODO:  Evaluate moving this to its own package, perhaps combining with fluid-mail-test.
  */
 /* eslint-env node */
 "use strict";
 var fluid = require("infusion");
-var gpii  = fluid.registerNamespace("gpii");
 
 var nodemailer    = require("nodemailer");
 var smtpTransport = require("nodemailer-smtp-transport");
 
-require("gpii-handlebars");
+require("fluid-handlebars");
 
-fluid.registerNamespace("gpii.express.user.mailer");
+fluid.registerNamespace("fluid.express.user.mailer");
 
 // Send a message using `nodemailer-smtp-transport`.  Here is a basic example of typical `mailOptions`:
 //
@@ -36,7 +35,7 @@ fluid.registerNamespace("gpii.express.user.mailer");
 // Note that the `to` and `cc` elements can also be passed an array of email addresses.  The full syntax available for
 // `mailOptions` can be found in [the nodemailer documentation](https://github.com/andris9/Nodemailer).
 //
-gpii.express.user.mailer.sendMessage = function (that, mailOptions) {
+fluid.express.user.mailer.sendMessage = function (that, mailOptions) {
     var transport = nodemailer.createTransport(smtpTransport(fluid.copy(that.options.transportOptions)));
     transport.sendMail(fluid.copy(mailOptions), that.handleSendResult);
 };
@@ -45,7 +44,7 @@ gpii.express.user.mailer.sendMessage = function (that, mailOptions) {
 // Fires an `onError` event if an error is received, and passes along the error message and stack.  If the message is
 // sent successfully, an `onSuccess` event is fired and the `info` object is passed along.
 //
-gpii.express.user.mailer.handleSendResult = function (that, err, info) {
+fluid.express.user.mailer.handleSendResult = function (that, err, info) {
     if (err) {
         that.events.onError.fire({ message: err.message, stack: err.stack});
     }
@@ -54,7 +53,7 @@ gpii.express.user.mailer.handleSendResult = function (that, err, info) {
     }
 };
 
-fluid.defaults("gpii.express.user.mailer", {
+fluid.defaults("fluid.express.user.mailer", {
     gradeNames: ["fluid.component"],
     transportOptions: {
         ignoreTLS: true
@@ -68,7 +67,7 @@ fluid.defaults("gpii.express.user.mailer", {
             funcName: "fluid.notImplemented"
         },
         handleSendResult: {
-            funcName: "gpii.express.user.mailer.handleSendResult",
+            funcName: "fluid.express.user.mailer.handleSendResult",
             args:     ["{that}", "{arguments}.0", "{arguments}.1"] // err, info
         }
     },
@@ -85,18 +84,18 @@ fluid.defaults("gpii.express.user.mailer", {
 });
 
 // Mailer for use with plain text content.
-fluid.defaults("gpii.express.user.mailer.text", {
-    gradeNames: ["gpii.express.user.mailer"],
+fluid.defaults("fluid.express.user.mailer.text", {
+    gradeNames: ["fluid.express.user.mailer"],
     invokers: {
         sendMessage: {
-            funcName: "gpii.express.user.mailer.sendMessage",
+            funcName: "fluid.express.user.mailer.sendMessage",
             args:     ["{that}", "{arguments}.0"] // Options to pass to nodemailer's `sendMail` function.
         }
     }
 });
 
 
-fluid.registerNamespace("gpii.express.user.mailer.handlebars");
+fluid.registerNamespace("fluid.express.user.mailer.handlebars");
 
 // Transform a message using handlebars before sending it. If `options.templates.html` is found, the message will
 // include an html body.  If `options.templates.text` is found, the message will include a text body.  Both can be
@@ -106,7 +105,7 @@ fluid.registerNamespace("gpii.express.user.mailer.handlebars");
 // if you pass in `{ variable: "value" }` as the `context`, then `{{variable}}` would become `value` in the final
 // output.
 //
-gpii.express.user.mailer.handlebars.sendTemplateMessage = function (that, mailOptions, context) {
+fluid.express.user.mailer.handlebars.sendTemplateMessage = function (that, mailOptions, context) {
     var fullMailOptions = fluid.copy(mailOptions) || {};
 
     if (!that.options.textTemplateKey && !that.options.htmlTemplateKey) {
@@ -123,7 +122,7 @@ gpii.express.user.mailer.handlebars.sendTemplateMessage = function (that, mailOp
         fullMailOptions.html = html;
     }
 
-    gpii.express.user.mailer.sendMessage(that, fullMailOptions);
+    fluid.express.user.mailer.sendMessage(that, fullMailOptions);
 };
 
 // Mailer with support for template rendering.  Requires you to set `options.templateDirs`.  To use this meaningfully, you
@@ -132,22 +131,22 @@ gpii.express.user.mailer.handlebars.sendTemplateMessage = function (that, mailOp
 // 1. `options.textTemplateKey`: The template key for the text content of the email.
 // 2. `options.htmlTemplateKey`: The template key for the HTML content of the email.
 //
-fluid.defaults("gpii.express.user.mailer.handlebars", {
-    gradeNames:      ["gpii.express.user.mailer"],
-    templateDirs:     "%gpii-express-user/src/templates",
+fluid.defaults("fluid.express.user.mailer.handlebars", {
+    gradeNames:      ["fluid.express.user.mailer"],
+    templateDirs:     "%fluid-express-user/src/templates",
     textTemplateKey: "email-text",
     htmlTemplateKey: "email-html",
     invokers: {
         sendMessage: {
-            funcName: "gpii.express.user.mailer.handlebars.sendTemplateMessage",
+            funcName: "fluid.express.user.mailer.handlebars.sendTemplateMessage",
             args:     ["{that}", "{arguments}.0", "{arguments}.1"] // `sendMail` options, data used in rendering template content.
         }
     },
     components: {
         handlebars: {
-            type: "gpii.handlebars.standaloneRenderer",
+            type: "fluid.handlebars.standaloneRenderer",
             options: {
-                templateDirs: "{gpii.express.user.mailer.handlebars}.options.templateDirs"
+                templateDirs: "{fluid.express.user.mailer.handlebars}.options.templateDirs"
             }
         }
     }

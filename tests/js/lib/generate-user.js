@@ -2,22 +2,21 @@
 /* eslint-env node */
 "use strict";
 var fluid = require("infusion");
-var gpii  = fluid.registerNamespace("gpii");
 
-fluid.registerNamespace("gpii.test.express.user");
+fluid.registerNamespace("fluid.test.express.user");
 
-gpii.test.express.user.generateUser = function () {
+fluid.test.express.user.generateUser = function () {
     var timestamp = Date.now();
     return {
         username: "user-" + timestamp,
-        password: gpii.test.express.user.generatePassword(timestamp),
-        confirm:  gpii.test.express.user.generatePassword(timestamp),
+        password: fluid.test.express.user.generatePassword(timestamp),
+        confirm:  fluid.test.express.user.generatePassword(timestamp),
         email:    "email-" + timestamp + "@localhost"
     };
 };
 
 // Generate a simple password that meets our rules.  Used in testing both the signup and reset functions.
-gpii.test.express.user.generatePassword = function (timestamp) {
+fluid.test.express.user.generatePassword = function (timestamp) {
     if (!timestamp) {
         timestamp = Date.now();
     }
