@@ -42,3 +42,6 @@ jobs:
 
       - name: Browser Tests
         run: npm run test:webdriver
+
+      - name: Coverage Reports
+        run: npm run posttest
