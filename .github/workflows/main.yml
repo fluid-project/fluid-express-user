@@ -43,5 +43,11 @@ jobs:
       - name: Browser Tests
         run: npm run test:webdriver
 
-      - name: Coverage Reports
+      - name: Create Coverage Reports
         run: npm run posttest
+
+      - name: Save Code Coverage Reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: reports
+          path: reports
