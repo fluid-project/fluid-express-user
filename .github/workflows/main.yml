@@ -32,19 +32,13 @@ jobs:
         run: npm install
 
       - name: Lint Code
-        run: $(npm bin)/grunt lint
+        run: npm run lint
 
       - name: Node Tests
-        run: xvfb-run --auto-servernum npm test
+        run: npm run test:node
 
-      - name: Stop Docker Containers
+      - name: Stop all Docker containers
         run: docker rm -f $(docker ps -q -a)
 
       - name: Browser Tests
         run: npm run test:webdriver
-
-      - name: Cleanup after xvfb
-        uses: bcomnes/cleanup-xvfb@v1
-
-      - name: Code Coverage
-        run: npm run posttest
