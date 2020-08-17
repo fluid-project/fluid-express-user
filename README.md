@@ -39,5 +39,13 @@ of `tests/js/launch-test-harness.js` and `tests/js/test-harness.js`,
 
 To run the tests in this package, use the command `npm test`.
 
-The tests in this package make use of [fluid-couchdb-test-harness](https://github.com/fluid-project/fluid-couchdb-test-harness),
-see that package for supported environments and configuration options.
+The tests in this package make use of [fluid-couchdb-test-harness](https://github.com/fluid-project/fluid-couchdb-test-harness).
+By default that package uses Docker to run the tests.  To use Vagrant instead, set the environment variable
+`FLUID_TEST_COUCH_USE_EXTERNAL` to `true`.  To use a standalone instance of CouchDB (which must run on port `25984`),
+set the environment variable `FLUID_TEST_COUCH_USE_EXTERNAL` to `true`.  For the full list of supported environments,
+software requirements, and configuration options, see [the documentation for fluid-couchdb-test-harness](https://github.com/fluid-project/fluid-couchdb-test-harness).
+
+The browser tests in this package make use of [fluid-webdriver](https://github.com/fluid-project/fluid-webdriver),
+which requires you to install the appropriate version of `chromedriver` (Chrome), `geckodriver` (Firefox), et cetera.
+Chrome in particular has issues when its version does not exactly match the version of `chromedriver` installed.  For
+more information about the requirements for running the browser tests, see the [fluid-webdriver documentation](https://github.com/fluid-project/fluid-webdriver).
