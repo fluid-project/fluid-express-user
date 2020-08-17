@@ -10,21 +10,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      couchdb:
-        image: couchdb
-        ports:
-          - 25984:5984
-        env:
-          COUCHDB_USER: admin
-          COUCHDB_PASSWORD: admin
+    timeout-minutes: 20
 
     strategy:
       matrix:
         node-version: [12.x]
 
     env:
-      FLUID_TEST_COUCH_USE_EXTERNAL: true
+      HEADLESS: true
       BROWSERS: chrome
 
     steps:
@@ -44,5 +37,14 @@ jobs:
       - name: Node Tests
         run: xvfb-run --auto-servernum npm test
 
+      - name: Stop Docker Containers
+        run: docker rm -f $(docker ps -q -a)
+
+      - name: Browser Tests
+        run: npm run test:webdriver
+
       - name: Cleanup after xvfb
         uses: bcomnes/cleanup-xvfb@v1
+
+      - name: Code Coverage
+        run: npm run posttest
