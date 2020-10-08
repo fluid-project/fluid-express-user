@@ -1,6 +1,6 @@
 {
     "name": "fluid-express-user",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "A series of Fluid components to provide simple user management.",
     "main": "index.js",
     "scripts": {
