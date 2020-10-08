@@ -3,10 +3,10 @@
 (function () {
     "use strict";
 
-    fluid.registerNamespace("gpii.express.user.frontend.resend");
+    fluid.registerNamespace("fluid.express.user.frontend.resend");
 
-    fluid.defaults("gpii.express.user.frontend.resend", {
-        gradeNames: ["gpii.express.user.frontend.errorAwareForm"],
+    fluid.defaults("fluid.express.user.frontend.resend", {
+        gradeNames: ["fluid.express.user.frontend.errorAwareForm"],
         templateKeys: {
             initial: "resend-viewport",
             error:   "common-error",
@@ -23,7 +23,6 @@
         },
         rules: {
             modelToRequestPayload: {
-                // TODO:  Refactor once https://issues.gpii.net/browse/GPII-1587 is resolved
                 "":    "notfound", // Required to clear out the default rules from `templateFormControl`
                 email: "email"
             }
@@ -40,7 +39,7 @@
         },
         components: {
             schemaHolder: {
-                type: "gpii.express.user.schemaHolder.resend"
+                type: "fluid.express.user.schemaHolder.resend"
             }
         }
     });

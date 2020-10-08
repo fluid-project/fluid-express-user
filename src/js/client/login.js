@@ -1,22 +1,20 @@
 // provide a front-end to /api/user/login
-/* global fluid, jQuery */
 (function () {
     "use strict";
-    var gpii = fluid.registerNamespace("gpii");
 
-    fluid.registerNamespace("gpii.express.user.frontend.login");
+    fluid.registerNamespace("fluid.express.user.frontend.login");
 
     // If the user controls are used to log out, we have to manually clear the success message.
     // If we delegate this to the controls component, it might clobber success messages for things other than the login.
-    gpii.express.user.frontend.login.checkAndClearSuccess = function (that) {
+    fluid.express.user.frontend.login.checkAndClearSuccess = function (that) {
         if (!that.model.user || !that.model.user.username) {
             that.applier.change("successMessage", null);
             that.renderInitialMarkup();
         }
     };
 
-    fluid.defaults("gpii.express.user.frontend.login", {
-        gradeNames: ["gpii.express.user.frontend.errorAwareForm"],
+    fluid.defaults("fluid.express.user.frontend.login", {
+        gradeNames: ["fluid.express.user.frontend.errorAwareForm"],
         templateKeys: {
             initial: "login-viewport",
             success: "common-success"
@@ -32,14 +30,14 @@
         },
         modelListeners: {
             "user": {
-                funcName:      "gpii.express.user.frontend.login.checkAndClearSuccess",
+                funcName:      "fluid.express.user.frontend.login.checkAndClearSuccess",
                 args:          ["{that}"],
                 excludeSource: "init"
             }
         },
         components: {
             schemaHolder: {
-                type: "gpii.express.user.schemaHolder.login"
+                type: "fluid.express.user.schemaHolder.login"
             },
             success: {
                 options: {
@@ -62,7 +60,6 @@
         },
         rules: {
             modelToRequestPayload: {
-                // TODO:  Refactor once https://issues.gpii.net/browse/GPII-1587 is resolved
                 "":       "notfound", // Required to clear out the default rules from `templateFormControl`
                 username: "username",
                 password: "password"

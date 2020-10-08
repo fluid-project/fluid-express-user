@@ -11,12 +11,11 @@
 /* eslint-env node */
 "use strict";
 var fluid = require("infusion");
-var gpii  = fluid.registerNamespace("gpii");
 
 var crypto = require("crypto");
 
-fluid.registerNamespace("gpii.express.user.password");
-gpii.express.user.password.encode = function (password, salt, iterations, keyLength, digest) {
+fluid.registerNamespace("fluid.express.user.password");
+fluid.express.user.password.encode = function (password, salt, iterations, keyLength, digest) {
     // Set defaults that are useful in dealing with CouchDB and express-couchUser data.
     iterations = iterations || 10;
     keyLength  = keyLength  || 20;
@@ -30,6 +29,6 @@ gpii.express.user.password.encode = function (password, salt, iterations, keyLen
 // Return a hex string that represents byte data that is `lengthInBytes` length.  For example, `generateSalt(1)` might
 // return `c3`.
 //
-gpii.express.user.password.generateSalt = function (lengthInBytes) {
+fluid.express.user.password.generateSalt = function (lengthInBytes) {
     return crypto.randomBytes(lengthInBytes).toString("hex");
 };

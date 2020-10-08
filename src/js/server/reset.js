@@ -13,9 +13,8 @@
  */
 "use strict";
 var fluid  = require("infusion");
-var gpii   = fluid.registerNamespace("gpii");
 
-require("gpii-handlebars");
+require("fluid-handlebars");
 
 require("./lib/password");
 require("./lib/datasource");
@@ -25,20 +24,20 @@ require("./lib/datasource");
 // TODO:  Replace this with a writable `dataSource`
 var request = require("request");
 
-fluid.registerNamespace("gpii.express.user.reset.handler");
+fluid.registerNamespace("fluid.express.user.reset.handler");
 
-gpii.express.user.reset.handler.checkResetCode = function (that, dataSourceResponse) {
+fluid.express.user.reset.handler.checkResetCode = function (that, dataSourceResponse) {
     // Prepare dates that will be used in later sanity checks.
     var earliestAcceptable = new Date(Date.now() - that.options.codeExpiration);
     var issueDate          = new Date(dataSourceResponse[that.options.codeIssuedKey]);
 
-    // TODO: Use a message key "gpii.express.user.reset.code.invalid": "The reset code you provided is invalid."
+    // TODO: Use a message key "fluid.express.user.reset.code.invalid": "The reset code you provided is invalid."
     if (!dataSourceResponse || !dataSourceResponse[that.options.codeKey] || (that.options.request.params.code !== dataSourceResponse[that.options.codeKey])) {
         that.sendFinalResponse(400, { isError: true, message: "You must provide a valid reset code to use this interface."});
     }
     // We cannot perform the next two checks using JSON Schema, so we must do it here.
     // We should not accept a reset code issued earlier than the current time minus our expiration period (a day by default).
-    // TODO: Use  the message   "gpii.express.user.reset.code.expired": "Your reset code is too old.  Please request another one."
+    // TODO: Use  the message   "fluid.express.user.reset.code.expired": "Your reset code is too old.  Please request another one."
     else if (isNaN(issueDate) || issueDate < earliestAcceptable) {
         that.sendFinalResponse(400, { isError: true, message: "Your reset code is too old.  Please request another one."});
     }
@@ -50,9 +49,9 @@ gpii.express.user.reset.handler.checkResetCode = function (that, dataSourceRespo
         var updatedUserRecord = fluid.copy(dataSourceResponse);
         delete updatedUserRecord[that.options.codeKey];
 
-        var salt                      = gpii.express.user.password.generateSalt(that.options.saltLength);
+        var salt                      = fluid.express.user.password.generateSalt(that.options.saltLength);
         updatedUserRecord.salt        = salt;
-        updatedUserRecord.derived_key = gpii.express.user.password.encode(that.options.request.body.password, salt);
+        updatedUserRecord.derived_key = fluid.express.user.password.encode(that.options.request.body.password, salt);
 
         // TODO:  Convert this to use a writable dataSource
         var writeUrl = fluid.stringTemplate(that.options.urls.write, { id: updatedUserRecord._id});
@@ -70,21 +69,21 @@ gpii.express.user.reset.handler.checkResetCode = function (that, dataSourceRespo
                 that.sendFinalResponse(response.statusCode, { isError: true, message: body});
             }
             else {
-                // TODO: Use message key     "gpii.express.user.reset.success": "Your password has been reset."
+                // TODO: Use message key     "fluid.express.user.reset.success": "Your password has been reset."
                 that.sendFinalResponse(200, { message: "Your password has been reset."});
             }
         });
     }
 };
 
-fluid.defaults("gpii.express.user.reset.handler", {
-    gradeNames:  ["gpii.express.handler"],
+fluid.defaults("fluid.express.user.reset.handler", {
+    gradeNames:  ["fluid.express.handler"],
     components: {
         reader: {
             // TODO:  Replace with the new "asymmetric" dataSource once that code has been reviewed
-            type: "gpii.express.user.couchdb.read",
+            type: "fluid.express.user.couchdb.read",
             options: {
-                url: "{gpii.express.user.reset}.options.urls.read",
+                url: "{fluid.express.user.reset}.options.urls.read",
                 rules: {
                     read: {
                         "": "rows.0.value"
@@ -93,12 +92,12 @@ fluid.defaults("gpii.express.user.reset.handler", {
                 termMap: { code: "%code"},
                 listeners: {
                     "onRead.checkResetCode": {
-                        nameSpace: "gpii.express.user.reset",
-                        funcName:  "gpii.express.user.reset.handler.checkResetCode",
-                        args:      ["{gpii.express.handler}", "{arguments}.0"] // dataSource response
+                        nameSpace: "fluid.express.user.reset",
+                        funcName:  "fluid.express.user.reset.handler.checkResetCode",
+                        args:      ["{fluid.express.handler}", "{arguments}.0"] // dataSource response
                     },
                     "onError.sendErrorResponse": {
-                        func: "{gpii.express.user.reset.handler}.sendFinalResponse",
+                        func: "{fluid.express.user.reset.handler}.sendFinalResponse",
                         args: [500, { isError: true, message: "{arguments}.0"}]
                     }
                 }
@@ -118,17 +117,17 @@ fluid.defaults("gpii.express.user.reset.handler", {
     }
 });
 
-fluid.defaults("gpii.express.user.reset.post", {
-    gradeNames:    ["gpii.express.user.validationGatedRouter"],
+fluid.defaults("fluid.express.user.reset.post", {
+    gradeNames:    ["fluid.express.user.validationGatedRouter"],
     method:        "post",
     path:          "/:code",
     routerOptions: {
         mergeParams: true
     },
-    handlerGrades: ["gpii.express.user.reset.handler"],
+    handlerGrades: ["fluid.express.user.reset.handler"],
     components: {
         schemaHolder: {
-            type: "gpii.express.user.schemaHolder.reset"
+            type: "fluid.express.user.schemaHolder.reset"
         },
         validationMiddleware: {
             options: {
@@ -145,22 +144,22 @@ fluid.defaults("gpii.express.user.reset.post", {
 
 
 // GET /api/user/reset/:code, a `singleTemplateRouter` that just serves up the client-side form.
-fluid.defaults("gpii.express.user.reset.formRouter", {
-    gradeNames:  ["gpii.express.singleTemplateMiddleware"],
+fluid.defaults("fluid.express.user.reset.formRouter", {
+    gradeNames:  ["fluid.express.singleTemplateMiddleware"],
     path:        "/:code",
     method:      "get",
     templateKey: "pages/reset"
 });
 
-fluid.defaults("gpii.express.user.reset", {
-    gradeNames:    ["gpii.express.router"],
+fluid.defaults("fluid.express.user.reset", {
+    gradeNames:    ["fluid.express.router"],
     method:        "use",
     path:          "/reset",
-    // The next two variables must match the value in gpii.express.user.forgot
+    // The next two variables must match the value in fluid.express.user.forgot
     codeKey:       "reset_code",
     codeIssuedKey: "reset_code_issued",
     codeExpiration: 86400000, // How long a reset code is valid, in milliseconds.  Defaults to a day.
-    // The salt length should match what's used in gpii.express.user.signup
+    // The salt length should match what's used in fluid.express.user.signup
     saltLength:    32,
     urls: {
         read: {
@@ -179,31 +178,31 @@ fluid.defaults("gpii.express.user.reset", {
     distributeOptions: [
         {
             source: "{that}.options.codeKey",
-            target: "{that gpii.express.handler}.options.codeKey"
+            target: "{that fluid.express.handler}.options.codeKey"
         },
         {
             source: "{that}.options.saltLength",
-            target: "{that gpii.express.handler}.options.saltLength"
+            target: "{that fluid.express.handler}.options.saltLength"
         },
         {
             source: "{that}.options.urls",
-            target: "{that gpii.express.handler}.options.urls"
+            target: "{that fluid.express.handler}.options.urls"
         },
         {
             source: "{that}.options.codeIssuedKey",
-            target: "{that gpii.express.handler}.options.codeIssuedKey"
+            target: "{that fluid.express.handler}.options.codeIssuedKey"
         },
         {
             source: "{that}.options.codeExpiration",
-            target: "{that gpii.express.handler}.options.codeExpiration"
+            target: "{that fluid.express.handler}.options.codeExpiration"
         }
     ],
     components: {
         get: {
-            type: "gpii.express.user.reset.formRouter"
+            type: "fluid.express.user.reset.formRouter"
         },
         post: {
-            type: "gpii.express.user.reset.post"
+            type: "fluid.express.user.reset.post"
         }
     }
 });

@@ -10,23 +10,23 @@
     "use strict";
     if (!fluid) {
         fluid = require("infusion");
-        fluid.require("%gpii-json-schema");
+        fluid.require("%fluid-json-schema");
     }
 
     // The core schema holder, which defines the fields used in every other user-related schema.
-    fluid.defaults("gpii.express.user.schemaHolder", {
-        gradeNames: ["gpii.schema.schemaHolder"],
+    fluid.defaults("fluid.express.user.schemaHolder", {
+        gradeNames: ["fluid.schema.schemaHolder"],
         schema: {
             type: "object",
-            title: "gpii-express-user core user schema",
-            description: "This schema defines the common format for user data transmitted and received by the gpii-express-user library.",
+            title: "fluid-express-user core user schema",
+            description: "This schema defines the common format for user data transmitted and received by the fluid-express-user library.",
             definitions: {
                 email: {
                     type: "string",
                     format: "email",
                     required: true,
                     errors: {
-                        "": "gpii.express.user.email"
+                        "": "fluid.express.user.email"
                     }
                 },
                 username: {
@@ -34,13 +34,13 @@
                     type: "string",
                     minLength: 1,
                     errors: {
-                        "": "gpii.express.user.username"
+                        "": "fluid.express.user.username"
                     }
                 },
                 password: {
                     required: true,
                     errors: {
-                        "": "gpii.express.user.password.length"
+                        "": "fluid.express.user.password.length"
                     },
                     allOf: [
                         {
@@ -50,21 +50,21 @@
                         {
                             type: "string",
                             errors: {
-                                "": "gpii.express.user.password.uppercase"
+                                "": "fluid.express.user.password.uppercase"
                             },
                             pattern: "[A-Z]+"
                         },
                         {
                             type: "string",
                             errors: {
-                                "": "gpii.express.user.password.lowercase"
+                                "": "fluid.express.user.password.lowercase"
                             },
                             pattern: "[a-z]+"
                         },
                         {
                             type: "string",
                             errors: {
-                                "": "gpii.express.user.password.complexity"
+                                "": "fluid.express.user.password.complexity"
                             },
                             pattern: "[^a-zA-Z]"
                         }
@@ -75,8 +75,8 @@
     });
 
     // The schema holder for the first part of the password reset, where an email is required.
-    fluid.defaults("gpii.express.user.schemaHolder.forgot", {
-        gradeNames: ["gpii.express.user.schemaHolder"],
+    fluid.defaults("fluid.express.user.schemaHolder.forgot", {
+        gradeNames: ["fluid.express.user.schemaHolder"],
         schema: {
             title: "'Forgot password' schema.",
             description: "This schema defines the format accepted when requesting a password reset.",
@@ -87,10 +87,10 @@
     });
 
     // The schema holder for the second part of a password reset, once the reset code has been received via email.
-    fluid.defaults("gpii.express.user.schemaHolder.reset", {
-        gradeNames: ["gpii.express.user.schemaHolder"],
+    fluid.defaults("fluid.express.user.schemaHolder.reset", {
+        gradeNames: ["fluid.express.user.schemaHolder"],
         schema: {
-            title: "gpii-express-user user password reset schema",
+            title: "fluid-express-user user password reset schema",
             description: "This schema defines the format accepted when resetting a user's password.",
             properties: {
                 password: "{that}.options.schema.definitions.password",
@@ -100,7 +100,7 @@
                     required: true,
                     minLength: 1,
                     errors: {
-                        "": "gpii.express.user.reset.password.mismatch"
+                        "": "fluid.express.user.reset.password.mismatch"
                     }
                 }
             }
@@ -108,10 +108,10 @@
     });
 
     // The schema holder for the initial user signup form.
-    fluid.defaults("gpii.express.user.schemaHolder.signup", {
-        gradeNames: ["gpii.express.user.schemaHolder"],
+    fluid.defaults("fluid.express.user.schemaHolder.signup", {
+        gradeNames: ["fluid.express.user.schemaHolder"],
         schema: {
-            title: "gpii-express-user user signup schema",
+            title: "fluid-express-user user signup schema",
             description: "This schema defines the format accepted when creating a new user.",
             properties: {
                 email: "{that}.options.schema.definitions.email",
@@ -124,10 +124,10 @@
     });
 
     // The schema holder requesting that the initial verification code be resent.
-    fluid.defaults("gpii.express.user.schemaHolder.resend", {
-        gradeNames: ["gpii.express.user.schemaHolder"],
+    fluid.defaults("fluid.express.user.schemaHolder.resend", {
+        gradeNames: ["fluid.express.user.schemaHolder"],
         schema: {
-            title: "gpii-express-user user resend verification code schema",
+            title: "fluid-express-user user resend verification code schema",
             description: "This schema defines the format accepted when requesting that a verification code be resent.",
             properties: {
                 email: "{that}.options.schema.definitions.email"
@@ -136,10 +136,10 @@
     });
 
     // The schema holder for the user login endpoint.
-    fluid.defaults("gpii.express.user.schemaHolder.login", {
-        gradeNames: ["gpii.express.user.schemaHolder"],
+    fluid.defaults("fluid.express.user.schemaHolder.login", {
+        gradeNames: ["fluid.express.user.schemaHolder"],
         schema: {
-            title: "gpii-express-user login schema",
+            title: "fluid-express-user login schema",
             description: "This schema defines the format accepted when logging in.",
             properties: {
                 username: {
@@ -148,7 +148,7 @@
                         "{that}.options.schema.definitions.email"
                     ],
                     errors: {
-                        "": "gpii.express.user.username.or.email.required"
+                        "": "fluid.express.user.username.or.email.required"
                     },
                     required: true
                 },
@@ -157,7 +157,7 @@
                     required: true,
                     minLength: 1,
                     errors: {
-                        "": "gpii.express.user.password.required"
+                        "": "fluid.express.user.password.required"
                     }
                 }
             }

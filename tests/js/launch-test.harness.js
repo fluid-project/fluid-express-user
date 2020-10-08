@@ -4,11 +4,9 @@
 var fluid = require("infusion");
 fluid.setLogging(true);
 
-var gpii = fluid.registerNamespace("gpii");
-
 require("./lib/test-harness");
 
-gpii.test.express.user.harness({
+fluid.test.express.user.harness({
     port:    "3959",
     mailPort:   "9225"
 });

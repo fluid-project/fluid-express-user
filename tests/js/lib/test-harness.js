@@ -5,46 +5,46 @@ var fluid = require("infusion");
 
 require("../../../");
 
-require("gpii-express");
-require("gpii-handlebars");
-require("gpii-mail-test");
+require("fluid-express");
+require("fluid-handlebars");
+require("fluid-mail-test");
 
 require("./test-harness-couch");
 
 
-fluid.defaults("gpii.test.express.user.harness.gated.handler", {
-    gradeNames: ["gpii.express.handler"],
+fluid.defaults("fluid.test.express.user.harness.gated.handler", {
+    gradeNames: ["fluid.express.handler"],
     invokers: {
         handleRequest: {
-            funcName: "gpii.express.handler.sendResponse",
+            funcName: "fluid.express.handler.sendResponse",
             args: ["{that}", "{that}.options.response", 200, { ok: true, message: "You are in the club!"}]
         }
     }
 });
 
-fluid.defaults("gpii.test.express.user.harness.express", {
-    gradeNames: ["gpii.express", "gpii.express.user.withRequiredMiddleware"],
+fluid.defaults("fluid.test.express.user.harness.express", {
+    gradeNames: ["fluid.express", "fluid.express.user.withRequiredMiddleware"],
     distributeOptions: {
         record: 1000000,
-        target: "{that gpii.express.handlerDispatcher}.options.timeout"
+        target: "{that fluid.express.handlerDispatcher}.options.timeout"
     },
     messageDirs: {
-        validation: "%gpii-json-schema/src/messages",
-        user: "%gpii-express-user/src/messages"
+        validation: "%fluid-json-schema/src/messages",
+        user: "%fluid-express-user/src/messages"
     },
     components: {
         // Front-end content used by some GET calls
         modules: {
-            type:  "gpii.express.router.static",
+            type:  "fluid.express.router.static",
             options: {
                 namespace: "modules",
                 priority:  "after:session",
                 path:      "/modules",
-                content:   "%gpii-express-user/node_modules"
+                content:   "%fluid-express-user/node_modules"
             }
         },
         inline: {
-            type: "gpii.handlebars.inlineTemplateBundlingMiddleware",
+            type: "fluid.handlebars.inlineTemplateBundlingMiddleware",
             options: {
                 namespace:    "inline",
                 priority:     "after:modules",
@@ -52,22 +52,22 @@ fluid.defaults("gpii.test.express.user.harness.express", {
             }
         },
         messageBundleLoader: {
-            type: "gpii.handlebars.i18n.messageBundleLoader",
+            type: "fluid.handlebars.i18n.messageBundleLoader",
             options: {
-                messageDirs: "{gpii.test.express.user.harness.express}.options.messageDirs"
+                messageDirs: "{fluid.test.express.user.harness.express}.options.messageDirs"
             }
         },
         messages: {
-            type: "gpii.handlebars.inlineMessageBundlingMiddleware",
+            type: "fluid.handlebars.inlineMessageBundlingMiddleware",
             options: {
-                messageDirs: "{gpii.test.express.user.harness.express}.options.messageDirs",
+                messageDirs: "{fluid.test.express.user.harness.express}.options.messageDirs",
                 model: {
                     messageBundles: "{messageBundleLoader}.model.messageBundles"
                 }
             }
         },
         api: {
-            type: "gpii.express.user.api",
+            type: "fluid.express.user.api",
             options: {
                 path:      "/api/user",
                 namespace: "api",
@@ -76,49 +76,49 @@ fluid.defaults("gpii.test.express.user.harness.express", {
                     port: 25984
                 },
                 app: {
-                    name: "gpii-express.user test harness..."
+                    name: "fluid-express.user test harness..."
                 }
             }
         },
         // A "gated" endpoint that can only be accessed if the user is logged in
         gated: {
-            type: "gpii.express.user.middleware.loginRequired.router",
+            type: "fluid.express.user.middleware.loginRequired.router",
             options: {
                 namespace:     "gated",
                 path:          "/gated",
                 priority:      "after:api",
-                handlerGrades: ["gpii.test.express.user.harness.gated.handler"]
+                handlerGrades: ["fluid.test.express.user.harness.gated.handler"]
             }
         },
         // Serve up the rest of our static content (JS source, etc.)
         src: {
-            type:  "gpii.express.router.static",
+            type:  "fluid.express.router.static",
             options: {
                 namespace: "src",
                 path:      "/",
                 priority:  "after:gated",
-                content:   "%gpii-express-user/src"
+                content:   "%fluid-express-user/src"
             }
         },
         jsonErrors: {
-            type: "gpii.express.middleware.error",
+            type: "fluid.express.middleware.error",
             options: {
-                defaultStatusCode: 400, // TODO: discuss handling this in gpii-json-schema
+                defaultStatusCode: 400, // TODO: discuss handling this in fluid-json-schema
                 priority: "after:src"
             }
         }
     }
 });
 
-fluid.defaults("gpii.test.express.user.harness", {
+fluid.defaults("fluid.test.express.user.harness", {
     gradeNames: ["fluid.component"],
     port:       "5379",
     couchPort:  "25984",
     mailPort:   "5225",
     templateDirs: {
-        user: "%gpii-express-user/src/templates",
-        validation: "%gpii-json-schema/src/templates",
-        testUser: "%gpii-express-user/tests/templates"
+        user: "%fluid-express-user/src/templates",
+        validation: "%fluid-json-schema/src/templates",
+        testUser: "%fluid-express-user/tests/templates"
     },
     baseUrl: {
         expander: {
@@ -129,21 +129,21 @@ fluid.defaults("gpii.test.express.user.harness", {
     distributeOptions: [
         {
             source: "{that}.options.timeout",
-            target: "{that gpii.express.requestAware.router}.options.timeout"
+            target: "{that fluid.express.requestAware.router}.options.timeout"
         },
         {
             source: "{that}.options.timeout",
-            target: "{that gpii.express.contentAware.router}.options.timeout"
+            target: "{that fluid.express.contentAware.router}.options.timeout"
         },
         // Make sure any mailer components are aware of our outgoing mail port
         {
             source: "{that}.options.mailPort",
-            target: "{that gpii.express.user.mailer}.options.transportOptions.port"
+            target: "{that fluid.express.user.mailer}.options.transportOptions.port"
         }
     ],
     components: {
         express: {
-            type: "gpii.test.express.user.harness.express",
+            type: "fluid.test.express.user.harness.express",
             options: {
                 port:  "{harness}.options.port",
                 templateDirs: "{harness}.options.templateDirs",
@@ -167,7 +167,7 @@ fluid.defaults("gpii.test.express.user.harness", {
             }
         },
         couch: {
-            type: "gpii.test.express.user.couch",
+            type: "fluid.test.express.user.couch",
             options: {
                 couch: {
                     port: "{harness}.options.couchPort"
@@ -175,7 +175,7 @@ fluid.defaults("gpii.test.express.user.harness", {
             }
         },
         smtp: {
-            type: "gpii.test.mail.smtp",
+            type: "fluid.test.mail.smtp",
             options: {
                 port: "{harness}.options.mailPort"
             }

@@ -1,12 +1,10 @@
 // Present a standard set of user controls with login/logout/profile links
 
-/* global fluid, jQuery */
 (function ($) {
     "use strict";
-    var gpii = fluid.registerNamespace("gpii");
-    fluid.registerNamespace("gpii.express.user.frontend.controls");
+    fluid.registerNamespace("fluid.express.user.frontend.controls");
 
-    gpii.express.user.frontend.controls.toggleMenu = function (that) {
+    fluid.express.user.frontend.controls.toggleMenu = function (that) {
         var toggle = that.locate("toggle");
         var menu   = that.locate("menu");
 
@@ -20,8 +18,8 @@
         }
     };
 
-    fluid.defaults("gpii.express.user.frontend.controls", {
-        gradeNames: ["gpii.handlebars.ajaxCapable", "gpii.handlebars.templateAware"],
+    fluid.defaults("fluid.express.user.frontend.controls", {
+        gradeNames: ["fluid.handlebars.ajaxCapable", "fluid.handlebars.templateAware"],
         container:  ".controls-viewport",
         ajaxOptions: {
             type:     "GET",
@@ -35,7 +33,6 @@
                 "": { literalValue: undefined }
             },
             successResponseToModel: {
-                // TODO:  Refactor once https://issues.gpii.net/browse/GPII-1587 is resolved
                 "":        "notfound",
                 user: {
                     literalValue: false
@@ -60,7 +57,7 @@
         },
         invokers: {
             toggleMenu: {
-                funcName: "gpii.express.user.frontend.controls.toggleMenu",
+                funcName: "fluid.express.user.frontend.controls.toggleMenu",
                 args:     [ "{that}"]
             },
             renderInitialMarkup: {
@@ -95,11 +92,11 @@
     });
 
     // A convenience gradeName to make any component aware of these controls.
-    fluid.defaults("gpii.ul.hasUserControls", {
+    fluid.defaults("fluid.ul.hasUserControls", {
         gradeNames: ["fluid.modelComponent"],
         components: {
             controls: {
-                type:      "gpii.express.user.frontend.controls",
+                type:      "fluid.express.user.frontend.controls",
                 container: ".controls-viewport",
                 options: {
                     model: {

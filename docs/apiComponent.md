@@ -1,6 +1,6 @@
-# `gpii.express.user.api`
+# `fluid.express.user.api`
 
-This is a `gpii.express.router` grade that mounts all parts of the user API under it.  In terms of the default path
+This is a `fluid.express.router` grade that mounts all parts of the user API under it.  In terms of the default path
 (`/user`), these endpoints include:
 
 * [`/user/current`](currentComponent.md)
@@ -16,25 +16,25 @@ which are returned by default when `/user` is requested with no additional path 
 
 ## Middleware required by this grade
 
-This API requires access to `req.session`, which is provided by the `gpii.express.middleware.session` middleware.
-That middleware requires `req.cookies`, which is provided by the `gpii.express.middleware.cookieparser` middleware.
+This API requires access to `req.session`, which is provided by the `fluid.express.middleware.session` middleware.
+That middleware requires `req.cookies`, which is provided by the `fluid.express.middleware.cookieparser` middleware.
 Various endpoints accept `POST`/`PUT` data (`req.body`), so you must also have both the
-`gpii.express.middleware.bodyparser.json` and `gpii.express.middleware.bodyparser.urlencoded` middleware.  For details
-on each of these pieces of middleware, see [the middleware documentation in `gpii.express`](https://github.com/GPII/gpii-express/blob/master/docs/middleware.md).
+`fluid.express.middleware.bodyparser.json` and `fluid.express.middleware.bodyparser.urlencoded` middleware.  For details
+on each of these pieces of middleware, see [the middleware documentation in `fluid.express`](https://github.com/fluid-project/fluid-express/blob/master/docs/middleware.md).
 
 The required middleware should be loaded at the same level (or higher) in the path, and before the API itself.  The
 order in which middleware loads is controlled using [namespaces and priorities](http://docs.fluidproject.org/infusion/development/Priorities.html).
 
-If you want this to be taken care of automatically, mix the `gpii.express.user.api.withRequiredMiddleware` grade
-into your `gpii.express` instance, as in the following example:
+If you want this to be taken care of automatically, mix the `fluid.express.user.api.withRequiredMiddleware` grade
+into your `fluid.express` instance, as in the following example:
 
 ```javascript
-gpii.express({
-    gradeNames: ["gpii.express.user.api.withRequiredMiddleware"],
+fluid.express({
+    gradeNames: ["fluid.express.user.api.withRequiredMiddleware"],
     port: "8080",
     components: {
         api: {
-            type: "gpii.express.user.api",
+            type: "fluid.express.user.api",
             options: {
                 priority: "after:session"
             }
@@ -44,21 +44,21 @@ gpii.express({
 ```
 
 This would result in the API being available on `http://localhost:8080/user`.  The same mix-in grade can be used with
-a `gpii.express.router` instance, as in the following example:
+a `fluid.express.router` instance, as in the following example:
 
 ```javascript
-gpii.express({
-    gradeNames: ["gpii.express.user.api.withRequiredMiddleware"],
+fluid.express({
+    gradeNames: ["fluid.express.user.api.withRequiredMiddleware"],
     port: "8080",
     components: {
         v1: {
-            type: "gpii.express.router.passthrough",
+            type: "fluid.express.router.passthrough",
             options: {
                 path: "/v1.0.0",
-                gradeNames: ["gpii.express.user.api.withRequiredMiddleware"],
+                gradeNames: ["fluid.express.user.api.withRequiredMiddleware"],
                 components: {
                     api: {
-                        type: "gpii.express.user.api",
+                        type: "fluid.express.user.api",
                         options: {
                             priority: "after:session"
                         }
@@ -76,7 +76,7 @@ outside of that path.
 
 ## Component options
 
-In addition to the options for any instance of [`gpii.express.router`](https://github.com/GPII/gpii-express/blob/master/docs/router.md),
+In addition to the options for any instance of [`fluid.express.router`](https://github.com/fluid-project/fluid-express/blob/master/docs/router.md),
 this component supports the following unique options:
 
 | Option             | Type       | Description |
@@ -87,13 +87,13 @@ this component supports the following unique options:
 | `couch.port`       | `{String}` | The port on which our CouchDB instance runs. |
 | `couch.userDbName` | `{String}` | The CouchDB database name containing our user records.  Defaults to `users`. |
 | `couch.userDbUrl`  | `{String}` | The URL of our CouchDB instance.  By default this is expanded from `userDbName` above using the pattern `http://localhost:%port/%userDbName` (see above). |
-| `schemaDirs`       | `{Array}`  | An array of schema directories that contain our [JSON Schemas](http://json-schema.org/). Supports package-relative paths like '%gpii-express-user/src/templates'. |
-| `templateDirs`     | `{Array}`  | An array of template directories that contain our Handlebars templates.  Supports package-relative paths like "%gpii-express-user/src/templates". |
+| `schemaDirs`       | `{Array}`  | An array of schema directories that contain our [JSON Schemas](http://json-schema.org/). Supports package-relative paths like '%fluid-express-user/src/templates'. |
+| `templateDirs`     | `{Array}`  | An array of template directories that contain our Handlebars templates.  Supports package-relative paths like "%fluid-express-user/src/templates". |
 
 When resolving schemas and templates from `schemaDirs` and `templateDirs`, the first directory containing matching
 content is used.
 
 ## Component Invokers
 
-This component has no unique invokers.  For details on the `route` invoker it inherits from `gpii.express.router.passthrough`,
-see the [`gpii.express` router documentation](https://github.com/GPII/gpii-express/blob/master/docs/router.md).
+This component has no unique invokers.  For details on the `route` invoker it inherits from `fluid.express.router.passthrough`,
+see the [`fluid.express` router documentation](https://github.com/fluid-project/fluid-express/blob/master/docs/router.md).
