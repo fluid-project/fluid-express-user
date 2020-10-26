@@ -4,7 +4,7 @@ This component provides a REST endpoint that can be used to request a password r
 the user in an email message, which they can use to continue the process using [`/user/reset`](resetComponent.md).
 
 This component is an instance of
-[`fluid.express.router.passthrough`](https://github.com/fluid-project/fluid-express/blob/master/docs/router.md) which
+[`fluid.express.router.passthrough`](https://github.com/fluid-project/fluid-express/blob/main/docs/router.md) which
 wraps two routers.  One is an instance of `fluid.express.singleTemplateRouter` that renders a "forgot password" form
 using the templates defined in this package when this endpoint receives a `GET` request.  The other
 (`fluid.express.user.api.forgot.post`, see below) handles `POST` requests, such as AJAX requests sent using the above
@@ -15,7 +15,7 @@ For details about making REST calls against the API endpoint provided by this co
 ## Component options
 
 In addition to the options for any instance of
-[`fluid.express.router`](https://github.com/fluid-project/fluid-express/blob/master/docs/router.md), this component
+[`fluid.express.router`](https://github.com/fluid-project/fluid-express/blob/main/docs/router.md), this component
 supports the following unique options:
 
 | Option                | Type       | Description |
@@ -34,12 +34,12 @@ supports the following unique options:
 ## Component Invokers
 
 This component has no unique invokers.  For details on the `route` invoker it inherits from
-`fluid.express.router.passthrough`, see the [`fluid.express` router documentation](https://github.com/fluid-project/fluid-express/blob/master/docs/router.md).
+`fluid.express.router.passthrough`, see the [`fluid.express` router documentation](https://github.com/fluid-project/fluid-express/blob/main/docs/router.md).
 
 ## `fluid.express.user.api.forgot.post`
 
 This component is an instance of
-[`fluid.express.requestAware.router`]((https://github.com/fluid-project/fluid-express/blob/master/docs/requestAwareRouter.md))
+[`fluid.express.requestAware.router`]((https://github.com/fluid-project/fluid-express/blob/main/docs/requestAwareRouter.md))
 with its own `handler` (see `fluid.express.user.api.forgot.post.handler` below).  It has no unique invokers or component
 options.
 

@@ -2,7 +2,7 @@
 
     Provides the first part of a two-step password reset mechanism.  See the documentation for more details:
 
-    https://github.com/fluid-project/fluid-express-user/blob/master/docs/forgotComponent.md
+    https://github.com/fluid-project/fluid-express-user/blob/main/docs/forgotComponent.md
 
  */
 /* eslint-env node */
