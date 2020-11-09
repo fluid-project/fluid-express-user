@@ -4,7 +4,7 @@
 
     See the documentation for more details:
 
-    https://github.com/fluid-project/fluid-express-user/blob/master/docs/apiComponent.md
+    https://github.com/fluid-project/fluid-express-user/blob/main/docs/apiComponent.md
 
  */
 /* eslint-env node */
@@ -135,7 +135,7 @@ fluid.defaults("fluid.express.user.api", {
 
     See the documentation for details:
 
-    https://github.com/fluid-project/fluid-express-user/blob/master/docs/apiComponent.md
+    https://github.com/fluid-project/fluid-express-user/blob/main/docs/apiComponent.md
 
  */
 fluid.defaults("fluid.express.user.withRequiredMiddleware", {

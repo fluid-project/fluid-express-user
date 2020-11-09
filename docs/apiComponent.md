@@ -20,7 +20,7 @@ This API requires access to `req.session`, which is provided by the `fluid.expre
 That middleware requires `req.cookies`, which is provided by the `fluid.express.middleware.cookieparser` middleware.
 Various endpoints accept `POST`/`PUT` data (`req.body`), so you must also have both the
 `fluid.express.middleware.bodyparser.json` and `fluid.express.middleware.bodyparser.urlencoded` middleware.  For details
-on each of these pieces of middleware, see [the middleware documentation in `fluid.express`](https://github.com/fluid-project/fluid-express/blob/master/docs/middleware.md).
+on each of these pieces of middleware, see [the middleware documentation in `fluid.express`](https://github.com/fluid-project/fluid-express/blob/main/docs/middleware.md).
 
 The required middleware should be loaded at the same level (or higher) in the path, and before the API itself.  The
 order in which middleware loads is controlled using [namespaces and priorities](http://docs.fluidproject.org/infusion/development/Priorities.html).
@@ -76,7 +76,7 @@ outside of that path.
 
 ## Component options
 
-In addition to the options for any instance of [`fluid.express.router`](https://github.com/fluid-project/fluid-express/blob/master/docs/router.md),
+In addition to the options for any instance of [`fluid.express.router`](https://github.com/fluid-project/fluid-express/blob/main/docs/router.md),
 this component supports the following unique options:
 
 | Option             | Type       | Description |
@@ -96,4 +96,4 @@ content is used.
 ## Component Invokers
 
 This component has no unique invokers.  For details on the `route` invoker it inherits from `fluid.express.router.passthrough`,
-see the [`fluid.express` router documentation](https://github.com/fluid-project/fluid-express/blob/master/docs/router.md).
+see the [`fluid.express` router documentation](https://github.com/fluid-project/fluid-express/blob/main/docs/router.md).
