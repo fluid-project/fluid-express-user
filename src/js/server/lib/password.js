@@ -5,7 +5,7 @@
 
     This package uses the `pbkdf2` functions provided by the `crypto` package built into node.  It has been tested to
     work specifically with the encoded passwords saved by CouchDB itself and by the express-couchUser package.  The
-    default digest is `sha1`.  Using any other digest function is not likely to be backward compatible.
+    default digest is `sha1`.  Using any other digest function is not likely to be backward compatible with Couch user accounts.
 
  */
 /* eslint-env node */
@@ -17,9 +17,9 @@ var crypto = require("crypto");
 fluid.registerNamespace("fluid.express.user.password");
 fluid.express.user.password.encode = function (password, salt, iterations, keyLength, digest) {
     // Set defaults that are useful in dealing with CouchDB and express-couchUser data.
-    iterations = iterations || 10;
-    keyLength  = keyLength  || 20;
-    digest     = digest     || "sha1"; // Already used when the value is omitted, but specified for future-proofing.
+    iterations = iterations !== undefined ? iterations : 10;
+    keyLength  = keyLength !== undefined ? keyLength : 20;
+    digest     = digest !== undefined ? digest : "sha256";
 
     // This will fail horribly if the password is not a number, array, or string, you are expected to catch errors.
     var hexEncodedValue = crypto.pbkdf2Sync(password, salt, iterations, keyLength, digest);

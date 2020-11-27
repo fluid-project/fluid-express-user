@@ -28,6 +28,10 @@ fluid.defaults("fluid.express.user.api", {
     gradeNames:   ["fluid.express.router"],
     path:         "/user",
     method:       "use",
+    digest:       "sha256",
+    iterations:   10,
+    keyLength:    20,
+    saltLength:   32,
     templateDirs: {
         user: "%fluid-express-user/src/templates",
         validation: "%fluid-json-schema/src/templates"
@@ -104,13 +108,21 @@ fluid.defaults("fluid.express.user.api", {
         reset: {
             type: "fluid.express.user.reset",
             options: {
-                priority: "after:session"
+                priority:   "after:session",
+                digest:     "{fluid.express.user.api}.options.digest",
+                iterations: "{fluid.express.user.api}.options.iterations",
+                keyLength:  "{fluid.express.user.api}.options.keyLength",
+                saltLength: "{fluid.express.user.api}.options.saltLength"
             }
         },
         signup: {
             type:     "fluid.express.user.signup",
             options: {
-                priority: "after:session"
+                priority: "after:session",
+                digest:     "{fluid.express.user.api}.options.digest",
+                iterations: "{fluid.express.user.api}.options.iterations",
+                keyLength:  "{fluid.express.user.api}.options.keyLength",
+                saltLength: "{fluid.express.user.api}.options.saltLength"
             }
         },
         verify: {

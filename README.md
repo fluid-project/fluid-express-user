@@ -13,11 +13,6 @@ The server side components are intended to be used with a `fluid.express` instan
 documented in `src/docs/api.md`. Before you can use the server side components, you must set up your database with the
 views included in `src/views` (see that directory for details).
 
-All user information stored by this package is meant to be backward compatible with CouchDB and express-couchUser.
-Accounts created using this package should be usable from either of those packages as well (in the case of CouchDB, the
-accounts would have to be written to the `_user` database).  You should be able to safely copy or synchronize accounts
-between any two sites that use this package.
-
 When writing your own server-side components that depend on the current user's information, the current user will
 always be available as part of the `request.session` object.  The user key may change depending on your configuration,
 by default the user is found at `request.session._fluid_user`.
@@ -49,3 +44,58 @@ The browser tests in this package make use of [fluid-webdriver](https://github.c
 which requires you to install the appropriate version of `chromedriver` (Chrome), `geckodriver` (Firefox), et cetera.
 Chrome in particular has issues when its version does not exactly match the version of `chromedriver` installed.  For
 more information about the requirements for running the browser tests, see the [fluid-webdriver documentation](https://github.com/fluid-project/fluid-webdriver).
+
+## Migrating from Version 1 to Version 2
+
+Version 1 of this package was designed to tightly mimic the user record structure and password encoding of early
+versions of CouchDB.  Version 2 no longer supports this use case.  To migrate from version 1 to version 2, you will
+need to make a few key changes to your record structure:
+
+1. You will need to remove the `` prefix from all IDs.
+2. You will need to add the previous default value for `digest` ("`sha1`") to each record.
+3. You can safely remove the `name` field from all records.
+4. All other fields should remain the same.
+
+To give a concrete example, here is a record from version 1:
+
+```json
+{
+    "_id":         "org.couchdb.user:sample",
+    "type":        "user",
+    "name":        "sample",
+    "username":    "sample",
+    "derived_key": "dd11a6d074786fc914cbcdbc7ec5a06ad002812a",
+    "salt":        "secret",
+    "iterations":  10,
+    "email":       "sample@localhost",
+    "roles":       ["role1", "role3"],
+    "verified":    true
+}
+```
+
+Here is the same record updated for compatibility with version 2 of this package:
+
+```json
+{
+    "_id":         "sample",
+    "type":        "user",
+    "username":    "sample",
+    "derived_key": "dd11a6d074786fc914cbcdbc7ec5a06ad002812a",
+    "salt":        "secret",
+    "digest":      "sha1",
+    "iterations":  10,
+    "email":       "sample@localhost",
+    "roles":       ["role1", "role3"],
+    "verified":    true
+}
+```
+
+One way to migrate all records would be to make use of the
+[CouchDB bulk API endpoints](https://docs.couchdb.org/en/stable/api/database/bulk-api.html):
+
+1. Take a backup of your existing user database.
+2. Download all existing records including design document(s).
+3. Convert the download format into the format used by the [CouchDB `_bulk_docs` endpoint](https://docs.couchdb.org/en/stable/api/database/bulk-api.html#db-bulk-docs).
+4. Update all records as outlined above (`digest`, `_id`, `name` fields).
+5. Remove your existing records.
+6. Submit the updated records using the `bulk_docs` endpoint.

@@ -64,6 +64,9 @@ fluid.defaults("fluid.express.user.signup.post.handler", {
             user:  "user"
         }
     },
+    digest: "{fluid.express.user.signup.post}.options.digest",
+    iterations: "{fluid.express.user.signup.post}.options.iterations",
+    keyLength: "{fluid.express.user.signup.post}.options.keyLength",
     urls: "{fluid.express.user.signup.post}.options.urls",
     saltLength: "{fluid.express.user.signup.post}.options.saltLength",
     verifyCodeLength: "{fluid.express.user.signup.post}.options.verifyCodeLength",
@@ -138,7 +141,7 @@ fluid.defaults("fluid.express.user.signup", {
     path:       "/signup",
     rules: {
         user: {
-            "username": "name", // Default configuration is designed for CouchDB and express-couchUser field naming conventions.
+            "username": "username",
             "email":    "email"
         }
     },

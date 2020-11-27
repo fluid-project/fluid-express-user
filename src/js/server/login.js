@@ -54,7 +54,7 @@ fluid.defaults("fluid.express.user.login.post.handler", {
                 rules: {
                     read: {
                         "":         "rows.0.value",
-                        "username": "rows.0.value.name"
+                        "username": "rows.0.value.username"
                     }
                 },
                 termMap: { username: "%username"},
@@ -91,7 +91,7 @@ fluid.defaults("fluid.express.user.login", {
     path:       "/login",
     rules: {
         user: {
-            "username": "name", // Default configuration is designed for CouchDB and express-couchUser field naming conventions.
+            "username": "username",
             "email":    "email",
             "roles":    "roles"
         }

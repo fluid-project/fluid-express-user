@@ -32,7 +32,7 @@ fluid.tests.express.user.signup.caseHolder.verifyResponse = function (response, 
     }
 
     if (hasCurrentUser) {
-        jqUnit.assertEquals("The current user should be returned.", "admin", data.user.name);
+        jqUnit.assertEquals("The current user should be returned.", "admin", data.user.username);
     }
 };
 
