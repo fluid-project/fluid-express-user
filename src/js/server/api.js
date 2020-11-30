@@ -106,7 +106,7 @@ fluid.defaults("fluid.express.user.api", {
         reset: {
             type: "fluid.express.user.reset",
             options: {
-                priority:   "after:session"
+                priority: "after:session"
             }
         },
         signup: {

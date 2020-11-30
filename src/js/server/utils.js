@@ -106,7 +106,7 @@ fluid.express.user.utils.createNewUser = function (that, userData) {
     combinedRecord[that.options.codeKey] = code;
 
     // Set the ID to match the CouchDB conventions, for backward compatibility
-    combinedRecord._id = "org.couch.db.user:" + combinedRecord.username;
+    combinedRecord._id = combinedRecord.username;
 
     // Write the record to couch.  TODO: Migrate this to a writable dataSource.
     var writeOptions = {
