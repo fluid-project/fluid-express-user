@@ -49,6 +49,23 @@ fluid.defaults("fluid.express.user.utils", {
     codeKey:          "verification_code",  // Must match the value in fluid.express.user.verify
     rules: {
         createUserWrite: {
+            // TODO: Discuss w/ Antranig why this isn't equivalent to:
+            //
+            //  combinedRecord[that.options.codeKey] = code;
+            //
+            // "transform": {
+            //     "type": "fluid.transforms.value",
+            //     "inputPath": "calculatedData.code",
+            //     "outputPath": {
+            //         "transform": {
+            //             "type": "fluid.transforms.value",
+            //             "inputPath": "options.codeKey"
+            //         }
+            //     }
+            // },
+            _id: "userData.username",
+            salt: "calculatedData.salt",
+            derived_key: "calculatedData.derived_key",
             username:      "userData.username",
             email:         "userData.email",
             digest:        "options.digest",
@@ -98,15 +115,16 @@ fluid.express.user.utils.createNewUser = function (that, userData) {
     var derived_key = fluid.express.user.password.encode(userData.password, salt, that.options.iterations, that.options.keyLength, that.options.digest);
     var code        = fluid.express.user.password.generateSalt(that.options.verifyCodeLength);
 
-    // Our rules will set the defaults and pull approved values from the original submission.
-    var combinedRecord = fluid.model.transformWithRules({ options: that.options, userData: userData}, that.options.rules.createUserWrite);
+    var calculatedData = {
+        salt: salt,
+        derived_key: derived_key,
+        code: code
+    };
 
-    combinedRecord.salt                  = salt;
-    combinedRecord.derived_key           = derived_key;
+    // Our rules will combine the data to create the final record to write to CouchDB.
+    var combinedRecord = fluid.model.transformWithRules({ options: that.options, userData: userData, calculatedData: calculatedData}, that.options.rules.createUserWrite);
+
     combinedRecord[that.options.codeKey] = code;
-
-    // Set the ID to match the CouchDB conventions, for backward compatibility
-    combinedRecord._id = combinedRecord.username;
 
     // Write the record to couch.  TODO: Migrate this to a writable dataSource.
     var writeOptions = {
