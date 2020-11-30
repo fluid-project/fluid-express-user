@@ -18,6 +18,7 @@ require("fluid-handlebars");
 
 require("./lib/password");
 require("./lib/datasource");
+require("./passwordEncryptOptions");
 
 // TODO: We have to confirm that the passwords match on our own in some function reused in both signup and reset.
 
@@ -77,11 +78,7 @@ fluid.express.user.reset.handler.checkResetCode = function (that, dataSourceResp
 };
 
 fluid.defaults("fluid.express.user.reset.handler", {
-    gradeNames:  ["fluid.express.handler"],
-    digest: "{fluid.express.user.reset.post}.options.digest",
-    iterations: "{fluid.express.user.reset.post}.options.iterations",
-    keyLength: "{fluid.express.user.reset.post}.options.keyLength",
-    saltLength: "{fluid.express.user.reset.post}.options.saltLength",
+    gradeNames:  ["fluid.express.handler", "fluid.express.user.passwordEncryptOptionsConsumer"],
     rules: {
         updateUser: {
             "": "userData",
@@ -130,7 +127,7 @@ fluid.defaults("fluid.express.user.reset.handler", {
 });
 
 fluid.defaults("fluid.express.user.reset.post", {
-    gradeNames:    ["fluid.express.user.validationGatedRouter"],
+    gradeNames:    ["fluid.express.user.validationGatedRouter", "fluid.express.user.passwordEncryptOptionsConsumer"],
     method:        "post",
     path:          "/:code",
     routerOptions: {
@@ -164,7 +161,7 @@ fluid.defaults("fluid.express.user.reset.formRouter", {
 });
 
 fluid.defaults("fluid.express.user.reset", {
-    gradeNames:    ["fluid.express.router"],
+    gradeNames:    ["fluid.express.router", "fluid.express.user.passwordEncryptOptionsConsumer"],
     method:        "use",
     path:          "/reset",
     // The next two variables must match the value in fluid.express.user.forgot
@@ -208,13 +205,7 @@ fluid.defaults("fluid.express.user.reset", {
             type: "fluid.express.user.reset.formRouter"
         },
         post: {
-            type: "fluid.express.user.reset.post",
-            options: {
-                digest: "{fluid.express.user.reset}.options.digest",
-                iterations: "{fluid.express.user.reset}.options.iterations",
-                keyLength: "{fluid.express.user.reset}.options.keyLength",
-                saltLength: "{fluid.express.user.reset}.options.saltLength"
-            }
+            type: "fluid.express.user.reset.post"
         }
     }
 });
