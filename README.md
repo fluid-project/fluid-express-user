@@ -51,7 +51,7 @@ Version 1 of this package was designed to tightly mimic the user record structur
 versions of CouchDB.  Version 2 no longer supports this use case.  To migrate from version 1 to version 2, you will
 need to make a few key changes to your record structure:
 
-1. You will need to remove the `` prefix from all IDs.
+1. You will need to remove the `org.couchdb.user:` prefix from all IDs.
 2. You will need to add the previous default value for `digest` ("`sha1`") to each record.
 3. You can safely remove the `name` field from all records.
 4. All other fields should remain the same.
