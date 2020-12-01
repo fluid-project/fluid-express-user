@@ -1,11 +1,8 @@
 /*
 
     A static function to consistently encode a password.  Used when storing passwords in CouchDB, and when logging in
-    using a username and password.
-
-    This package uses the `pbkdf2` functions provided by the `crypto` package built into node.  It has been tested to
-    work specifically with the encoded passwords saved by CouchDB itself and by the express-couchUser package.  The
-    default digest is `sha1`.  Using any other digest function is not likely to be backward compatible with Couch user accounts.
+    using a username and password. This package uses the `pbkdf2` functions provided by the `crypto` package built into
+    node.
 
  */
 /* eslint-env node */

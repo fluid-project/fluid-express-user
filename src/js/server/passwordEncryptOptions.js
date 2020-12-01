@@ -3,7 +3,7 @@
 var fluid = require("infusion");
 fluid.defaults("fluid.express.user.passwordEncryptOptionsHolder", {
     gradeNames: ["fluid.component"],
-    digest:       "sha256",
+    digest:       "blake2b512",
     iterations:   10,
     keyLength:    20,
     saltLength:   32
