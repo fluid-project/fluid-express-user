@@ -17,15 +17,17 @@ require("./docs.js");
 require("./forgot.js");
 require("./login.js");
 require("./logout.js");
+require("./passwordEncryptOptions");
 require("./reset.js");
 require("./signup.js");
-require("./verify.js");
 require("./utils.js");
+require("./verify.js");
+
 
 fluid.registerNamespace("fluid.express.user.api");
 
 fluid.defaults("fluid.express.user.api", {
-    gradeNames:   ["fluid.express.router"],
+    gradeNames:   ["fluid.express.router", "fluid.express.user.passwordEncryptOptionsHolder"],
     path:         "/user",
     method:       "use",
     templateDirs: {

@@ -94,7 +94,7 @@ fluid.defaults("fluid.express.users.datasource.tests.caseHolder", {
                     sequence: [
                         {
                             func: "{idReader}.get",
-                            args: [{ _id: "org.couchdb.user:sample"}]
+                            args: [{ _id: "sample"}]
                         },
                         {
                             listener: "fluid.express.user.datasource.tests.checkResult",
@@ -110,7 +110,7 @@ fluid.defaults("fluid.express.users.datasource.tests.caseHolder", {
                     sequence: [
                         {
                             func: "{allDocsReader}.get",
-                            args: [{ key: "org.couchdb.user:sample"}]
+                            args: [{ key: "sample"}]
                         },
                         {
                             listener: "fluid.express.user.datasource.tests.checkResult",

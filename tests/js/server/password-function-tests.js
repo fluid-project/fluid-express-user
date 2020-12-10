@@ -50,15 +50,16 @@ fluid.express.user.password.tests.runTests = function (that) {
 
 fluid.defaults("fluid.express.user.password.tests", {
     gradeNames: ["fluid.component"],
+
     expected: {
         "admin": {
             "iterations":  10,
-            "derived_key": "9ff4bc1c1846181d303971b08b65122a45174d04",
+            "derived_key": "18a6afcda1e086610040a7fc482a3d9640fff52e",
             "salt":        "2653c80aabd3889c3dfd6e198d3dca93"
         },
         "local": {
             "iterations":  10,
-            "derived_key": "3cfbf59bba56c7f364973c11c5bd7f78e6879e23",
+            "derived_key": "eec0061d71b2ef6633922b27d52311def00a656c",
             "salt":        "2bec993281f3252dc8f56780428121c9"
         }
     },
@@ -67,8 +68,8 @@ fluid.defaults("fluid.express.user.password.tests", {
         "password": {
             "iterations":  23,
             "keyLength":   32,
-            "digest":      "sha256",
-            "derived_key": "8263cc1c1ccad9780c8ad66df3cd6cbae517bbd6f99d27c0512e3383ed045229",
+            "digest":      "sha1",
+            "derived_key": "f34467e93e3f8b73ffaa9781e815be966074c8f34911efc7b7406cb7c8e01c1e",
             "salt":        "secret"
         }
 

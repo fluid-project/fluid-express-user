@@ -202,7 +202,7 @@ fluid.tests.express.user.reset.caseHolder.verifyResponse = function (response, b
     }
 
     if (hasCurrentUser) {
-        jqUnit.assertEquals("The current user should be returned.", "admin", fluid.get(data, "user.name"));
+        jqUnit.assertEquals("The current user should be returned.", "admin", fluid.get(data, "user.username"));
     }
 };
 

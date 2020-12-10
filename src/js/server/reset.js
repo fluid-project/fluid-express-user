@@ -18,6 +18,7 @@ require("fluid-handlebars");
 
 require("./lib/password");
 require("./lib/datasource");
+require("./passwordEncryptOptions");
 
 // TODO: We have to confirm that the passwords match on our own in some function reused in both signup and reset.
 
@@ -37,7 +38,7 @@ fluid.express.user.reset.handler.checkResetCode = function (that, dataSourceResp
     }
     // We cannot perform the next two checks using JSON Schema, so we must do it here.
     // We should not accept a reset code issued earlier than the current time minus our expiration period (a day by default).
-    // TODO: Use  the message   "fluid.express.user.reset.code.expired": "Your reset code is too old.  Please request another one."
+    // TODO: Use  the message "fluid.express.user.reset.code.expired": "Your reset code is too old.  Please request another one."
     else if (isNaN(issueDate) || issueDate < earliestAcceptable) {
         that.sendFinalResponse(400, { isError: true, message: "Your reset code is too old.  Please request another one."});
     }
@@ -46,12 +47,12 @@ fluid.express.user.reset.handler.checkResetCode = function (that, dataSourceResp
         that.sendFinalResponse(400, { isError: true, message: "Your password and confirmation password do not match."});
     }
     else {
-        var updatedUserRecord = fluid.copy(dataSourceResponse);
+        var updatedUserRecord = fluid.model.transformWithRules({ userData: dataSourceResponse, options: that.options}, that.options.rules.updateUser);
         delete updatedUserRecord[that.options.codeKey];
 
         var salt                      = fluid.express.user.password.generateSalt(that.options.saltLength);
         updatedUserRecord.salt        = salt;
-        updatedUserRecord.derived_key = fluid.express.user.password.encode(that.options.request.body.password, salt);
+        updatedUserRecord.derived_key = fluid.express.user.password.encode(that.options.request.body.password, salt, that.options.iterations, that.options.keyLength, that.options.digest);
 
         // TODO:  Convert this to use a writable dataSource
         var writeUrl = fluid.stringTemplate(that.options.urls.write, { id: updatedUserRecord._id});
@@ -69,7 +70,7 @@ fluid.express.user.reset.handler.checkResetCode = function (that, dataSourceResp
                 that.sendFinalResponse(response.statusCode, { isError: true, message: body});
             }
             else {
-                // TODO: Use message key     "fluid.express.user.reset.success": "Your password has been reset."
+                // TODO: Use message key "fluid.express.user.reset.success": "Your password has been reset."
                 that.sendFinalResponse(200, { message: "Your password has been reset."});
             }
         });
@@ -77,7 +78,15 @@ fluid.express.user.reset.handler.checkResetCode = function (that, dataSourceResp
 };
 
 fluid.defaults("fluid.express.user.reset.handler", {
-    gradeNames:  ["fluid.express.handler"],
+    gradeNames:  ["fluid.express.handler", "fluid.express.user.passwordEncryptOptionsConsumer"],
+    rules: {
+        updateUser: {
+            "": "userData",
+            iterations: "options.iterations",
+            keyLength: "options.keyLength",
+            digest: "options.digest"
+        }
+    },
     components: {
         reader: {
             // TODO:  Replace with the new "asymmetric" dataSource once that code has been reviewed
@@ -118,7 +127,7 @@ fluid.defaults("fluid.express.user.reset.handler", {
 });
 
 fluid.defaults("fluid.express.user.reset.post", {
-    gradeNames:    ["fluid.express.user.validationGatedRouter"],
+    gradeNames:    ["fluid.express.user.validationGatedRouter", "fluid.express.user.passwordEncryptOptionsConsumer"],
     method:        "post",
     path:          "/:code",
     routerOptions: {
@@ -152,15 +161,13 @@ fluid.defaults("fluid.express.user.reset.formRouter", {
 });
 
 fluid.defaults("fluid.express.user.reset", {
-    gradeNames:    ["fluid.express.router"],
+    gradeNames:    ["fluid.express.router", "fluid.express.user.passwordEncryptOptionsConsumer"],
     method:        "use",
     path:          "/reset",
     // The next two variables must match the value in fluid.express.user.forgot
     codeKey:       "reset_code",
     codeIssuedKey: "reset_code_issued",
     codeExpiration: 86400000, // How long a reset code is valid, in milliseconds.  Defaults to a day.
-    // The salt length should match what's used in fluid.express.user.signup
-    saltLength:    32,
     urls: {
         read: {
             expander: {
@@ -179,10 +186,6 @@ fluid.defaults("fluid.express.user.reset", {
         {
             source: "{that}.options.codeKey",
             target: "{that fluid.express.handler}.options.codeKey"
-        },
-        {
-            source: "{that}.options.saltLength",
-            target: "{that fluid.express.handler}.options.saltLength"
         },
         {
             source: "{that}.options.urls",

@@ -10,6 +10,8 @@ require("./lib/withMailHandler");
 require("./lib/mailer");
 require("./lib/password");
 
+require("./passwordEncryptOptions");
+
 fluid.registerNamespace("fluid.express.user.signup.post.handler");
 
 // TODO: We have to confirm that the passwords match on our own in some function reused in both signup and reset.
@@ -43,7 +45,7 @@ fluid.express.user.signup.post.handler.checkForExistingUser = function (that, ut
 };
 
 fluid.defaults("fluid.express.user.signup.post.handler", {
-    gradeNames: ["fluid.express.user.withMailHandler"],
+    gradeNames: ["fluid.express.user.withMailHandler", "fluid.express.user.passwordEncryptOptionsConsumer"],
     templates: {
         mail: {
             text:  "email-verify-text",
@@ -65,7 +67,6 @@ fluid.defaults("fluid.express.user.signup.post.handler", {
         }
     },
     urls: "{fluid.express.user.signup.post}.options.urls",
-    saltLength: "{fluid.express.user.signup.post}.options.saltLength",
     verifyCodeLength: "{fluid.express.user.signup.post}.options.verifyCodeLength",
     codeKey: "{fluid.express.user.signup.post}.options.codeKey",
     invokers: {
@@ -96,10 +97,9 @@ fluid.defaults("fluid.express.user.signup.post.handler", {
 });
 
 fluid.defaults("fluid.express.user.signup.post", {
-    gradeNames:       ["fluid.express.user.validationGatedRouter"],
+    gradeNames:       ["fluid.express.user.validationGatedRouter", "fluid.express.user.passwordEncryptOptionsConsumer"],
     path:             "/",
     method:           "post",
-    saltLength:       32,
     verifyCodeLength: 16,
     codeKey:          "verification_code",  // Must match the value in fluid.express.user.verify
     couchPath:        "/_design/lookup/_view/byUsernameOrEmail",
@@ -138,7 +138,7 @@ fluid.defaults("fluid.express.user.signup", {
     path:       "/signup",
     rules: {
         user: {
-            "username": "name", // Default configuration is designed for CouchDB and express-couchUser field naming conventions.
+            "username": "username",
             "email":    "email"
         }
     },

@@ -21,7 +21,7 @@ fluid.tests.express.user.utils.createUser = function (utils) {
         email: "myFirstUser@fluid.net"
     });
     prom.then(function (data) {
-        jqUnit.assertEquals("Generated Couch ID", "org.couch.db.user:myFirstUser", data._id);
+        jqUnit.assertEquals("Generated Couch ID", "myFirstUser", data._id);
         jqUnit.assertEquals("Email", "myFirstUser@fluid.net", data.email);
         jqUnit.assertEquals("Username", "myFirstUser", data.username);
         jqUnit.assertTrue("Unlock the password", fluid.express.user.utils.verifyPassword(data, "this is a password"));
