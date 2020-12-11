@@ -60,12 +60,24 @@ fluid.defaults("fluid.tests.express.user.utils.caseHolder", {
                     ]
                 },
                 {
-                    name: "Testing unlocking a user with correct credentials.",
+                    name: "Testing unlocking a user with a correct username and password.",
                     type: "test",
                     sequence: [
                         {
                             task: "fluid.tests.express.user.utils.unlockPromise",
                             args: ["{fluid.express.user.utils}", "existing", "password"],
+                            resolve: "jqUnit.assertEquals",
+                            resolveArgs: ["Check verified username", "existing", "{arguments}.0.username"]
+                        }
+                    ]
+                },
+                {
+                    name: "Testing unlocking a user with a correct email address and password.",
+                    type: "test",
+                    sequence: [
+                        {
+                            task: "fluid.tests.express.user.utils.unlockPromise",
+                            args: ["{fluid.express.user.utils}", "existing@localhost", "password"],
                             resolve: "jqUnit.assertEquals",
                             resolveArgs: ["Check verified username", "existing", "{arguments}.0.username"]
                         }

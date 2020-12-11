@@ -36,6 +36,11 @@ fluid.defaults("fluid.tests.express.user.reset.caseHolder", {
         password: "Password1",
         confirm:  "Password1"
     },
+    emailUser: {
+        email:    "existing@localhost",
+        password: "Password1",
+        confirm:  "Password1"
+    },
     components: {
         cookieJar: {
             type: "kettle.test.cookieJar"
@@ -77,6 +82,24 @@ fluid.defaults("fluid.tests.express.user.reset.caseHolder", {
             options: {
                 endpoint: "api/user/login",
                 method:   "POST"
+            }
+        },
+        emailResetForgotRequest: {
+            type: "fluid.test.express.user.request",
+            options: {
+                endpoint: "api/user/forgot",
+                method:   "POST"
+            }
+        },
+        emailResetResetRequest: {
+            type: "fluid.test.express.user.request",
+            options: {
+                user: "{caseHolder}.options.testUser",
+                endpoint: "api/user/reset/%code",
+                method:   "POST",
+                termMap: {
+                    "code": "%code"
+                }
             }
         },
         mismatchedPasswordsForgotRequest: {
@@ -154,6 +177,33 @@ fluid.defaults("fluid.tests.express.user.reset.caseHolder", {
                             listener: "fluid.tests.express.user.reset.caseHolder.verifyResponse",
                             event: "{fullResetLoginRequest}.events.onComplete",
                             args: ["{fullResetLoginRequest}.nativeResponse", "{arguments}.0", 200, ["user"]]
+                        }
+                    ]
+                },
+                // emailResetForgotRequest
+                {
+                    name: "Testing resetting a user's password using an email address...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{emailResetForgotRequest}.send",
+                            args: [ { email: "{that}.options.testUser.email" } ]
+                        },
+                        // If we catch this event, the timing won't work out to cache the initial response.  We can safely ignore it for now.
+                        //{
+                        //    listener: "fluid.tests.express.user.reset.caseHolder.verifyResponse",
+                        //    event: "{fullResetForgotRequest}.events.onComplete",
+                        //    args: ["{fullResetForgotRequest}", "{fullResetForgotRequest}.nativeResponse", "{arguments}.0", 200]
+                        //},
+                        {
+                            listener: "fluid.tests.express.user.reset.caseHolder.fullResetExtractCodeFromEmailAndReset",
+                            event:    "{testEnvironment}.smtp.mailServer.events.onMessageReceived",
+                            args:     ["{testEnvironment}", "{emailResetResetRequest}"] // testEnvironment, resetRequest
+                        },
+                        {
+                            listener: "fluid.tests.express.user.reset.caseHolder.verifyResponse",
+                            event: "{emailResetResetRequest}.events.onComplete",
+                            args: ["{emailResetResetRequest}.nativeResponse", "{arguments}.0", 200, ["message"]]
                         }
                     ]
                 },
