@@ -173,7 +173,7 @@ fluid.express.user.utils.verifyPassword = function (userRecord, password) {
  * Otherwise a standard error Object is returned.
  *
  * @param {fluid.express.user.utils} that - Utils component.
- * @param {String} username - Username to use for record lookup.
+ * @param {String} username - Username (or email address) to use for record lookup.
  * @param {String} password - Clear text password to validate record with.
  * @return {fluid.promise} - Promise resolving with a `userData` record if the password is correct, otherwise
  * rejecting with an `isError` Object.
@@ -182,7 +182,7 @@ fluid.express.user.utils.unlockUser = function (that, username, password) {
     var promiseTogo = fluid.promise();
     that.byUsernameOrEmailReader.get({username: username}).then(
         function (body) {
-            if (body.username) {
+            if (body.username || body.email) {
                 var user = body;
                 var encodedPassword = fluid.express.user.password.encode(password, user.salt, user.iterations, user.keyLength, user.digest);
                 if (encodedPassword === user.derived_key) {
