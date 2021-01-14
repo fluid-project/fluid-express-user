@@ -1,21 +1,21 @@
 /* example CSS file with handles for all classes used in the controls (only those used in the demos are uncommented). */
 .user-menu {
+    background: #fff;
+    border: 1px solid #ccc;
     margin-top: -1em;
-    border: 1px solid #cccccc;
     width: 100%;
-    background: #ffffff;
 }
 
 .user-menu ul {
-    padding:0px;
-    margin: 0px;
     list-style-type: none;
+    margin: 0;
+    padding: 0;
 }
 
 .user-menu li {
     list-style: none;
-    padding: .75em;
-    margin: 0px;
+    margin: 0;
+    padding: 0.75em;
 }
 
 .user-menu li:nth-child(even) {
@@ -23,15 +23,15 @@
 }
 
 .user-controls-toggle::after {
-    border-color: #ffffff transparent transparent transparent;
+    border-color: #fff transparent transparent transparent;
     border-style: solid;
+    border-width: 0.4em;
     content: "";
     display: block;
     height: 0;
     position: absolute;
-    top: 5%;
     right: 20%;
-    border-width: .4em;
+    top: 5%;
     width: 0;
 }
 
@@ -40,5 +40,5 @@
 }
 
 .user-menu p {
-    padding-left: .75em;
+    padding-left: 0.75em;
 }

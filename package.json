@@ -4,12 +4,12 @@
     "description": "A series of Fluid components to provide simple user management.",
     "main": "index.js",
     "scripts": {
-        "lint": "grunt lint",
-        "pretest": "node node_modules/rimraf/bin.js coverage/* reports/* instrumented/*",
+        "lint": "fluid-lint-all",
+        "pretest": "npx rimraf coverage/* reports/* instrumented/*",
         "test": "npm run test:webdriver && npm run test:node",
         "test:webdriver": "node tests/js/browser/index.js",
-        "test:node": "node node_modules/nyc/bin/nyc.js node tests/js/server/index.js",
-        "posttest": "node node_modules/nyc/bin/nyc.js report --reporter html --reporter text-summary"
+        "test:node": "nyc node tests/js/server/index.js",
+        "posttest": "nyc report --reporter html --reporter text-summary"
     },
     "repository": {
         "type": "git",
@@ -27,28 +27,25 @@
         "fluid-express": "1.0.16",
         "fluid-handlebars": "2.1.3",
         "fluid-json-schema": "2.1.4",
-        "infusion": "3.0.0-dev.20200728T104627Z.e6aa1a341.FLUID-6145",
         "kettle": "1.16.0",
-        "markdown-it": "11.0.0",
-        "nodemailer": "6.4.11",
+        "infusion": "3.0.0-dev.20201113T153152Z.32176dcbe.FLUID-6145",
+        "markdown-it": "12.0.4",
+        "nodemailer": "6.4.17",
         "nodemailer-smtp-transport": "2.7.4",
         "request": "2.88.2"
     },
     "devDependencies": {
         "cookie": "0.4.1",
-        "eslint-config-fluid": "1.4.0",
-        "eslint": "7.7.0",
-        "eslint-plugin-markdown": "1.0.2",
+        "eslint-config-fluid": "2.0.0",
+        "eslint": "7.17.0",
         "fluid-couchdb-test-harness": "1.1.0",
-        "fluid-grunt-lint-all": "1.0.8",
+        "fluid-lint-all": "1.0.0-dev.20210113T154306Z.b842b2c.GH-1",
         "fluid-mail-test": "1.0.7",
         "fluid-webdriver": "1.1.1",
-        "grunt": "1.2.1",
         "handlebars": "4.7.6",
-        "mailparser": "2.8.1",
+        "mailparser": "3.0.1",
         "node-jqunit": "1.1.8",
         "nyc": "15.1.0",
-        "pagedown": "1.1.0",
-        "rimraf": "3.0.2"
+        "pagedown": "1.1.0"
     }
 }

@@ -1,5 +1,4 @@
 // provide a front-end to /api/user/signup
-/* global fluid, jQuery */
 (function () {
     "use strict";
 
