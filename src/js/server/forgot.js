@@ -45,10 +45,10 @@ fluid.express.user.forgot.post.handler.checkUser = function (that, user) {
 
 /**
  *
- * @param  {Object} that The handler component instance itself.
- * @param  {Object} error The error message (if any) received in response to our CouchDB lookup.
- * @param  {Object} response The Express response object.
- * @param  {Object} body The response body.
+ * @param  {Object} that - The handler component instance itself.
+ * @param  {Object} error - The error message (if any) received in response to our CouchDB lookup.
+ * @param  {Object} response - The Express response object.
+ * @param  {Object} body - The response body.
  *
  * Process a response from CouchDB and send the results and/or error message via the `response` object.
  *

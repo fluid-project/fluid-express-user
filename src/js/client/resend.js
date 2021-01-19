@@ -1,5 +1,4 @@
 // provide a front-end to /api/user/verify/resend
-/* global fluid, jQuery */
 (function () {
     "use strict";
 
