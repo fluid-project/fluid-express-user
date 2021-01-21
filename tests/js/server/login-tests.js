@@ -51,42 +51,42 @@ fluid.defaults("fluid.tests.express.user.login.caseHolder", {
         loginRequest: {
             type: "fluid.test.express.user.request",
             options: {
-                endpoint: "api/user/login",
+                path: "/api/user/login",
                 method: "POST"
             }
         },
         currentUserLoggedInRequest: {
             type: "fluid.test.express.user.request",
             options: {
-                endpoint: "api/user/current",
+                path: "/api/user/current",
                 method: "GET"
             }
         },
         logoutRequest: {
             type: "fluid.test.express.user.request",
             options: {
-                endpoint: "api/user/logout",
+                path: "/api/user/logout",
                 method: "GET"
             }
         },
         currentUserLoggedOutRequest: {
             type: "fluid.test.express.user.request",
             options: {
-                endpoint: "api/user/current",
+                path: "/api/user/current",
                 method: "GET"
             }
         },
         bogusLoginRequest: {
             type: "fluid.test.express.user.request",
             options: {
-                endpoint: "api/user/login",
+                path: "/api/user/login",
                 method: "POST"
             }
         },
         unverifiedLoginRequest: {
             type: "fluid.test.express.user.request",
             options: {
-                endpoint: "api/user/login",
+                path: "/api/user/login",
                 method: "POST"
             }
         }

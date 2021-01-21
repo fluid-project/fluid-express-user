@@ -5,9 +5,10 @@
 var fluid = require("infusion");
 
 fluid.defaults("fluid.test.express.user.request", {
-    gradeNames: ["fluid.test.express.request"],
+    gradeNames: ["kettle.test.request.httpCookie"],
     headers: {
         accept: "application/json"
     },
-    port: "{testEnvironment}.options.port"
+    port: "{testEnvironment}.options.port",
+    method: "GET"
 });

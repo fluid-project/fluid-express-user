@@ -11,7 +11,7 @@ require("../lib/");
 
 fluid.defaults("fluid.express.user.loginRequired.request", {
     gradeNames: ["fluid.test.express.user.request"],
-    endpoint:   "gated",
+    path:       "/gated",
     method:     "GET"
 });
 
@@ -27,7 +27,7 @@ fluid.defaults("fluid.tests.express.user.loginRequired.caseHolder", {
         loginRequest: {
             type: "fluid.test.express.user.request",
             options: {
-                endpoint: "api/user/login",
+                path: "/api/user/login",
                 method:   "POST"
             }
         },
