@@ -48,21 +48,21 @@ fluid.defaults("fluid.tests.express.user.reset.caseHolder", {
         loginRequest: {
             type: "fluid.test.express.user.request",
             options: {
-                endpoint: "api/user/login",
+                path: "/api/user/login",
                 method:   "POST"
             }
         },
         bogusResetRequest: {
             type: "fluid.test.express.user.request",
             options: {
-                endpoint: "api/user/reset/NONSENSE",
+                path: "/api/user/reset/NONSENSE",
                 method:   "POST"
             }
         },
         fullResetForgotRequest: {
             type: "fluid.test.express.user.request",
             options: {
-                endpoint: "api/user/forgot",
+                path: "/api/user/forgot",
                 method:   "POST"
             }
         },
@@ -70,7 +70,7 @@ fluid.defaults("fluid.tests.express.user.reset.caseHolder", {
             type: "fluid.test.express.user.request",
             options: {
                 user: "{caseHolder}.options.testUser",
-                endpoint: "api/user/reset/%code",
+                path: "/api/user/reset/%code",
                 method:   "POST",
                 termMap: {
                     "code": "%code"
@@ -80,14 +80,14 @@ fluid.defaults("fluid.tests.express.user.reset.caseHolder", {
         fullResetLoginRequest: {
             type: "fluid.test.express.user.request",
             options: {
-                endpoint: "api/user/login",
+                path: "/api/user/login",
                 method:   "POST"
             }
         },
         emailResetForgotRequest: {
             type: "fluid.test.express.user.request",
             options: {
-                endpoint: "api/user/forgot",
+                path: "/api/user/forgot",
                 method:   "POST"
             }
         },
@@ -95,7 +95,7 @@ fluid.defaults("fluid.tests.express.user.reset.caseHolder", {
             type: "fluid.test.express.user.request",
             options: {
                 user: "{caseHolder}.options.testUser",
-                endpoint: "api/user/reset/%code",
+                path: "/api/user/reset/%code",
                 method:   "POST",
                 termMap: {
                     "code": "%code"
@@ -105,7 +105,7 @@ fluid.defaults("fluid.tests.express.user.reset.caseHolder", {
         mismatchedPasswordsForgotRequest: {
             type: "fluid.test.express.user.request",
             options: {
-                endpoint: "api/user/forgot",
+                path: "/api/user/forgot",
                 method:   "POST"
             }
         },
@@ -121,7 +121,7 @@ fluid.defaults("fluid.tests.express.user.reset.caseHolder", {
                 termMap: {
                     "code": "%code"
                 },
-                endpoint: "api/user/reset/%code",
+                path: "/api/user/reset/%code",
                 method:   "POST"
             }
         }

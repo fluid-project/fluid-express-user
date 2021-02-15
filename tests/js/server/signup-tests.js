@@ -59,8 +59,9 @@ fluid.tests.express.user.signup.caseHolder.extractVerificationCode = function (t
 };
 
 fluid.defaults("fluid.tests.express.user.signup.verifyRequest", {
-    gradeNames: ["fluid.test.express.user.request"],
-    endpoint: "api/user/verify/%code",
+    gradeNames: ["kettle.test.request.http"],
+    port: "{testEnvironment}.options.port",
+    path: "/api/user/verify/%code",
     termMap: {
         "code": "%code"
     },
@@ -77,21 +78,21 @@ fluid.defaults("fluid.tests.express.user.signup.caseHolder", {
         duplicateUserCreateRequest: {
             type: "fluid.test.express.user.request",
             options: {
-                endpoint: "api/user/signup",
+                path: "/api/user/signup",
                 method:   "POST"
             }
         },
         mismatchedPasswordCreateRequest: {
             type: "fluid.test.express.user.request",
             options: {
-                endpoint: "api/user/signup",
+                path: "/api/user/signup",
                 method:   "POST"
             }
         },
         incompleteUserCreateRequest: {
             type: "fluid.test.express.user.request",
             options: {
-                endpoint: "api/user/signup",
+                path: "/api/user/signup",
                 method:   "POST"
             }
         },
@@ -101,28 +102,28 @@ fluid.defaults("fluid.tests.express.user.signup.caseHolder", {
         resendVerification: {
             type: "fluid.test.express.user.request",
             options: {
-                endpoint: "api/user/verify/resend",
+                path: "/api/user/verify/resend",
                 method: "POST"
             }
         },
         resendVerificationForVerifiedUser: {
             type: "fluid.test.express.user.request",
             options: {
-                endpoint: "api/user/verify/resend",
+                path: "/api/user/verify/resend",
                 method: "POST"
             }
         },
         resendVerificationForBogusUser: {
             type: "fluid.test.express.user.request",
             options: {
-                endpoint: "api/user/verify/resend",
+                path: "/api/user/verify/resend",
                 method: "POST"
             }
         },
         fullSignupInitialRequest: {
             type: "fluid.test.express.user.request",
             options: {
-                endpoint: "api/user/signup",
+                path: "/api/user/signup",
                 user: {
                     expander: {
                         funcName: "fluid.test.express.user.generateUser"
@@ -137,7 +138,7 @@ fluid.defaults("fluid.tests.express.user.signup.caseHolder", {
         fullSignupLoginRequest: {
             type: "fluid.test.express.user.request",
             options: {
-                endpoint: "api/user/login",
+                path: "/api/user/login",
                 method:   "POST"
             }
         }

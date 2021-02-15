@@ -23,7 +23,7 @@ fluid.defaults("fluid.tests.express.user.docs.caseHolder", {
         docsRequest: {
             type: "fluid.test.express.user.request",
             options: {
-                endpoint: "api/user/"
+                path: "/api/user/"
             }
         }
     },
