@@ -42,7 +42,7 @@
         "fluid-lint-all": "1.0.4",
         "fluid-mail-test": "1.0.8",
         "fluid-webdriver": "1.1.2",
-        "handlebars": "4.7.6",
+        "handlebars": "4.7.7",
         "mailparser": "3.0.1",
         "node-jqunit": "1.1.8",
         "nyc": "15.1.0",
